@@ -4,7 +4,7 @@ set -euo pipefail
 
 DOMAIN=dhanfunded.com
 APP=/var/www/dhanfunded
-REPO=git@github.com:joker0star999-maker/carrent.git
+REPO=git@github.com:marginplant2-dev/dhan.git
 # Let's Encrypt contact — only used for expiry-warning mail when a certificate
 # is first issued. Override per-run with:  LE_EMAIL=you@domain bash deploy.sh
 LE_EMAIL=${LE_EMAIL:-support@dhanfunded.com}
@@ -70,7 +70,7 @@ if [ ! -f "$APP/server/.env" ]; then
   cat > "$APP/server/.env" <<EOF
 PORT=3001
 NODE_ENV=production
-MONGODB_URI=mongodb://127.0.0.1:27017/bharatfundedtrade
+MONGODB_URI=mongodb://127.0.0.1:27017/dhanfunded
 REDIS_URL=redis://127.0.0.1:6379
 JWT_SECRET=$(openssl rand -hex 32)
 JWT_EXPIRES_IN=7d
