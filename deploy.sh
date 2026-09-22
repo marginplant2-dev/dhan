@@ -50,6 +50,18 @@ if ! command -v mongod >/dev/null; then
   }
   mongo_repo "${VERSION_CODENAME}" || mongo_repo noble
 fi
+# MongoDB's packaged unit runs mongod with rseq switched off
+# (GLIBC_TUNABLES=glibc.pthread.rseq=0), and 8.0.32 then refuses to start at
+# all on kernel 6.19+ ("known incompatibility", SERVER-121912) — which is every
+# Ubuntu 26.04 box. Clearing the tunable brings it straight up; mongod only
+# loses a tcmalloc per-CPU cache optimisation.
+if [ ! -f /etc/systemd/system/mongod.service.d/rseq.conf ]; then
+  mkdir -p /etc/systemd/system/mongod.service.d
+  printf '[Service]
+Environment="GLIBC_TUNABLES="
+' > /etc/systemd/system/mongod.service.d/rseq.conf
+  systemctl daemon-reload
+fi
 systemctl enable --now mongod redis-server
 
 echo "== 4/9 swap (vite build needs ~2G) =="
