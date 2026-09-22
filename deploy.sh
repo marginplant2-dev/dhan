@@ -40,9 +40,15 @@ echo "== 3/9 mongodb =="
 if ! command -v mongod >/dev/null; then
   . /etc/os-release
   curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | gpg -o /usr/share/keyrings/mongodb.gpg --dearmor --yes
-  echo "deb [signed-by=/usr/share/keyrings/mongodb.gpg] https://repo.mongodb.org/apt/ubuntu ${VERSION_CODENAME}/mongodb-org/8.0 multiverse" \
-    > /etc/apt/sources.list.d/mongodb-org-8.0.list
-  apt-get update -qq && apt-get install -y -qq mongodb-org
+  # MongoDB publishes per Ubuntu LTS and lags new releases by months — 26.04
+  # ("resolute") has no packages at all, and the deploy used to die here with
+  # "Unable to locate package mongodb-org". The noble (24.04) build installs
+  # and runs fine on it, so fall back to that rather than failing.
+  mongo_repo() {
+    echo "deb [signed-by=/usr/share/keyrings/mongodb.gpg] https://repo.mongodb.org/apt/ubuntu $1/mongodb-org/8.0 multiverse"       > /etc/apt/sources.list.d/mongodb-org-8.0.list
+    apt-get update -qq && apt-get install -y -qq mongodb-org
+  }
+  mongo_repo "${VERSION_CODENAME}" || mongo_repo noble
 fi
 systemctl enable --now mongod redis-server
 
