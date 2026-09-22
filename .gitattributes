@@ -1,0 +1,5 @@
+# Shell scripts must keep LF endings even when checked out on Windows: a
+# CRLF deploy.sh dies on its own first line ("set: pipefail: invalid option
+# name") because bash reads the \r as part of the option.
+*.sh text eol=lf
+*.mjs text eol=lf
