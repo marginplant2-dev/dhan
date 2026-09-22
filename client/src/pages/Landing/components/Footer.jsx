@@ -67,7 +67,7 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1fr]">
           <div>
             <Link to="/" className="inline-block mb-5">
-              <img src={logoOnDark} alt="DhanFunded" width={971} height={320} className="h-14 w-auto" />
+              <img src={logoOnDark} alt="DhanFunded" width={1162} height={320} className="h-14 w-auto" />
             </Link>
             <p className="text-[.9rem] leading-relaxed mb-6" style={{ color: MUTED }}>
               Trade. Prove. Get Funded. Structured, simulated assessments for serious

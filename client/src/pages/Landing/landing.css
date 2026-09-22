@@ -345,17 +345,8 @@
 }
 @media (min-width: 1536px) { .df-navbar { max-width: 1280px; } }
 
-/* brand lockup: the square mark, then the name in type */
-.df-brand { display: inline-flex; align-items: center; gap: 9px; }
-/* the mark is a letterform, not a tile — a touch larger reads better beside
-   the name, and it carries no background of its own */
-.df-brand img { width: 42px; height: 42px; display: block; }
-.df-brand-name {
-  font-size: 1.16rem; font-weight: 800; letter-spacing: -.02em;
-  color: var(--pf-text); white-space: nowrap;
-}
-.df-brand-name i { font-style: normal; color: var(--pf-brand); }
-@media (max-width: 400px) { .df-brand-name { font-size: 1rem; } }
+/* brand lockup: the wordmark artwork, sized by height */
+.df-brand { display: inline-flex; align-items: center; }
 
 /* the mobile sheet hangs off the island, matching its width and radius */
 .df-mobile-sheet {

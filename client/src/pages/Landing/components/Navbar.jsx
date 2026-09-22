@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
-// On a white bar the wordmark artwork can only work with its navy plate behind
-// it — the metallic lettering is built for a dark backdrop and goes hollow once
-// the plate is cut away. So the bar carries the mark plus the name set in type:
-// no plate, no box, and crisp at every size. The artwork itself still leads
-// every dark surface (hero, footer, dashboards, emails, OG card).
-import mark from '../../../assets/dhanfunded-mark.png';
+// The bar is white, so it carries the light cut of the lockup: navy lettering,
+// green second half, no plate behind it. Dark surfaces use the reversed cut.
+import wordmark from '../../../assets/dhanfunded-wordmark-onlight.png';
 
 const LINKS = [
   { label: 'Home', to: '/' },
@@ -63,8 +60,12 @@ export default function Navbar() {
       >
 
         <Link to="/" className="df-brand shrink-0" aria-label="DhanFunded — home">
-          <img src={mark} alt="" width={512} height={512} />
-          <span className="df-brand-name">Dhan<i>Funded</i></span>
+          <img
+            src={wordmark}
+            alt="DhanFunded — Trade. Learn. Grow."
+            width={1162} height={320}
+            className="h-[34px] sm:h-[42px] w-auto"
+          />
         </Link>
 
         {/* xl, not lg: with nowrap links the full row needs ~1100px, which
