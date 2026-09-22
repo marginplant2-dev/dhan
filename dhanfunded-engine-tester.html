@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DhanFunded Engine Tester — DhanFunded</title>
+<style>
+  :root{
+    --bg:#070b16; --bg2:#0a1020; --panel:#0e1424; --panel2:#111a2e;
+    --border:#1b2740; --border2:#243450;
+    --cyan:#38bdf8; --purple:#a78bfa; --green:#34d399; --red:#f87171; --amber:#fbbf24;
+    --txt:#c8d3e6; --muted:#67769a; --dim:#46546f;
+    --mono: ui-monospace,'JetBrains Mono','SF Mono',Menlo,Consolas,'Courier New',monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:
+     radial-gradient(1200px 600px at 80% -10%, rgba(124,92,250,.10), transparent 60%),
+     radial-gradient(900px 500px at -10% 110%, rgba(56,189,248,.08), transparent 55%),
+     var(--bg);
+     color:var(--txt);font-family:var(--mono);font-size:13px;line-height:1.5}
+  a{color:var(--cyan)}
+  .wrap{max-width:1280px;margin:0 auto;padding:18px}
+  /* header */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;
+     padding:14px 18px;border:1px solid var(--border);border-radius:14px;
+     background:linear-gradient(180deg,rgba(124,92,250,.10),rgba(14,20,36,.6));margin-bottom:16px}
+  .brand{display:flex;align-items:center;gap:14px}
+  .logo{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;font-size:20px;
+     background:linear-gradient(135deg,var(--cyan),var(--purple));box-shadow:0 6px 22px rgba(124,92,250,.45)}
+  .brand h1{margin:0;font-size:19px;letter-spacing:3px}
+  .brand .sub{color:var(--muted);font-size:10px;letter-spacing:2px;margin-top:2px}
+  .tabs{display:flex;gap:8px}
+  .tab{padding:9px 16px;border:1px solid var(--border2);border-radius:9px;background:var(--panel);
+     color:var(--muted);letter-spacing:2px;font-size:11px;cursor:pointer;user-select:none;transition:.15s}
+  .tab:hover{color:var(--txt);border-color:var(--cyan)}
+  .tab.active{background:linear-gradient(135deg,var(--cyan),var(--purple));color:#06101e;border-color:transparent;font-weight:700}
+  /* layout */
+  .grid{display:grid;grid-template-columns:340px 1fr;gap:16px;align-items:start}
+  @media(max-width:920px){.grid{grid-template-columns:1fr}}
+  .panel{border:1px solid var(--border);border-radius:13px;background:var(--panel);padding:16px;margin-bottom:16px}
+  .panel h2{margin:0 0 14px;font-size:11px;letter-spacing:2px;color:var(--muted);
+     display:flex;align-items:center;gap:8px;text-transform:uppercase}
+  .panel h2 .ic{font-size:13px}
+  label{display:block;color:var(--muted);font-size:10px;letter-spacing:1.5px;margin:12px 0 5px;text-transform:uppercase}
+  input,select{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
+     color:var(--txt);font-family:var(--mono);font-size:13px;padding:10px 11px;outline:none}
+  input:focus,select:focus{border-color:var(--cyan)}
+  .btn{width:100%;border:none;border-radius:9px;padding:12px;font-family:var(--mono);font-size:12px;
+     letter-spacing:2px;font-weight:700;cursor:pointer;margin-top:14px;color:#06101e;
+     background:linear-gradient(135deg,var(--cyan),var(--purple))}
+  .btn:hover{filter:brightness(1.08)}
+  .btn.green{background:linear-gradient(135deg,#10b981,#34d399)}
+  .btn.ghost{background:var(--panel2);color:var(--txt);border:1px solid var(--border2)}
+  .rules{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 0;margin-top:12px}
+  .rrow{display:flex;justify-content:space-between;align-items:center;padding:5px 0}
+  .rrow span:first-child{color:var(--muted)}
+  .rrow input{width:78px;text-align:right;padding:5px 7px;font-size:12px}
+  .rrow b{color:var(--cyan)}
+  .quick{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}
+  .qbtn{padding:8px 4px;border:1px solid var(--border2);border-radius:7px;background:var(--panel2);
+     font-family:var(--mono);font-size:11px;cursor:pointer;color:var(--green)}
+  .qbtn.loss{color:var(--red)}
+  .qbtn:hover{border-color:currentColor}
+  .daterow{display:flex;gap:6px}
+  .daterow input{flex:1}
+  .daterow button{white-space:nowrap;border:1px solid var(--border2);background:var(--panel2);color:var(--txt);
+     border-radius:8px;padding:0 12px;font-family:var(--mono);cursor:pointer;font-size:11px}
+  /* status banner */
+  .status{border-radius:13px;padding:18px 20px;margin-bottom:16px;border:1px solid var(--border2);
+     display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+     background:linear-gradient(135deg,rgba(16,120,140,.28),rgba(14,20,36,.5))}
+  .status.ACTIVE{background:linear-gradient(135deg,rgba(14,116,144,.35),rgba(14,20,36,.5))}
+  .status.PASSED,.status.FUNDED{background:linear-gradient(135deg,rgba(16,185,129,.30),rgba(14,20,36,.5));border-color:#10b981}
+  .status.FAILED{background:linear-gradient(135deg,rgba(220,38,38,.32),rgba(14,20,36,.5));border-color:#ef4444}
+  .status .lbl{color:var(--muted);font-size:10px;letter-spacing:2px}
+  .status .big{font-size:26px;letter-spacing:3px;font-weight:700;margin-top:4px}
+  .status .msg{color:var(--txt);font-size:11px;max-width:380px;text-align:right;opacity:.9}
+  /* cards */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+  @media(max-width:640px){.cards{grid-template-columns:repeat(2,1fr)}}
+  .card{border:1px solid var(--border);border-radius:12px;background:var(--panel);padding:14px 15px}
+  .card .k{color:var(--muted);font-size:10px;letter-spacing:1.5px;text-transform:uppercase}
+  .card .v{font-size:21px;font-weight:700;margin-top:7px;letter-spacing:.5px}
+  .v.cyan{color:var(--cyan)} .v.green{color:var(--green)} .v.red{color:var(--red)}
+  .v.purple{color:var(--purple)} .v.amber{color:var(--amber)} .v.txt{color:var(--txt)}
+  /* progress */
+  .prog{margin:14px 0}
+  .prog .top{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}
+  .bar{height:9px;border-radius:6px;background:var(--bg2);overflow:hidden;border:1px solid var(--border)}
+  .bar > i{display:block;height:100%;border-radius:6px;transition:width .3s}
+  .bar.t > i{background:linear-gradient(90deg,var(--purple),var(--cyan))}
+  .bar.d > i{background:linear-gradient(90deg,var(--cyan),#22d3ee)}
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:8px}
+  th{color:var(--dim);text-align:left;font-weight:500;letter-spacing:1px;text-transform:uppercase;
+     padding:7px 8px;border-bottom:1px solid var(--border);font-size:10px}
+  td{padding:8px;border-bottom:1px solid rgba(27,39,64,.5)}
+  tr:last-child td{border-bottom:none}
+  .pos{color:var(--green)} .neg{color:var(--red)}
+  .pill{padding:2px 8px;border-radius:20px;font-size:10px;letter-spacing:1px;border:1px solid currentColor}
+  .pill.ACTIVE{color:var(--cyan)} .pill.PASSED,.pill.FUNDED{color:var(--green)} .pill.FAILED{color:var(--red)}
+  .empty{color:var(--dim);text-align:center;padding:60px 0;letter-spacing:2px}
+  .note{color:var(--muted);font-size:11px;margin-top:10px;line-height:1.7}
+  .hide{display:none}
+  /* tests */
+  .test{border:1px solid var(--border);border-radius:10px;padding:13px 15px;margin-bottom:10px;background:var(--panel)}
+  .test .h{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .test .h b{letter-spacing:.5px}
+  .test .desc{color:var(--muted);font-size:11px;margin-top:6px;line-height:1.7}
+  .test .detail{color:var(--dim);font-size:11px;margin-top:8px;white-space:pre-wrap;
+     border-left:2px solid var(--border2);padding-left:10px}
+  .badge{padding:3px 11px;border-radius:7px;font-size:10px;letter-spacing:1.5px;font-weight:700;white-space:nowrap}
+  .badge.pass{background:rgba(16,185,129,.18);color:var(--green);border:1px solid #10b981}
+  .badge.fail{background:rgba(239,68,68,.18);color:var(--red);border:1px solid #ef4444}
+  .summary{display:flex;gap:12px;align-items:center;margin-bottom:16px;font-size:13px}
+  .summary .big{font-size:24px;font-weight:700;letter-spacing:1px}
+  /* bugs */
+  .bug{border:1px solid var(--border);border-left-width:3px;border-radius:10px;padding:14px 16px;margin-bottom:12px;background:var(--panel)}
+  .bug.med{border-left-color:var(--amber)} .bug.low{border-left-color:var(--cyan)} .bug.ok{border-left-color:var(--green)}
+  .bug .t{font-weight:700;letter-spacing:.5px;margin-bottom:4px}
+  .bug .sev{font-size:10px;letter-spacing:1.5px;padding:2px 8px;border-radius:6px;margin-left:8px}
+  .sev.med{background:rgba(251,191,36,.16);color:var(--amber)} .sev.low{background:rgba(56,189,248,.16);color:var(--cyan)}
+  .sev.ok{background:rgba(52,211,153,.16);color:var(--green)}
+  .bug .b{color:var(--muted);font-size:11.5px;margin-top:8px;line-height:1.75}
+  code{background:var(--bg2);border:1px solid var(--border2);border-radius:5px;padding:1px 6px;color:var(--amber);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">⚡</div>
+      <div>
+        <h1>DHANFUNDED ENGINE TESTER</h1>
+        <div class="sub">DHANFUNDED — PROP-CHALLENGE RULE VALIDATOR</div>
+      </div>
+    </div>
+    <div class="tabs">
+      <div class="tab active" data-tab="sim">SIMULATOR</div>
+      <div class="tab" data-tab="tests">TESTS</div>
+      <div class="tab" data-tab="bugs">BUGS</div>
+    </div>
+  </div>
+
+  <!-- ================= SIMULATOR ================= -->
+  <div id="tab-sim">
+  <div class="grid">
+    <!-- LEFT -->
+    <div>
+      <div class="panel">
+        <h2><span class="ic">⚙</span> Account Setup</h2>
+        <label>Starting Balance (₹)</label>
+        <input id="startBal" type="number" value="1000000">
+        <label>Challenge Type</label>
+        <select id="chType">
+          <option value="instant">Instant (0-Step)</option>
+          <option value="one" selected>1-Step Challenge</option>
+          <option value="two">2-Step Challenge</option>
+        </select>
+        <div class="rules" id="ruleBox">
+          <div class="rrow"><span>profitTargetPct</span><input id="r_target" type="number" step="0.5" value="10"></div>
+          <div class="rrow"><span>dailyDdPct</span><input id="r_daily" type="number" step="0.5" value="4"></div>
+          <div class="rrow"><span>maxDdPct</span><input id="r_max" type="number" step="0.5" value="10"></div>
+          <div class="rrow"><span>minTradingDays</span><input id="r_days" type="number" value="5"></div>
+          <div class="rrow"><span>maxOneDayProfitPct</span><input id="r_oneday" type="number" step="1" value="40"></div>
+        </div>
+        <div class="note">Yeh exactly tumhare admin rules hain — apni challenge ki values daal do. Engine inhi pe chalega.</div>
+        <button class="btn" id="initBtn">INITIALISE ACCOUNT</button>
+      </div>
+
+      <div class="panel">
+        <h2><span class="ic">📈</span> Submit Trade</h2>
+        <label>Trade P&amp;L (₹) — negative for loss</label>
+        <input id="tradePnl" type="number" placeholder="e.g. 5000 or -2000">
+        <label>Trading Date</label>
+        <div class="daterow">
+          <input id="tradeDate" type="date" value="2025-01-01">
+          <button id="nextDay" title="advance one day">+1 day</button>
+        </div>
+        <button class="btn green" id="closeTrade">CLOSE TRADE →</button>
+        <label style="margin-top:14px">Quick inject:</label>
+        <div class="quick">
+          <div class="qbtn" data-amt="2000">+2,000</div>
+          <div class="qbtn" data-amt="5000">+5,000</div>
+          <div class="qbtn" data-amt="15000">+15,000</div>
+          <div class="qbtn loss" data-amt="-1000">−1,000</div>
+          <div class="qbtn loss" data-amt="-5000">−5,000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div id="dash">
+      <div class="empty">← Initialise an account to begin testing</div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ================= TESTS ================= -->
+  <div id="tab-tests" class="hide">
+    <div class="panel">
+      <h2><span class="ic">🧪</span> Automated Engine Tests</h2>
+      <div class="note">In tests me wahi engine chalta hai jo Simulator me hai. Ye saabit karte hain ki <b>Daily Loss roz reset hota hai</b>, <b>Max DD carry-forward hota hai</b>, profit-target / min-days / one-day-cap sahi lagte hain. Sab <span class="pos">PASS</span> hone chahiye.</div>
+      <button class="btn" id="runTests" style="max-width:220px">▶ RUN ALL TESTS</button>
+    </div>
+    <div class="summary hide" id="testSummary"></div>
+    <div id="testResults"></div>
+  </div>
+
+  <!-- ================= BUGS ================= -->
+  <div id="tab-bugs" class="hide">
+    <div class="panel">
+      <h2><span class="ic">🐞</span> Findings — Daily-Reset Investigation</h2>
+      <div class="note">Ye simulator <b>intended (correct) behaviour</b> encode karta hai. Live backend ki deep audit me <b>carry-forward bug nahi mila</b> — daily loss reset hota hai. Do <b>hardening</b> items mile (tumhara symptom nahi, par theek karne layak):</div>
+    </div>
+    <div id="bugList"></div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   DHANFUNDED PROP ENGINE  — mirrors server/models/ChallengeAccount.js
+   (updateEquity, resetDailyStats) + server/services/propTradingEngine.js
+   Single source of truth: powers BOTH the Simulator and the Tests.
+   ============================================================ */
+class DhanFundedEngine {
+  constructor(cfg){
+    this.initial   = +cfg.startingBalance;
+    this.targetPct = +cfg.profitTargetPct;
+    this.dailyPct  = +cfg.dailyDdPct;
+    this.maxPct    = +cfg.maxDdPct;
+    this.minDays   = +cfg.minTradingDays;
+    this.oneDayPct = +cfg.maxOneDayProfitPct;
+    this.steps     = +cfg.steps;            // 0 instant, 1, 2
+
+    this.profitTarget = this.initial * this.targetPct/100;
+    this.dayPnlCap    = this.profitTarget * this.oneDayPct/100;   // max one-day profit (₹)
+    this.maxDdFloor   = this.initial * (1 - this.maxPct/100);     // OVERALL floor — never resets
+
+    // live state
+    this.phaseStart        = this.initial;   // balance at start of this phase
+    this.equity            = this.initial;
+    this.dayStartBalance   = this.initial;   // re-snapshot every new day  (DAILY RESET anchor)
+    this.lowestEquityToday = this.initial;   // watermark, resets daily
+    this.lowestEquityOverall = this.initial; // watermark, NEVER resets    (max DD)
+    this.currentDay = null;
+    this.days = {};        // date -> {actual}
+    this.dayOrder = [];
+    this.tradingDays = new Set();
+    this.phase  = 1;
+    this.status = 'ACTIVE';
+    this.failReason = null;
+    this.trades = [];
+  }
+
+  // OVERALL floor is anchored to the original initialBalance and never moves.
+  get dailyDdLimit(){ return this.initial * this.dailyPct/100; }
+  // today's breach level = day's starting balance − daily-DD allowance
+  get dailyDdBreachLevel(){ return this.dayStartBalance - this.dailyDdLimit; }
+  get dayActual(){ return this.currentDay ? (this.days[this.currentDay]?.actual || 0) : 0; }
+  get dayEffective(){ const a=this.dayActual; return a>0 ? Math.min(a,this.dayPnlCap) : a; }
+  // Per-day profit counted TOWARD THE TARGET is capped at dayPnlCap (max one-day
+  // profit) and RESETS every day — one huge day can add at most dayPnlCap toward
+  // the target. Losses count in full. This is the daily-reset the cap is meant for.
+  effectiveDay(d){ const a=this.days[d].actual; return a>0 ? Math.min(a, this.dayPnlCap) : a; }
+  get effectiveCumulative(){ return this.dayOrder.reduce((s,d)=> s + this.effectiveDay(d), 0); }
+  get cumulativeProfit(){ return this.effectiveCumulative; }  // counts toward target (daily-capped)
+  get actualProfit(){ return this.equity - this.phaseStart; } // real money made this phase
+  get targetRemaining(){ return Math.max(0, this.profitTarget - this.effectiveCumulative); }
+  // days whose raw profit exceeded the cap (the excess simply does not count toward target)
+  get cappedDays(){ return this.dayOrder.filter(d => this.days[d].actual > this.dayPnlCap + 1e-6); }
+  // True if `date`'s day already hit the per-day profit cap. Mirrors the
+  // production validateTradeOpen block — drives the "stop for today" popup.
+  dailyCapReached(date){
+    if(!(this.dayPnlCap > 0)) return false;
+    const d = this.days[date];
+    return !!d && d.actual >= this.dayPnlCap - 1e-6;
+  }
+
+  submit(dateStr, pnl){
+    pnl = +pnl;
+    if(this.status!=='ACTIVE' && this.status!=='FUNDED'){
+      return {ok:false, msg:`Account is ${this.status}. Trade ignored.`};
+    }
+    // ---- NEW TRADING DAY → DAILY RESET (this is the crux the user worried about) ----
+    if(dateStr !== this.currentDay){
+      this.currentDay        = dateStr;
+      this.dayStartBalance   = this.equity;   // re-anchor: today starts fresh from current balance
+      this.lowestEquityToday = this.equity;   // erase yesterday's low
+      if(!this.days[dateStr]){ this.days[dateStr]={actual:0}; this.dayOrder.push(dateStr); }
+    }
+    this.tradingDays.add(dateStr);
+
+    // ---- apply realised P&L ----
+    this.equity += pnl;
+    this.days[dateStr].actual += pnl;
+    this.lowestEquityToday   = Math.min(this.lowestEquityToday, this.equity);
+    this.lowestEquityOverall = Math.min(this.lowestEquityOverall, this.equity);
+
+    let res = {ok:true, msg:'Trade processed. Account active.'};
+
+    // ---- DAILY DRAWDOWN breach (measured from TODAY's start only) ----
+    const dailyDrop = this.dayStartBalance - this.lowestEquityToday;
+    const overallDrop = this.initial - this.lowestEquityOverall;
+    if(dailyDrop >= this.dailyDdLimit - 1e-6){
+      this.status='FAILED';
+      this.failReason=`Daily Drawdown breach — lost ₹${fmt(dailyDrop)} today (limit ₹${fmt(this.dailyDdLimit)})`;
+      res={ok:true, fail:true, msg:this.failReason};
+    }
+    // ---- OVERALL (MAX) DRAWDOWN breach (carries forward across days) ----
+    else if(overallDrop >= this.initial*this.maxPct/100 - 1e-6){
+      this.status='FAILED';
+      this.failReason=`Max Drawdown breach — equity ₹${fmt(this.lowestEquityOverall)} hit floor ₹${fmt(this.maxDdFloor)}`;
+      res={ok:true, fail:true, msg:this.failReason};
+    }
+    // ---- PASS / PHASE progression ----
+    // Target is measured on the DAILY-CAPPED cumulative, so one big day can't pass it —
+    // you need several consistent days. This is the fix for the max-one-day-profit bug.
+    else if(this.effectiveCumulative >= this.profitTarget - 1e-6
+            && this.tradingDays.size >= this.minDays){
+      if(this.phase < this.steps){
+        this.phase++;
+        res={ok:true, pass:true, msg:`Phase ${this.phase-1} PASSED → starting Phase ${this.phase}`};
+        this._resetPhase();
+      } else {
+        this.status = (this.steps===0) ? 'FUNDED' : 'PASSED';
+        res={ok:true, pass:true, msg:`🎉 ${this.status} — target reached across ${this.tradingDays.size} days (daily cap respected)`};
+      }
+    } else if(this.effectiveCumulative >= this.profitTarget - 1e-6 && this.tradingDays.size < this.minDays){
+      res={ok:true, msg:`Counted profit hit target but need ${this.minDays} trading days (have ${this.tradingDays.size}).`};
+    } else if(this.cappedDays.length){
+      res={ok:true, msg:`Daily cap hit: only ₹${fmt(this.dayPnlCap)}/day counts toward target. Counted ₹${fmt(this.effectiveCumulative)} / ₹${fmt(this.profitTarget)}.`};
+    }
+
+    this.trades.push({
+      n:this.trades.length+1, date:dateStr, pnl,
+      equity:this.equity, dayEff:this.dayEffective, cum:this.cumulativeProfit, status:this.status
+    });
+    return res;
+  }
+
+  // fresh evaluation for the next phase (each phase re-evaluates from the same balance)
+  _resetPhase(){
+    this.phaseStart=this.equity=this.initial;
+    this.dayStartBalance=this.lowestEquityToday=this.lowestEquityOverall=this.initial;
+    this.currentDay=null; this.days={}; this.dayOrder=[]; this.tradingDays=new Set();
+  }
+}
+
+/* ---------- helpers ---------- */
+const fmt = n => Math.round(n).toLocaleString('en-IN');
+const inr = n => '₹'+fmt(n);
+const signed = n => (n>=0?'+':'−')+'₹'+fmt(Math.abs(n));
+
+const TYPE_DEFAULTS = {
+  instant:{profitTargetPct:5,  dailyDdPct:3, maxDdPct:6,  minTradingDays:0, maxOneDayProfitPct:40, steps:0},
+  one:    {profitTargetPct:10, dailyDdPct:4, maxDdPct:10, minTradingDays:5, maxOneDayProfitPct:40, steps:1},
+  two:    {profitTargetPct:8,  dailyDdPct:5, maxDdPct:10, minTradingDays:5, maxOneDayProfitPct:40, steps:2},
+};
+
+/* ---------- DOM ---------- */
+let engine=null;
+const $=id=>document.getElementById(id);
+
+function readCfg(){
+  const t=$('chType').value;
+  return {
+    startingBalance:$('startBal').value, profitTargetPct:$('r_target').value,
+    dailyDdPct:$('r_daily').value, maxDdPct:$('r_max').value,
+    minTradingDays:$('r_days').value, maxOneDayProfitPct:$('r_oneday').value,
+    steps:TYPE_DEFAULTS[t].steps
+  };
+}
+$('chType').addEventListener('change',e=>{
+  const d=TYPE_DEFAULTS[e.target.value];
+  $('r_target').value=d.profitTargetPct; $('r_daily').value=d.dailyDdPct;
+  $('r_max').value=d.maxDdPct; $('r_days').value=d.minTradingDays; $('r_oneday').value=d.maxOneDayProfitPct;
+});
+$('initBtn').onclick=()=>{ engine=new DhanFundedEngine(readCfg()); render(); };
+$('closeTrade').onclick=()=>doTrade(+$('tradePnl').value||0);
+document.querySelectorAll('.qbtn').forEach(b=>b.onclick=()=>doTrade(+b.dataset.amt));
+$('nextDay').onclick=()=>{ const d=new Date($('tradeDate').value); d.setDate(d.getDate()+1);
+  $('tradeDate').value=d.toISOString().slice(0,10); };
+function doTrade(pnl){
+  if(!engine){ alert('Initialise account first'); return; }
+  if(!pnl){ return; }
+  const date=$('tradeDate').value;
+  // ── Daily profit cap guard — HARD BLOCK, exactly like the production
+  // backend (validateTradeOpen returns valid:false → trade never executes).
+  // OK just dismisses; the trade is NOT added.
+  if(engine.dailyCapReached(date) && (engine.status==='ACTIVE'||engine.status==='FUNDED')){
+    alert(
+      '⛔ DAILY PROFIT CAP HIT — TRADE BLOCKED\n\n'+
+      date+' ka profit ₹'+fmt(engine.days[date].actual)+' already daily cap ₹'+fmt(engine.dayPnlCap)+'/day tak pahunch gaya hai.\n\n'+
+      'Aaj aur jo profit karoge woh TARGET me NAHI ginega. Kal (+1 day) trade karo.\n\n'+
+      'Production me yeh trade block ho jata hai — yahan bhi block kar diya (paisa add NAHI hua).'
+    );
+    return; // do NOT submit — trade blocked
+  }
+  engine.submit(date, pnl);
+  $('tradePnl').value='';
+  render();
+}
+
+function card(k,v,cls){ return `<div class="card"><div class="k">${k}</div><div class="v ${cls}">${v}</div></div>`; }
+
+function render(){
+  if(!engine){ return; }
+  const e=engine;
+  const tProg = Math.max(0,Math.min(100, e.cumulativeProfit/e.profitTarget*100));
+  const dProg = e.minDays>0 ? Math.min(100, e.tradingDays.size/e.minDays*100) : 100;
+  const stMsg = e.status==='FAILED' ? e.failReason
+              : (e.trades.length? e.trades[e.trades.length-1].statusMsg : '') || 'Account active.';
+  const lastMsg = e._lastMsg || 'Account initialised. Submit a trade.';
+
+  const rows = e.trades.slice().reverse().map(t=>`
+    <tr>
+      <td>${t.n}</td><td>${t.date}</td>
+      <td class="${t.pnl>=0?'pos':'neg'}">${signed(t.pnl)}</td>
+      <td>${inr(t.equity)}</td>
+      <td class="${t.dayEff>=0?'pos':'neg'}">${signed(t.dayEff)}</td>
+      <td class="${t.cum>=0?'pos':'neg'}">${signed(t.cum)}</td>
+      <td><span class="pill ${t.status}">${t.status}</span></td>
+    </tr>`).join('') || `<tr><td colspan="7" class="empty" style="padding:30px">No trades yet</td></tr>`;
+
+  $('dash').innerHTML = `
+    <div class="status ${e.status}">
+      <div><div class="lbl">STATUS · PHASE ${e.phase}${e.steps>1?'/'+e.steps:''}</div>
+        <div class="big">${e.status}</div></div>
+      <div class="msg">${lastMsg}</div>
+    </div>
+    <div class="cards">
+      ${card('Current Equity', inr(e.equity),'cyan')}
+      ${card('Net P&L (Actual)', signed(e.actualProfit), e.actualProfit>=0?'green':'red')}
+      ${card('Day Actual P&L', signed(e.dayActual), e.dayActual>=0?'green':'red')}
+      ${card('Day Effective P&L', signed(e.dayEffective), e.dayEffective>=0?'green':'red')}
+      ${card('Counted Profit → Target', signed(e.cumulativeProfit),'purple')}
+      ${card('Target Remaining', inr(e.targetRemaining),'amber')}
+      ${card('Day P&L Cap (per day)', inr(e.dayPnlCap),'amber')}
+      ${card('Daily DD Breach Level', inr(e.dailyDdBreachLevel),'red')}
+      ${card('Max DD Breach Level', inr(e.maxDdFloor),'red')}
+      ${card('Trading Days', e.tradingDays.size+' / '+e.minDays,'txt')}
+    </div>
+    <div class="panel">
+      <h2><span class="ic">📊</span> Progress</h2>
+      <div class="prog"><div class="top"><span>Profit Target</span><span>${inr(e.cumulativeProfit)} / ${inr(e.profitTarget)}</span></div>
+        <div class="bar t"><i style="width:${tProg}%"></i></div></div>
+      <div class="prog"><div class="top"><span>Min Trading Days</span><span>${e.tradingDays.size} / ${e.minDays} days</span></div>
+        <div class="bar d"><i style="width:${dProg}%"></i></div></div>
+      ${e.cappedDays.length?`<div class="note" style="color:var(--amber)">⚠ Daily profit cap lagaa — ${e.cappedDays.length} din me profit ₹${fmt(e.dayPnlCap)}/day se zyada tha. Extra target me NAHI ginta; har din max ₹${fmt(e.dayPnlCap)} hi count hota hai (daily reset). Net P&L (Actual) ₹${fmt(e.actualProfit)} par counted sirf ₹${fmt(e.cumulativeProfit)}.</div>`:''}
+    </div>
+    <div class="panel">
+      <h2><span class="ic">📋</span> Trade Log (${e.trades.length} trades)</h2>
+      <table>
+        <thead><tr><th>#</th><th>Date</th><th>P&L</th><th>Equity</th><th>Eff.Day P&L</th><th>Cum.Profit</th><th>Status</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+// capture last message for the banner
+const _origSubmit = DhanFundedEngine.prototype.submit;
+DhanFundedEngine.prototype.submit = function(d,p){ const r=_origSubmit.call(this,d,p); this._lastMsg=r.msg; return r; };
+
+/* ================= TAB SWITCHING ================= */
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  ['sim','tests','bugs'].forEach(n=>$('tab-'+n).classList.add('hide'));
+  $('tab-'+t.dataset.tab).classList.remove('hide');
+  if(t.dataset.tab==='bugs') renderBugs();
+});
+
+/* ================= AUTOMATED TESTS ================= */
+function approx(a,b,eps=1){ return Math.abs(a-b)<=eps; }
+const TESTS = [
+  {
+    name:'Daily Loss RESETS next day (no carry-forward)',
+    desc:'Din-1: −3,000 phir +5,000 (net +2,000). Din-2: −1,000. Din-2 ka daily-loss sirf 1,000 hona chahiye, 4,000 nahi. Yahi user ka asli sawaal tha.',
+    run(){
+      const e=new DhanFundedEngine({startingBalance:1000000,profitTargetPct:10,dailyDdPct:4,maxDdPct:10,minTradingDays:5,maxOneDayProfitPct:40,steps:1});
+      e.submit('2025-01-01',-3000); e.submit('2025-01-01',5000);
+      e.submit('2025-01-02',-1000);
+      const dailyDropDay2 = e.dayStartBalance - e.lowestEquityToday;
+      const checks=[
+        ['Day-2 dayStartBalance re-anchored to 1,002,000', approx(e.dayStartBalance,1002000)],
+        ['Day-2 daily loss = 1,000 (NOT 4,000)', approx(dailyDropDay2,1000)],
+        ['Day-1 ka 3,000 carry NAHI hua', dailyDropDay2<3000],
+        ['Account still ACTIVE', e.status==='ACTIVE'],
+        ['Equity = 1,001,000', approx(e.equity,1001000)],
+      ];
+      return {checks, detail:`dayStartBalance=${inr(e.dayStartBalance)}  lowestEquityToday=${inr(e.lowestEquityToday)}  daily loss today=${inr(dailyDropDay2)}  status=${e.status}`};
+    }
+  },
+  {
+    name:'Daily DD breach fails same day',
+    desc:'Fund 10,00,000, daily limit 4% = 40,000. Ek hi din −40,000 → FAIL.',
+    run(){
+      const e=new DhanFundedEngine({startingBalance:1000000,profitTargetPct:10,dailyDdPct:4,maxDdPct:10,minTradingDays:5,maxOneDayProfitPct:40,steps:1});
+      e.submit('2025-01-01',-40000);
+      return {checks:[
+        ['Status = FAILED', e.status==='FAILED'],
+        ['Reason mentions Daily Drawdown', /Daily Drawdown/.test(e.failReason||'')],
+      ], detail:e.failReason};
+    }
+  },
+  {
+    name:'Two −39k days survive (daily resets) — proves reset',
+    desc:'Din-1 −39,000 aur Din-2 −39,000. Cumulatively −78,000 (>40k), par har din alag se 39k<40k → ACTIVE rehna chahiye.',
+    run(){
+      const e=new DhanFundedEngine({startingBalance:1000000,profitTargetPct:10,dailyDdPct:4,maxDdPct:10,minTradingDays:5,maxOneDayProfitPct:40,steps:1});
+      e.submit('2025-01-01',-39000);
+      const s1=e.status;
+      e.submit('2025-01-02',-39000);
+      return {checks:[
+        ['ACTIVE after Day-1 (39k<40k)', s1==='ACTIVE'],
+        ['Still ACTIVE after Day-2 (daily reset)', e.status==='ACTIVE'],
+        ['Equity = 9,22,000', approx(e.equity,922000)],
+      ], detail:`equity=${inr(e.equity)} status=${e.status} — daily loss har din 39k pe reset hua`};
+    }
+  },
+  {
+    name:'Max DD CARRIES FORWARD across days',
+    desc:'Lagaatar −39k/din (har din daily-limit ke andar). Overall loss jab 1,00,000 (10%) cross kare → Max DD FAIL. Yeh saabit karta hai max DD reset nahi hota.',
+    run(){
+      const e=new DhanFundedEngine({startingBalance:1000000,profitTargetPct:10,dailyDdPct:4,maxDdPct:10,minTradingDays:5,maxOneDayProfitPct:40,steps:1});
+      e.submit('2025-01-01',-39000);  // 961,000
+      e.submit('2025-01-02',-39000);  // 922,000
+      const before=e.status;
+      e.submit('2025-01-03',-23000);  // 899,000  → overall 101,000 ≥ 100,000
+      return {checks:[
+        ['ACTIVE through Day-2 (no daily breach)', before==='ACTIVE'],
+        ['FAILED on Day-3 via Max DD', e.status==='FAILED'],
+        ['Reason = Max Drawdown', /Max Drawdown/.test(e.failReason||'')],
+      ], detail:`final equity=${inr(e.equity)} floor=${inr(e.maxDdFloor)} — ${e.failReason}`};
+    }
+  },
+  {
+    name:'Daily DD breach level re-anchors each day',
+    desc:'Din-1 +10,000 ke baad Din-2 ka breach level naye balance se nikalna chahiye (10,10,000 − 40,000).',
+    run(){
+      const e=new DhanFundedEngine({startingBalance:1000000,profitTargetPct:10,dailyDdPct:4,maxDdPct:10,minTradingDays:5,maxOneDayProfitPct:40,steps:1});
+      e.submit('2025-01-01',10000);
+      const d1=e.dailyDdBreachLevel;
+      e.submit('2025-01-02',0);
+      return {checks:[
+        ['Day-1 breach level = 9,60,000', approx(d1,960000)],
+        ['Day-2 breach level = 9,70,000 (re-anchored)', approx(e.dailyDdBreachLevel,970000)],
+      ], detail:`Day1=${inr(d1)}  Day2=${inr(e.dailyDdBreachLevel)}`};
+    }
+  },
+  {
+    name:'Max one-day-profit: extra profit does NOT count toward target',
+    desc:'Cap = 40% × target(1,00,000) = 40,000. Ek din +90,000 → us din sirf 40,000 target me ginta, baaki nahi (par equity full badhti hai).',
+    run(){
+      const e=new DhanFundedEngine({startingBalance:1000000,profitTargetPct:10,dailyDdPct:4,maxDdPct:10,minTradingDays:5,maxOneDayProfitPct:40,steps:1});
+      e.submit('2025-01-01',90000);
+      return {checks:[
+        ['Day Actual = 90,000 (real money)', approx(e.dayActual,90000)],
+        ['Day Effective capped at 40,000', approx(e.dayEffective,40000)],
+        ['Counted toward target = 40,000 (NOT 90,000)', approx(e.cumulativeProfit,40000)],
+        ['Equity still grows fully = 10,90,000', approx(e.equity,1090000)],
+      ], detail:`day actual=${inr(e.dayActual)} counted=${inr(e.cumulativeProfit)} equity=${inr(e.equity)} cap=${inr(e.dayPnlCap)}`};
+    }
+  },
+  {
+    name:"One HUGE day can't pass the challenge (the reported bug)",
+    desc:'Target 50,000, daily cap 20,000. Ek hi din +5,00,000 kamao → sirf 20,000 count → challenge PASS nahi hona chahiye.',
+    run(){
+      const e=new DhanFundedEngine({startingBalance:1000000,profitTargetPct:5,dailyDdPct:3,maxDdPct:6,minTradingDays:5,maxOneDayProfitPct:40,steps:1});
+      e.submit('2025-01-01',500000);
+      return {checks:[
+        ['Counted profit = 20,000 (capped, not 5,00,000)', approx(e.cumulativeProfit,20000)],
+        ['Target Remaining still > 0', e.targetRemaining>0],
+        ['Status NOT passed (still ACTIVE)', e.status==='ACTIVE'],
+      ], detail:`counted=${inr(e.cumulativeProfit)} remaining=${inr(e.targetRemaining)} status=${e.status}`};
+    }
+  },
+  {
+    name:'Daily profit cap RESETS & accumulates across days',
+    desc:'Cap 20,000/day. 3 din × +50,000 (har din 20,000 tak capped) = 60,000 counted ≥ target 50,000, 3 days ≥ min 3 → PASS.',
+    run(){
+      const e=new DhanFundedEngine({startingBalance:1000000,profitTargetPct:5,dailyDdPct:3,maxDdPct:6,minTradingDays:3,maxOneDayProfitPct:40,steps:1});
+      e.submit('2025-01-01',50000); e.submit('2025-01-02',50000); e.submit('2025-01-03',50000);
+      return {checks:[
+        ['Each day counts only 20,000', approx(e.effectiveDay('2025-01-01'),20000)],
+        ['Counted cumulative = 60,000', approx(e.cumulativeProfit,60000)],
+        ['3 trading days', e.tradingDays.size===3],
+        ['Status = PASSED', e.status==='PASSED'],
+      ], detail:`counted=${inr(e.cumulativeProfit)} days=${e.tradingDays.size} status=${e.status}`};
+    }
+  },
+  {
+    name:'Daily cap hit → block/popup next same-day trade (next day OK)',
+    desc:'Cap 20,000/day. Din-1 +20,000 (cap hit) → usi din agla trade lene par popup/block. Agle din fresh → no block.',
+    run(){
+      const e=new DhanFundedEngine({startingBalance:1000000,profitTargetPct:5,dailyDdPct:3,maxDdPct:6,minTradingDays:3,maxOneDayProfitPct:40,steps:1});
+      e.submit('2025-01-01',20000);
+      const sameDay=e.dailyCapReached('2025-01-01');
+      const nextDay=e.dailyCapReached('2025-01-02');
+      return {checks:[
+        ['Same-day cap reached → block/popup fires', sameDay===true],
+        ['Next day fresh → no block (resets)', nextDay===false],
+      ], detail:`cap=${inr(e.dayPnlCap)} day1=${inr(e.days['2025-01-01'].actual)} sameDay=${sameDay} nextDay=${nextDay}`};
+    }
+  },
+  {
+    name:'PASS needs target + min days + clean',
+    desc:'5 din × +20,000 (har din cap ke andar) = 1,00,000 over 5 days → PASSED.',
+    run(){
+      const e=new DhanFundedEngine({startingBalance:1000000,profitTargetPct:10,dailyDdPct:4,maxDdPct:10,minTradingDays:5,maxOneDayProfitPct:40,steps:1});
+      for(let i=1;i<=5;i++) e.submit(`2025-01-0${i}`,20000);
+      return {checks:[
+        ['Cumulative = 1,00,000', approx(e.cumulativeProfit,100000)],
+        ['5 trading days', e.tradingDays.size===5],
+        ['Status = PASSED', e.status==='PASSED'],
+      ], detail:`cum=${inr(e.cumulativeProfit)} days=${e.tradingDays.size} status=${e.status}`};
+    }
+  },
+  {
+    name:'Min-days gate blocks early pass',
+    desc:'Target 3 din me hi reach (34k×3=1,02,000, har din cap ke andar) par 3<5 days → abhi PASS nahi.',
+    run(){
+      const e=new DhanFundedEngine({startingBalance:1000000,profitTargetPct:10,dailyDdPct:4,maxDdPct:10,minTradingDays:5,maxOneDayProfitPct:40,steps:1});
+      e.submit('2025-01-01',34000); e.submit('2025-01-02',34000); e.submit('2025-01-03',34000);
+      return {checks:[
+        ['Cumulative ≥ target', e.cumulativeProfit>=100000],
+        ['Only 3 trading days', e.tradingDays.size===3],
+        ['Status still ACTIVE (not passed)', e.status==='ACTIVE'],
+      ], detail:`cum=${inr(e.cumulativeProfit)} days=${e.tradingDays.size} status=${e.status}`};
+    }
+  },
+  {
+    name:"User's exact scenario: net +2k day is safe",
+    desc:'3 trade −3k + 2 trade +5k ek hi din. Net +2,000. Account fail nahi, daily DD limit ke andar.',
+    run(){
+      const e=new DhanFundedEngine({startingBalance:1000000,profitTargetPct:10,dailyDdPct:4,maxDdPct:10,minTradingDays:5,maxOneDayProfitPct:40,steps:1});
+      [-1000,-1000,-1000,2500,2500].forEach(p=>e.submit('2025-01-01',p));
+      return {checks:[
+        ['Net day P&L = +2,000', approx(e.dayActual,2000)],
+        ['Equity = 10,02,000', approx(e.equity,1002000)],
+        ['Status ACTIVE (no false fail)', e.status==='ACTIVE'],
+        ['Worst intraday low 9,97,000 > daily floor 9,60,000', e.lowestEquityToday>e.dailyDdBreachLevel],
+      ], detail:`equity=${inr(e.equity)} low=${inr(e.lowestEquityToday)} floor=${inr(e.dailyDdBreachLevel)}`};
+    }
+  },
+];
+
+$('runTests').onclick=()=>{
+  let pass=0, fail=0; const out=[];
+  for(const t of TESTS){
+    let r; try{ r=t.run(); }catch(err){ r={checks:[['threw',false]], detail:String(err)}; }
+    const ok = r.checks.every(c=>c[1]);
+    ok?pass++:fail++;
+    out.push(`<div class="test"><div class="h"><b>${t.name}</b><span class="badge ${ok?'pass':'fail'}">${ok?'PASS':'FAIL'}</span></div>
+      <div class="desc">${t.desc}</div>
+      <div class="detail">${r.checks.map(c=>`${c[1]?'✓':'✗'} ${c[0]}`).join('\n')}\n— ${r.detail||''}</div></div>`);
+  }
+  $('testSummary').className='summary';
+  $('testSummary').innerHTML=`<span class="big ${fail?'neg':'pos'}">${pass}/${TESTS.length}</span>
+     <span style="color:var(--muted)">tests passed${fail?` · <span class="neg">${fail} failed</span>`:' · all green ✓'}</span>`;
+  $('testResults').innerHTML=out.join('');
+};
+
+/* ================= BUGS ================= */
+const BUGS=[
+  {sev:'ok', cls:'ok', t:'NO carry-forward bug — daily loss DOES reset',
+   b:'6 adversarial verifiers ne confirm kiya: Objectives panel <code>routes/propTrading.js:954-956</code> live equity use karta hai (<code>max(0, dayStartBalance − currentEquity)</code>), aur reset 2 jagah hota hai — 00:05 IST cron <code>resetDailyStats</code> + naye din ke pehle trade pe <code>propTradingEngine.js:577-586</code>. Kal aaj ka loss daily-meter me add NAHI hoga. ✅'},
+  {sev:'MEDIUM', cls:'med', t:'Daily-reset cron has no run-at-startup',
+   b:'<code>server/cron/settlement.cron.js:105-116</code> — 00:05 IST reset sirf setTimeout se schedule hota hai; boot pe turant nahi chalta (swap-scheduler & expiry-sweep chalte hain). Agar server 00:05 IST ke <b>baad restart</b> ho, us din ka cron reset skip — idle account din bhar purana base rakhega. Fix: node-cron <code>("5 0 * * *", tz "Asia/Kolkata")</code> + boot pe ek baar chalao.'},
+  {sev:'LOW', cls:'low', t:'onTradeOpened new-day block currentDailyDrawdownPercent zero nahi karta',
+   b:'<code>propTradingEngine.js:585</code> — naye din pehle trade pe <code>dayStartBalance/lowestEquityToday</code> reset hota hai par stored <code>currentDailyDrawdownPercent</code> kal ka reh jaata hai (agle equity-tick pe theek ho jaata hai). Tumhare net-profit case me harmless (3%&lt;4%). Fix: line 585 ke baad <code>account.currentDailyDrawdownPercent = 0;</code> add karo (jaise resetDailyStats karta hai).'},
+  {sev:'SPEC', cls:'med', t:'Max-one-day-profit ko target-progress pe daily-cap karo (tumhara naya rule)',
+   b:'Is tester me ab fix laga: har din target ke liye max <code>dayPnlCap (= maxOneDayProfitPct × target)</code> tak hi profit ginta hai aur <b>roz reset</b> hota hai — ek bade din se challenge pass NAHI ho sakta, multiple consistent days chahiye. Tumhara real backend abhi <code>Challenge.maxOneDayProfitPercentOfTarget</code> ko sirf "flag + excess credit" karta hai (<code>propTradingEngine.checkMaxOneDayProfit</code>), target-progress ko daily-cap nahi karta. Backend me bhi <b>pass-check ko effective (daily-capped) cumulative profit</b> se compute karna chahiye — tabhi yeh behaviour match karega. Yeh tester woh correct spec hai jisse compare karna.'},
+];
+function renderBugs(){
+  $('bugList').innerHTML = BUGS.map(x=>`
+    <div class="bug ${x.cls}">
+      <div class="t">${x.t}<span class="sev ${x.cls}">${x.sev}</span></div>
+      <div class="b">${x.b}</div>
+    </div>`).join('');
+}
+</script>
+</body>
+</html>

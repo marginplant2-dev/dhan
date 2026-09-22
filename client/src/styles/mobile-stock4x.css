@@ -1,0 +1,1799 @@
+/**
+ * DhanFunded mobile UI — aligns with dhanfunded-mobile-ui.html (dark) &
+ * dhanfunded-mobile-light.html (light). Scoped to max-width: 768px.
+ */
+
+@media (max-width: 768px) {
+  /* ── Dark theme tokens (inside .app) ── */
+  html[data-theme='dark'] .app.user-layout-shell {
+    /* Obsidian Trade — "Kinetic Darkroom" palette */
+    --m-accent: #2962FF;
+    --m-accent-dim: rgba(41, 98, 255, 0.1);
+    --m-accent-border: rgba(41, 98, 255, 0.2);
+    --m-blue: #2962FF;
+    --m-blue-l: #448AFF;
+    --m-blue-dim: rgba(41, 98, 255, 0.1);
+    --m-blue-border: rgba(41, 98, 255, 0.2);
+    --m-green: #00C853;
+    --m-green-dim: rgba(0, 200, 83, 0.1);
+    --m-red: #FF3D00;
+    --m-red-dim: rgba(255, 61, 0, 0.1);
+    --m-bg0: #0d0e10;
+    --m-bg1: #131416;
+    --m-bg2: #1a1b1e;
+    --m-bg3: #1f2022;
+    --m-border: rgba(255, 255, 255, 0.06);
+    --m-t1: #ffffff;
+    --m-t2: #c3c5d8;
+    --m-t3: #5a5d6e;
+    --m-hero-grad: linear-gradient(180deg, #151618 0%, #0d0e10 100%);
+    --m-portfolio-bg: linear-gradient(145deg, #1f2022 0%, #1a1b1e 100%);
+    --m-portfolio-border: 1px solid rgba(255, 255, 255, 0.06);
+    --m-bnav-bg: rgba(13, 14, 16, 0.85);
+    --m-fab-grad: linear-gradient(135deg, #00C853, #009624);
+  }
+
+  /* ── Light theme tokens ── */
+  html[data-theme='light'] .app.user-layout-shell {
+    --m-blue: #3b6ef8;
+    --m-blue-l: #2451d1;
+    --m-green: #00a96e;
+    --m-green-dim: rgba(0, 169, 110, 0.1);
+    --m-red: #e02020;
+    --m-red-dim: rgba(224, 32, 32, 0.1);
+    --m-bg0: #eef2fb;
+    --m-bg1: #f4f7ff;
+    --m-bg2: #ffffff;
+    --m-bg3: #f0f4ff;
+    --m-border: rgba(59, 110, 248, 0.1);
+    --m-t1: #0d1526;
+    --m-t2: #4a587a;
+    --m-t3: #8a96b4;
+    --m-hero-grad: linear-gradient(160deg, #c8d8ff 0%, #d8e6ff 30%, #ebf0ff 70%, #f0f4ff 100%);
+    --m-portfolio-bg: linear-gradient(145deg, #2451d1 0%, #3b6ef8 60%, #5580ff 100%);
+    --m-portfolio-border: none;
+    --m-bnav-bg: #ffffff;
+    --m-fab-grad: linear-gradient(135deg, #3b6ef8, #00a96e);
+  }
+
+  .app.user-layout-shell .m-font-syne {
+    font-family: 'Syne', sans-serif;
+  }
+
+  .app.user-layout-shell .m-font-mono {
+    font-family: 'DM Mono', monospace;
+  }
+
+  .app.user-layout-shell {
+    font-family: 'Inter', 'DM Sans', system-ui, sans-serif;
+    padding-bottom: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Actual rendered height of .mobi-fixed-footer (status strip + nav
+       + breathing room) so content is never flush against the nav.
+       All pages read this via var() so there's one source of truth. */
+    --mobi-footer-h: 90px;
+  }
+
+  /* Make .main-content the single scroll container on mobile. The inline
+     style on the element sets `overflow: hidden` and `position: fixed` —
+     we override overflow so page content scrolls naturally and the
+     padding-bottom reserves space for the fixed bottom nav. This replaces
+     the previous pattern where every page had its own scroll wrapper and
+     had to remember to leave ~90px at the bottom for the nav. */
+  .app.user-layout-shell .main-content {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    padding-bottom: calc(var(--mobi-footer-h, 90px) + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Page root containers should not constrain height so content flows
+     naturally and the main-content padding-bottom reserves nav space.
+     Exception: .market-page-root needs its own scroll/overflow for tabs. */
+  .app.user-layout-shell .main-content > div:not(.market-page-root) {
+    height: auto !important;
+    min-height: 100%;
+    overflow: visible !important;
+  }
+
+  /* Fixed footer: compact status + bottom nav.
+     Match the page background exactly (no blur, no tint) so there's no
+     visible band above the bottom nav on any page. */
+  .mobi-fixed-footer {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    background: var(--bg-primary);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-top: none;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .mobi-status-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 10px;
+    font-size: 10px;
+    color: var(--m-t2);
+    border-bottom: 1px solid var(--m-border);
+    min-height: 32px;
+  }
+
+  .mobi-status-strip .m-mono {
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    color: var(--m-t1);
+  }
+
+  .mobi-status-expand-btn {
+    background: var(--m-bg3);
+    border: 1px solid var(--m-border);
+    color: var(--m-t2);
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 10px;
+    cursor: pointer;
+  }
+
+  .mobi-status-currency-toggle {
+    display: inline-flex;
+    background: var(--m-bg3);
+    border: 1px solid var(--m-border);
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .mobi-status-currency-toggle button {
+    padding: 4px 8px;
+    background: transparent;
+    border: none;
+    color: var(--m-t3, #9ca3af);
+    font-size: 10px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .mobi-status-currency-toggle button.active {
+    background: var(--m-blue, #3b6ef8);
+    color: #fff;
+  }
+
+  .mobi-status-detail {
+    display: none;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    padding: 8px 10px;
+    font-size: 10px;
+    color: var(--m-t2);
+    border-bottom: 1px solid var(--m-border);
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+
+  .mobi-fixed-footer.mobi-status-open .mobi-status-detail {
+    display: flex;
+  }
+
+  .header-nav .nav-bnav-dup {
+    display: none !important;
+  }
+
+  /* Hide desktop status bar on mobile (replaced by strip) */
+  .app.user-layout-shell > footer.status-bar {
+    display: none;
+  }
+
+  /* Bottom nav — 5 equal tabs: Home | Challenges | Orders | Wallet | More */
+  .mobile-bottom-nav.mobi-dhanfunded-bnav {
+    display: flex !important;
+    align-items: center;
+    position: relative !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    padding: 2px 4px 4px;
+    background: transparent;
+    border-top: none;
+    gap: 0;
+  }
+
+  .mobi-dhanfunded-bnav .mobi-bnav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 4px 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    color: var(--m-t3);
+    transition: color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .mobi-dhanfunded-bnav .mobi-bnav-item.mobi-active {
+    color: var(--m-t1);
+    background: none !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .mobi-dhanfunded-bnav .mobi-bnav-item .mobi-bnav-icon {
+    font-size: 20px;
+    line-height: 1;
+    display: inline-flex;
+  }
+  /* Shrink the icon inside the span to 20px so it matches other apps */
+  .mobi-dhanfunded-bnav .mobi-bnav-item .mobi-bnav-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mobi-dhanfunded-bnav .mobi-bnav-item .mobi-bnav-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    line-height: 1.1;
+  }
+
+  .mobi-dhanfunded-bnav .mobi-bnav-item:focus,
+  .mobi-dhanfunded-bnav .mobi-bnav-item:active {
+    outline: none !important;
+    box-shadow: none !important;
+    background: none !important;
+    border: none !important;
+  }
+
+  .mobi-dhanfunded-bnav .mobi-bnav-dot {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    display: none;
+  }
+
+  .mobi-dhanfunded-bnav .mobi-bnav-item.mobi-active .mobi-bnav-dot {
+    opacity: 1;
+  }
+
+  .mobi-bnav-trade-wrap {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-top: -18px;
+  }
+
+  .mobi-bnav-trade {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: none;
+    background: var(--m-fab-grad);
+    color: #fff;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(59, 110, 248, 0.45);
+    outline: none;
+  }
+
+  .mobi-bnav-trade.mobi-fab-active {
+    box-shadow:
+      0 0 0 3px rgba(77, 142, 255, 0.45),
+      0 4px 20px rgba(59, 110, 248, 0.45);
+  }
+
+  html[data-theme='light'] .mobi-bnav-trade {
+    box-shadow: 0 4px 20px rgba(59, 110, 248, 0.35);
+  }
+
+  .mobi-bnav-trade-wrap .mobi-bnav-trade-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--m-blue-l);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Home — mobile dashboard */
+  .mobi-home-dashboard {
+    display: none;
+  }
+
+  .home-desktop-block {
+    display: block !important;
+  }
+
+  .mobi-s1-hero {
+    background: var(--m-hero-grad);
+    padding: 0 16px 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 20px 20px;
+  }
+
+  .mobi-s1-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0 16px;
+  }
+
+  .mobi-s1-greeting {
+    font-size: 13px;
+    color: var(--m-t2);
+    font-weight: 500;
+  }
+
+  .mobi-s1-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--m-t1);
+    letter-spacing: -0.3px;
+  }
+
+  .mobi-s1-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .mobi-notif-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    color: var(--m-t2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  html[data-theme='light'] .mobi-notif-btn {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+  }
+
+  .mobi-s1-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--m-fab-grad);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    color: #fff;
+  }
+
+  .mobi-portfolio-card {
+    background: var(--m-portfolio-bg);
+    border: var(--m-portfolio-border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  html[data-theme='light'] .mobi-portfolio-card {
+    box-shadow: 0 8px 32px rgba(59, 110, 248, 0.25);
+  }
+
+  .mobi-pc-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--m-t2);
+    margin-bottom: 6px;
+  }
+
+  html[data-theme='light'] .mobi-pc-label {
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .mobi-pc-amount {
+    font-family: 'Inter', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--m-t1);
+    letter-spacing: -1.2px;
+    line-height: 1.1;
+  }
+
+  html[data-theme='light'] .mobi-pc-amount {
+    color: #fff;
+  }
+
+  .mobi-pc-sub {
+    font-size: 11px;
+    color: var(--m-t2);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  html[data-theme='light'] .mobi-pc-sub {
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .mobi-live-pill {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--m-green-dim);
+    color: var(--m-green);
+  }
+
+  .mobi-pc-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--m-border);
+  }
+
+  html[data-theme='light'] .mobi-pc-row {
+    border-top-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .mobi-pc-stat-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m-t3);
+    margin-bottom: 2px;
+  }
+
+  html[data-theme='light'] .mobi-pc-stat-label {
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .mobi-pc-stat-val {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--m-t1);
+  }
+
+  html[data-theme='light'] .mobi-pc-stat-val {
+    color: #fff;
+  }
+
+  .mobi-quick-actions {
+    display: flex;
+    gap: 10px;
+    padding: 0 16px 16px;
+  }
+
+  .mobi-qa-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 4px;
+    background: var(--m-bg3);
+    border: 1px solid var(--m-border);
+    border-radius: 12px;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    min-height: 80px;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .mobi-qa-btn:active {
+    background: var(--m-bg2);
+  }
+
+  html[data-theme='light'] .mobi-qa-btn {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(59, 110, 248, 0.06);
+  }
+
+  .mobi-qa-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .mobi-qa-icon.blue {
+    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    color: #60a5fa;
+  }
+  .mobi-qa-icon.green {
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    color: #4ade80;
+  }
+  .mobi-qa-icon.red {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    color: #f87171;
+  }
+
+  .mobi-qa-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--m-t2);
+    text-align: center;
+  }
+
+  .mobi-market-list {
+    padding: 0 16px 20px;
+  }
+
+  .mobi-section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .mobi-section-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--m-t1);
+    letter-spacing: -0.2px;
+  }
+
+  .mobi-see-all-btn {
+    background: none;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--m-blue-l, #4d8eff);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    padding: 4px 0;
+  }
+
+  .mobi-mkt-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--m-border);
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+  }
+
+  .mobi-mkt-item:last-child {
+    border-bottom: none;
+  }
+
+  .mobi-mkt-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  html[data-theme='light'] .mobi-mkt-icon {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+    border-color: rgba(34, 197, 94, 0.2);
+  }
+
+  .mobi-mkt-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--m-t1);
+  }
+
+  .mobi-mkt-sub {
+    font-size: 10px;
+    color: var(--m-t3);
+  }
+
+  .mobi-mkt-price {
+    margin-left: auto;
+    text-align: right;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--m-t1);
+    letter-spacing: -0.3px;
+  }
+
+  .mobi-mkt-chg {
+    font-size: 10px;
+    font-weight: 700;
+    text-align: right;
+  }
+
+  .mobi-mkt-chg.up {
+    color: var(--m-green);
+  }
+  .mobi-mkt-chg.dn {
+    color: var(--m-red);
+  }
+
+  /* Market page — list shell */
+  .mobi-market-s2 {
+    background: var(--m-bg1);
+    min-height: 100%;
+  }
+
+  .mobi-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--m-bg3);
+    border: 1px solid var(--m-border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin: 8px 16px;
+  }
+
+  html[data-theme='light'] .mobi-search-bar {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(59, 110, 248, 0.05);
+  }
+
+  .mobi-search-bar input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--m-t1);
+  }
+
+  .mobi-search-bar input::placeholder {
+    color: var(--m-t3);
+  }
+
+  .mobi-tabs-row {
+    display: flex;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--m-border);
+    gap: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobi-tabs-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobi-tab-pill {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 12px;
+    color: var(--m-t3);
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: none;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+
+  .mobi-tab-pill.mobi-active {
+    color: var(--m-blue-l);
+    border-bottom-color: var(--m-blue-l);
+  }
+
+  /* Terminal / chart mobile polish */
+  .mobi-s3-header {
+    background: var(--m-hero-grad);
+    padding: 8px 16px 12px;
+    border-bottom: 1px solid var(--m-border);
+  }
+
+  .mobi-ohlc-row {
+    display: flex;
+    margin-top: 10px;
+    background: var(--m-bg3);
+    border-radius: 12px;
+    padding: 8px 10px;
+    border: 1px solid var(--m-border);
+  }
+
+  html[data-theme='light'] .mobi-ohlc-row {
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .mobi-ohlc-item {
+    flex: 1;
+    text-align: center;
+  }
+
+  .mobi-ohlc-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m-t3);
+  }
+
+  .mobi-ohlc-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--m-t2);
+    font-weight: 500;
+  }
+
+  /* !important is needed because a later unscoped `display: none` rule
+     further down this file (outside any @media block) would otherwise win
+     on source order at matching specificity. */
+  .mobi-wallet-mobile-hero {
+    display: block !important;
+    margin-bottom: 12px;
+  }
+
+  /* The desktop balance card duplicates the hero above (same numbers,
+     worse layout — 5 items in a 2-col grid leaves Free Margin orphaned
+     on its own row). Hide it on mobile in favour of the purpose-built
+     hero card. */
+  .wallet-page .wallet-balance-card {
+    display: none !important;
+  }
+
+  /* On mobile the form is collapsed by default — only the hero card is
+     shown. Tapping Deposit/Withdraw in the hero adds the
+     `.wallet-form-card--mobile-open` class which reveals the form. */
+  .wallet-page .wallet-form-card {
+    display: none !important;
+  }
+  .wallet-page .wallet-form-card.wallet-form-card--mobile-open {
+    display: block !important;
+    position: relative;
+    padding: 14px !important;
+    border-radius: 14px !important;
+  }
+  /* Close (✕) button — top-right of the form card on mobile. Hidden on
+     desktop since the form is always open there. */
+  .wallet-form-mobile-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary, rgba(255, 255, 255, 0.06));
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    border-radius: 50%;
+    color: var(--text-secondary, #9ca3af);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 2;
+  }
+  .wallet-page .wallet-tabs {
+    margin-bottom: 12px !important;
+  }
+  .wallet-page .wallet-form .form-group {
+    margin-bottom: 12px !important;
+  }
+  .wallet-page .wallet-form .form-group label {
+    font-size: 12px !important;
+  }
+  .wallet-page .wallet-form .form-group input,
+  .wallet-page .wallet-form .form-group select {
+    padding: 11px 12px !important;
+    font-size: 14px !important;
+    border-radius: 10px !important;
+  }
+  .wallet-page .submit-btn {
+    padding: 13px !important;
+    font-size: 14px !important;
+    border-radius: 12px !important;
+  }
+  /* Transaction history — tighten heading and row spacing. */
+  .wallet-page .transactions-card {
+    padding: 14px !important;
+    border-radius: 14px !important;
+    margin-top: 12px;
+  }
+  .wallet-page .transactions-card h3 {
+    font-size: 15px !important;
+    margin-bottom: 10px !important;
+  }
+
+  /* Wallet mobile */
+  .mobi-wallet-page {
+    background: var(--m-bg1);
+    min-height: 100%;
+    padding: 0 0 8px;
+  }
+
+  .mobi-wallet-hero {
+    padding: 12px 16px 20px;
+    background: var(--m-hero-grad);
+    border-bottom: 1px solid var(--m-border);
+  }
+
+  .mobi-wallet-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--m-t1);
+    margin-bottom: 12px;
+  }
+
+  .mobi-curr-toggle {
+    display: flex;
+    background: var(--m-bg3);
+    border-radius: 12px;
+    padding: 3px;
+    width: fit-content;
+    margin-bottom: 14px;
+    border: 1px solid var(--m-border);
+  }
+
+  .mobi-curr-toggle button {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 9px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    background: none;
+    color: var(--m-t2);
+  }
+
+  .mobi-curr-toggle button.mobi-active {
+    background: var(--m-blue);
+    color: #fff;
+  }
+
+  .mobi-balance-card {
+    background: var(--m-portfolio-bg);
+    border: var(--m-portfolio-border);
+    border-radius: 18px;
+    padding: 18px;
+  }
+
+  html[data-theme='light'] .mobi-balance-card {
+    box-shadow: 0 8px 28px rgba(59, 110, 248, 0.2);
+  }
+
+  .mobi-wallet-actions {
+    display: flex;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+
+  .mobi-wa-deposit {
+    flex: 1;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    background: var(--m-blue);
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .mobi-wa-withdraw {
+    flex: 1;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--m-border);
+    background: var(--m-bg3);
+    color: var(--m-t1);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* Login mobile */
+  .mobi-login-shell {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 20px 40px;
+    position: relative;
+  }
+
+  html[data-theme='dark'] .mobi-login-shell,
+  .auth-page .mobi-login-shell {
+    background: linear-gradient(160deg, #070e22 0%, #080c18 60%, #050810 100%);
+    color: #f0f2f8;
+  }
+
+  html[data-theme='light'] .mobi-login-shell {
+    background: linear-gradient(160deg, #dce6ff 0%, #e8edf8 50%, #eef2fb 100%);
+    color: #0d1526;
+  }
+
+  .mobi-login-logo-block {
+    text-align: center;
+    margin: 32px 0 28px;
+  }
+
+  .mobi-login-logo-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 12px;
+    background: linear-gradient(135deg, #3b6ef8, #00d68f);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(59, 110, 248, 0.35);
+  }
+
+  .mobi-login-logo-icon img {
+    width: 40px;
+    height: auto;
+  }
+
+  .mobi-login-brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .mobi-login-tagline {
+    font-size: 13px;
+    color: var(--m-t3, #8a9ab5);
+    margin-top: 6px;
+  }
+
+  .mobi-login-field-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--m-t3, #8a9ab5);
+    margin-bottom: 6px;
+  }
+
+  .mobi-login-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--m-bg3, #121c35);
+    border: 1px solid var(--m-border, rgba(255, 255, 255, 0.07));
+    border-radius: 13px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+
+  html[data-theme='light'] .mobi-login-input-wrap {
+    background: #fff;
+    border-color: rgba(59, 110, 248, 0.12);
+  }
+
+  .mobi-login-input-wrap input {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: inherit;
+  }
+
+  .mobi-login-cta {
+    width: 100%;
+    padding: 16px;
+    margin-top: 8px;
+    background: var(--m-blue, #3b6ef8);
+    border: none;
+    border-radius: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 6px 28px rgba(59, 110, 248, 0.35);
+  }
+}
+
+.mobi-wallet-mobile-hero {
+  display: none;
+}
+
+/* Mobile-only chart action bar (hidden on desktop) */
+.mobi-chart-action-bar {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  /* Close button for the mobile-only collapsed form — hide on desktop. */
+  .wallet-form-mobile-close {
+    display: none !important;
+  }
+
+  .mobi-chart-ohlc-bar {
+    display: none !important;
+  }
+
+  .mobi-chart-action-bar {
+    display: none !important;
+  }
+
+  .settings-page .settings-nav-mobile {
+    display: none !important;
+  }
+
+  .mobi-home-dashboard {
+    display: none !important;
+  }
+
+  .home-desktop-block {
+    display: block !important;
+  }
+
+  .mobi-fixed-footer {
+    display: none !important;
+  }
+
+  .app.user-layout-shell .main-content {
+    padding-bottom: 0;
+  }
+
+  .mobi-wallet-mobile-hero {
+    display: none !important;
+  }
+}
+
+/* ── Market page (existing class names) ── */
+@media (max-width: 768px) {
+  .mobile-market-tabs {
+    background: var(--m-bg1) !important;
+    border-bottom: 1px solid var(--m-border) !important;
+    padding: 4px 4px 0 !important;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .mobile-market-tab {
+    color: var(--m-t3) !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    border-bottom: none !important;
+    border-top: none !important;
+    background: none !important;
+  }
+
+  .mobile-market-tab.active {
+    color: var(--m-blue-l) !important;
+    border-bottom-color: transparent !important;
+    border-top-color: transparent !important;
+  }
+
+  .mobile-instruments-content .instruments-search-bar {
+    margin: 8px 16px !important;
+    padding: 10px 14px !important;
+    border-radius: 12px !important;
+    background: var(--m-bg3) !important;
+    border: 1px solid var(--m-border) !important;
+  }
+
+  .mobile-instruments-content .instruments-search-bar input {
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 13px !important;
+    color: var(--m-t1) !important;
+  }
+
+  .mobile-instruments-content .instruments-filter-tabs {
+    padding: 0 16px !important;
+    border-bottom: 1px solid var(--m-border) !important;
+    gap: 0 !important;
+  }
+
+  .mobile-instruments-content .filter-tab {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    padding: 10px 12px !important;
+    color: var(--m-t3) !important;
+    border: none !important;
+    border-bottom: 2px solid transparent !important;
+    background: none !important;
+    border-radius: 0 !important;
+  }
+
+  .mobile-instruments-content .filter-tab.active {
+    color: var(--m-blue-l) !important;
+    border-bottom-color: var(--m-blue-l) !important;
+  }
+
+  .mobile-instrument-row {
+    border-bottom: 1px solid var(--m-border) !important;
+    padding: 12px 16px !important;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .mobile-instrument-row .inst-symbol {
+    font-weight: 700 !important;
+    color: var(--m-t1) !important;
+  }
+
+  .chart-section .chart-tabs-bar {
+    background: var(--m-hero-grad) !important;
+    border-bottom: 1px solid var(--m-border) !important;
+    padding: 6px 8px !important;
+  }
+
+  .chart-section .chart-tab {
+    font-family: 'DM Mono', monospace !important;
+    font-size: 11px !important;
+  }
+
+  .market-page-root,
+  .market-main-area {
+    background: var(--m-bg1) !important;
+  }
+
+  /* Auth / login */
+  .auth-page .tubes-hint {
+    display: none !important;
+  }
+
+  .auth-page .auth-container.tubes-auth {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 16px !important;
+    align-items: flex-start !important;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  html[data-theme='dark'] .auth-page .auth-container.tubes-auth {
+    background: linear-gradient(160deg, #070e22 0%, #080c18 60%, #050810 100%) !important;
+  }
+
+  html[data-theme='light'] .auth-page .auth-container.tubes-auth {
+    background: linear-gradient(160deg, #dce6ff 0%, #e8edf8 50%, #eef2fb 100%) !important;
+  }
+
+  .auth-page .auth-card {
+    background: rgba(18, 28, 53, 0.55) !important;
+    border: 1px solid var(--m-border, rgba(255, 255, 255, 0.08)) !important;
+    border-radius: 20px !important;
+    backdrop-filter: blur(12px);
+    max-width: 420px !important;
+    width: 100% !important;
+  }
+
+  html[data-theme='light'] .auth-page .auth-card {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-color: rgba(59, 110, 248, 0.12) !important;
+  }
+
+  .auth-page .auth-header .auth-logo-img {
+    width: 56px !important;
+    height: auto !important;
+  }
+
+  .auth-page .form-group label {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    color: var(--m-t3, #8a9ab5) !important;
+  }
+
+  .auth-page .form-group input {
+    border-radius: 13px !important;
+    padding: 13px 16px !important;
+    font-family: 'DM Sans', sans-serif !important;
+    border: 1px solid var(--m-border, rgba(255, 255, 255, 0.1)) !important;
+    background: var(--m-bg3, rgba(18, 28, 53, 0.6)) !important;
+    color: inherit !important;
+  }
+
+  html[data-theme='light'] .auth-page .form-group input {
+    background: #f0f4ff !important;
+  }
+
+  .auth-page .auth-submit-btn {
+    border-radius: 14px !important;
+    padding: 16px !important;
+    font-weight: 800 !important;
+    font-size: 15px !important;
+    box-shadow: 0 6px 28px rgba(59, 110, 248, 0.35) !important;
+  }
+
+  /* Wallet: hide top rate bar on small screens (hero replaces) */
+  .wallet-page .currency-rate-bar {
+    display: none !important;
+  }
+
+  .wallet-page .wallet-balance-card {
+    border-radius: 18px !important;
+    margin-top: 0 !important;
+    padding: 16px !important;
+  }
+
+  /* Stack deposit form and transaction history vertically */
+  .wallet-page .wallet-content {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Stack balance rows and shrink grid to 2 columns on mobile */
+  .wallet-page .balance-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+
+  .wallet-page .currency-label {
+    min-width: 0 !important;
+    font-size: 12px !important;
+    text-align: left !important;
+  }
+
+  .wallet-page .balance-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .wallet-page .balance-item {
+    padding: 10px !important;
+  }
+
+  .wallet-page .balance-value {
+    font-size: 14px !important;
+    word-break: break-all;
+  }
+
+  .wallet-page .balance-label {
+    font-size: 10px !important;
+  }
+
+  /* Settings page: hide desktop tabs, show mobile dropdown */
+  .settings-page .settings-nav-tabs-desktop {
+    display: none !important;
+  }
+
+  .settings-page .settings-nav-mobile {
+    display: block !important;
+  }
+
+  /* Mobile chart: one-tap Buy/Sell action bar below chart */
+  .chart-section .mobi-chart-action-bar {
+    display: flex !important;
+    align-items: stretch;
+    gap: 8px;
+    padding: 2px 10px 6px;
+    background: var(--m-bg1, #0f1117);
+    border-top: 1px solid var(--m-border, rgba(255, 255, 255, 0.08));
+    position: relative;
+    flex-wrap: wrap;
+  }
+
+  /* Swipe-up handle that spans the full top of the action bar */
+  .mobi-chart-expand-handle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 0 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    order: -1;
+  }
+
+  .mobi-chart-expand-bar {
+    display: block;
+    width: 46px;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--m-border, rgba(255, 255, 255, 0.25));
+  }
+
+  .mobi-chart-lot-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 4px 6px;
+    width: 56px;
+    flex-shrink: 0;
+    background: var(--m-bg3, rgba(255, 255, 255, 0.04));
+    border: 1px solid var(--m-border, rgba(255, 255, 255, 0.1));
+    border-radius: 10px;
+  }
+
+  .mobi-chart-lot-label {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--m-t3, #9ca3af);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .mobi-chart-lot-input {
+    width: 100%;
+    padding: 2px 4px;
+    border: none;
+    background: transparent;
+    color: var(--text-primary, #fff);
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    text-align: center;
+    outline: none;
+  }
+
+  /* Mobile full-order-panel bottom sheet */
+  .mobi-order-sheet-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+    z-index: 1199;
+    animation: mobi-order-fade 0.18s ease-out;
+  }
+
+  .mobi-order-sheet {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-secondary, #0f1117);
+    border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+    border-radius: 20px 20px 0 0;
+    z-index: 1200;
+    box-shadow: 0 -14px 40px rgba(0, 0, 0, 0.55);
+    animation: mobi-order-slide 0.22s ease-out;
+  }
+
+  .mobi-order-sheet-header {
+    position: relative;
+    padding: 10px 16px 6px;
+    border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.06));
+  }
+
+  .mobi-order-sheet-handle {
+    display: block;
+    width: 46px;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--border-color, rgba(255, 255, 255, 0.22));
+    margin: 2px auto 6px;
+  }
+
+  .mobi-order-sheet-close {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary, rgba(255, 255, 255, 0.06));
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    border-radius: 50%;
+    color: var(--text-secondary, #9ca3af);
+    cursor: pointer;
+  }
+
+  .mobi-order-sheet-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 14px calc(20px + env(safe-area-inset-bottom, 0px));
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* === Compact order-panel restyle inside the mobile sheet === */
+  .mobi-order-compact .order-header {
+    display: none !important;
+  }
+
+  .mobi-order-compact .trading-mode-tabs {
+    display: flex !important;
+    gap: 6px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    margin-bottom: 10px !important;
+  }
+
+  .mobi-order-compact .mode-tab {
+    flex: 1 !important;
+    padding: 9px 6px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    border-radius: 10px !important;
+    background: var(--bg-tertiary, rgba(255, 255, 255, 0.04)) !important;
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08)) !important;
+    color: var(--text-secondary, #9ca3af) !important;
+  }
+
+  .mobi-order-compact .mode-tab.active {
+    background: var(--accent-primary, #6366f1) !important;
+    color: #fff !important;
+    border-color: var(--accent-primary, #6366f1) !important;
+  }
+
+  .mobi-order-compact .order-type-tabs {
+    display: flex !important;
+    gap: 6px !important;
+    margin-bottom: 10px !important;
+    padding: 4px !important;
+    background: var(--bg-tertiary, rgba(255, 255, 255, 0.04)) !important;
+    border-radius: 10px !important;
+  }
+
+  .mobi-order-compact .type-tab {
+    flex: 1 !important;
+    padding: 8px 4px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-secondary, #9ca3af) !important;
+  }
+
+  .mobi-order-compact .type-tab.active {
+    background: var(--bg-primary, #000) !important;
+    color: var(--text-primary, #fff) !important;
+  }
+
+  .mobi-order-compact .price-buttons {
+    display: flex !important;
+    align-items: stretch !important;
+    gap: 6px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .mobi-order-compact .price-btn {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 6px !important;
+    border-radius: 12px !important;
+    min-height: 58px !important;
+  }
+
+  .mobi-order-compact .price-btn .side-label {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .mobi-order-compact .price-btn .side-price {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+  }
+
+  .mobi-order-compact .spread-badge {
+    align-self: center !important;
+    font-size: 10px !important;
+    padding: 4px 6px !important;
+    min-width: 38px !important;
+    text-align: center !important;
+  }
+
+  .mobi-order-compact .order-input-group {
+    margin-bottom: 10px !important;
+  }
+
+  .mobi-order-compact .order-input-group label {
+    display: block !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: var(--text-secondary, #9ca3af) !important;
+    margin-bottom: 6px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.4px !important;
+  }
+
+  .mobi-order-compact .order-input-group input,
+  .mobi-order-compact .order-input-group select {
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+    border-radius: 10px !important;
+    background: var(--bg-tertiary, rgba(255, 255, 255, 0.04)) !important;
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08)) !important;
+  }
+
+  .mobi-order-compact .volume-control {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    background: var(--bg-tertiary, rgba(255, 255, 255, 0.04)) !important;
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08)) !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+  }
+
+  .mobi-order-compact .volume-control button {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-primary, #fff) !important;
+    flex-shrink: 0 !important;
+  }
+
+  .mobi-order-compact .volume-control input {
+    flex: 1 !important;
+    border: none !important;
+    background: transparent !important;
+    text-align: center !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    padding: 0 !important;
+  }
+
+  .mobi-order-compact .volume-hint {
+    display: block;
+    margin-top: 4px;
+    font-size: 10px !important;
+  }
+
+  .mobi-order-compact .sl-tp-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+
+  .mobi-order-compact .pips-control {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .mobi-order-compact .pips-control button {
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    border-radius: 6px !important;
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08)) !important;
+    background: var(--bg-tertiary, rgba(255, 255, 255, 0.04)) !important;
+    color: var(--text-primary, #fff) !important;
+    font-size: 14px !important;
+  }
+
+  .mobi-order-compact .margin-info {
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--text-secondary, #9ca3af);
+  }
+
+  .mobi-order-compact .session-tabs {
+    margin-bottom: 10px !important;
+  }
+
+  @keyframes mobi-order-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes mobi-order-slide {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .mobi-chart-sell-btn,
+  .mobi-chart-buy-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    padding: 7px 8px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.08s ease, filter 0.15s ease;
+  }
+
+  .mobi-chart-sell-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+  }
+
+  .mobi-chart-buy-btn {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
+  }
+
+  .mobi-chart-sell-btn:active,
+  .mobi-chart-buy-btn:active {
+    transform: scale(0.97);
+    filter: brightness(0.95);
+  }
+
+  .mobi-chart-action-label {
+    font-size: 12px;
+    letter-spacing: 0.4px;
+  }
+
+  .mobi-chart-action-price {
+    font-size: 10.5px;
+    font-weight: 600;
+    opacity: 0.92;
+  }
+
+  /* Mobile "More" bottom sheet */
+  .mobi-more-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 1099;
+    animation: mobi-more-fade 0.18s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .mobi-more-sheet {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-secondary, #0f1117);
+    border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+    border-radius: 20px 20px 0 0;
+    touch-action: manipulation;
+    padding: 8px 16px calc(24px + env(safe-area-inset-bottom, 0px));
+    z-index: 1100;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.5);
+    animation: mobi-more-slide 0.22s ease-out;
+  }
+
+  .mobi-more-handle {
+    width: 44px;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--border-color, rgba(255, 255, 255, 0.2));
+    margin: 8px auto 12px;
+  }
+
+  .mobi-more-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary, rgba(255, 255, 255, 0.06));
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    border-radius: 50%;
+    color: var(--text-secondary, #9ca3af);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    z-index: 2;
+  }
+
+  .mobi-more-close:hover,
+  .mobi-more-close:active {
+    background: var(--bg-hover, rgba(255, 255, 255, 0.1));
+    color: var(--text-primary, #fff);
+  }
+
+  .mobi-more-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 14px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    color: var(--text-primary, #fff);
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .mobi-more-item:hover,
+  .mobi-more-item:active {
+    background: var(--bg-tertiary, rgba(255, 255, 255, 0.06));
+  }
+
+  .mobi-more-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--bg-tertiary, rgba(255, 255, 255, 0.06));
+    color: var(--accent-primary, #6366f1);
+    flex-shrink: 0;
+  }
+
+  .mobi-more-label {
+    flex: 1;
+  }
+
+  @keyframes mobi-more-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes mobi-more-slide {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+}

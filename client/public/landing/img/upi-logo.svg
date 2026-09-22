@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 132" role="img" aria-label="UPI — Unified Payments Interface">
+  <text x="0" y="92" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="96" letter-spacing="-4" fill="#7C7C7C">UPI</text>
+  <!-- tricolour double arrow: orange (front-left) + green (back-right) -->
+  <polygon points="205,8 262,55 205,102" fill="#ED7A2E"/>
+  <polygon points="236,8 293,55 236,102" fill="#0BA24F"/>
+  <text x="150" y="126" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="17" letter-spacing="3" fill="#5A5A5A">UNIFIED PAYMENTS INTERFACE</text>
+</svg>

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- PWA manifest for installable web app -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- Chrome fires beforeinstallprompt long before the React bundle parses, so
+         the InstallAppButton's useEffect listener always missed it and fell back
+         to the iOS "Add to Home Screen" modal. Catch it here and stash it. -->
+    <script>
+      window.__pfInstallPrompt = null;
+      window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        window.__pfInstallPrompt = e;
+        window.dispatchEvent(new Event('pf-install-ready'));
+      });
+      window.addEventListener('appinstalled', function () {
+        window.__pfInstallPrompt = null;
+      });
+    </script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1769709554194839');
+    fbq('init', '945466765247883');
+    fbq('track', 'PageView');
+    </script>
+    <!-- End Meta Pixel Code -->
+
+    <!-- ── Primary Meta Tags ───────────────────────────────────────────── -->
+    <title>DhanFunded — Prop Firm India | Funded NIFTY & BANKNIFTY Accounts</title>
+    <meta name="title" content="DhanFunded — Prop Firm India | Funded NIFTY & BANKNIFTY Accounts" />
+    <meta name="description" content="India-only prop trading assessments on NSE and BSE index options — NIFTY, BANKNIFTY and SENSEX. Accounts from ₹1 Lakh to ₹50 Lakh, one-time fees from ₹2,700, 80% performance share paid in INR to your Indian bank every 14 days. No forex, no crypto, no subscription." />
+    <meta name="author" content="DhanFunded" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <!-- Names the market plainly. Similarly-named global prop firms trade
+         forex and crypto in USD; this site is India-only, NSE/BSE, INR. -->
+    <meta name="geo.region" content="IN" />
+    <meta name="geo.placename" content="India" />
+    <meta name="target_country" content="IN" />
+    <meta name="revisit-after" content="7 days" />
+    <link rel="canonical" href="https://dhanfunded.com/" />
+
+    <!-- ── Open Graph / Facebook ───────────────────────────────────────── -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://dhanfunded.com/" />
+    <meta property="og:title" content="DhanFunded — Prop Firm India | Funded NIFTY & BANKNIFTY Accounts" />
+    <meta property="og:description" content="India-only assessments on NIFTY, BANKNIFTY and SENSEX. Accounts from ₹1 Lakh to ₹50 Lakh, fees from ₹2,700, 80% share paid in INR every 14 days." />
+    <meta property="og:image" content="https://dhanfunded.com/landing/img/dhanfunded-og.png" />
+    <meta property="og:site_name" content="DhanFunded" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- ── Twitter Card ────────────────────────────────────────────────── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://dhanfunded.com/" />
+    <meta name="twitter:title" content="DhanFunded — Prop Firm India | Funded NIFTY & BANKNIFTY Accounts" />
+    <meta name="twitter:description" content="India-only assessments on NIFTY, BANKNIFTY and SENSEX. Accounts from ₹1 Lakh to ₹50 Lakh, fees from ₹2,700, 80% share paid in INR every 14 days." />
+    <meta name="twitter:image" content="https://dhanfunded.com/landing/img/dhanfunded-og.png" />
+
+    <!-- ── Favicons ────────────────────────────────────────────────────── -->
+    <!-- One icon set covers both user (dhanfunded.com) and admin
+         subdomain (admin.dhanfunded.com) since they ship the same index.html.
+         Generated from public/brand/source/fev_icon.png — see scripts note. -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=2" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png?v=2" />
+    <link rel="shortcut icon" type="image/png" href="/favicon-32.png?v=2" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2" />
+
+    <!-- ── Theme color for browser chrome ──────────────────────────────── -->
+    <meta name="theme-color" content="#0A2130" />
+    <!-- ── iOS PWA / standalone mode ─────────────────────────────────── -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="DhanFunded" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- ── Fonts — trimmed weights, swap for instant text ──────────────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- DM Sans / Mono — lazy-loaded (not render-blocking, only used in dashboard) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'" />
+
+    <!-- ── Schema.org structured data: Organization ───────────────────── -->
+    <!-- Only site-wide schema belongs here: every prerendered page inherits
+         this head, so a page-specific block (FAQPage, Service) would end up on
+         pages it does not describe. Those live in the page component. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "DhanFunded",
+        "legalName": "DhanFunded",
+        "alternateName": [
+          "DhanFunded India",
+          "DhanFunded.com"
+        ],
+        "slogan": "Trade. Prove. Get Funded.",
+        "url": "https://dhanfunded.com",
+        "logo": "https://dhanfunded.com/landing/img/dhanfunded-og.png",
+        "description": "Rules-based trading assessments on Indian index derivatives. Accounts from ₹1 Lakh to ₹50 Lakh, assessment fees from ₹2,700 one-time, 80% performance share and payouts every 14 days in INR.",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Oval House, 03/302, British Hotel Lane",
+          "addressLocality": "Mumbai",
+          "addressRegion": "Maharashtra",
+          "postalCode": "400001",
+          "addressCountry": "IN"
+        },
+        "contactPoint": [
+          {
+            "@type": "ContactPoint",
+            "telephone": "+91-83670-45119",
+            "contactType": "customer support",
+            "email": "support@dhanfunded.com",
+            "areaServed": {
+              "@type": "Country",
+              "name": "India"
+            },
+            "availableLanguage": [
+              "English",
+              "Hindi"
+            ]
+          }
+        ],
+        "sameAs": [
+          "https://www.instagram.com/dhanfunded",
+          "https://www.youtube.com/@dhanfunded",
+          "https://t.me/dhanfunded",
+          "https://www.trustpilot.com/review/dhanfunded.com"
+        ],
+        "knowsAbout": [
+          "NIFTY 50 index options",
+          "BANKNIFTY index options",
+          "SENSEX index options",
+          "NSE",
+          "BSE",
+          "simulated trading evaluation"
+        ],
+        "areaServed": {
+          "@type": "Country",
+          "name": "India"
+        }
+      }
+    </script>
+
+    <!-- ── Schema.org structured data: WebSite + SearchAction ─────────── -->
+    <!-- Only site-wide schema belongs here: every prerendered page inherits
+         this head, so a page-specific block (FAQPage, Service) would end up on
+         pages it does not describe. Those live in the page component. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "DhanFunded",
+        "url": "https://dhanfunded.com",
+        "alternateName": [
+          "DhanFunded India",
+          "DhanFunded.com"
+        ]
+      }
+    </script>
+
+    <!-- ── Schema.org structured data: Service ────────────────────────── -->
+
+    <!-- ── Schema.org structured data: FAQPage (rich results) ─────────── -->
+
+    <script>
+      (function() {
+        var saved = localStorage.getItem('dhanfunded-dark-mode');
+        var isDark = saved === null ? true : saved === 'true';
+        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      })();
+    </script>
+    <style>
+      html, body {
+        background-color: #05131B;
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        min-height: 100dvh;
+        -webkit-text-size-adjust: 100%;
+        -webkit-overflow-scrolling: touch;
+      }
+      html[data-theme="light"], html[data-theme="light"] body { background-color: #ffffff; }
+      #root { min-height: 100%; min-height: 100dvh; }
+    </style>
+    <script async src="/charting_library/charting_library.standalone.js"></script>
+  </head>
+  <body>
+    <!-- Meta Pixel <noscript> fallback — must live in the body, not the head. -->
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1769709554194839&ev=PageView&noscript=1" alt="" /></noscript>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=945466765247883&ev=PageView&noscript=1" alt="" /></noscript>
+
+    <!-- Pre-mount splash: the brand mark instead of an empty screen while the
+         bundle parses. React replaces #root's contents on mount. -->
+    <div id="root">
+      <div id="df-splash" style="min-height:100dvh;display:grid;place-items:center">
+        <img src="/favicon.png" alt="DhanFunded" width="72" height="72"
+             style="width:72px;height:72px;animation:df-boot 1.8s ease-in-out infinite" />
+      </div>
+    </div>
+    <style>@keyframes df-boot{0%,100%{opacity:1}50%{opacity:.55}}</style>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

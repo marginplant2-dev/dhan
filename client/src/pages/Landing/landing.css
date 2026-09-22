@@ -1,0 +1,678 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   DhanFunded — landing design system
+   One look: the logo's navy canvas. Every colour is a token on .landing-page
+   (not :root), so the trading app keeps its own theme.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.landing-page {
+  /* surfaces — the logo's own canvas. --pf-bg is transparent on purpose: the
+     animated grid lives on this element, and a section painting an opaque
+     background over it would hide the texture. */
+  --pf-bg:        transparent;
+  --pf-bg-soft:   rgba(120,230,170,.035);
+  --pf-card:      #0A2130;
+  --pf-card-alt:  #0E2A3A;
+  --pf-border:    rgba(120,230,170,.13);
+  --pf-border-strong: rgba(120,230,170,.26);
+
+  /* ink */
+  --pf-text:      #EAF5EF;
+  --pf-muted:     #9FB5AB;
+  --pf-faint:     #7E958B;
+
+  /* brand — the logo's green→cyan arrow. --pf-brand is the legible brand
+     colour for text and icons; --pf-gold / --pf-gold-2 are the bright gradient
+     fills (kept under the old names so every component picks them up). */
+  --pf-brand:     #35DC85;
+  --pf-brand-2:   #49E8F0;
+  --pf-gold:      #1FD87A;   /* logo green */
+  --pf-gold-2:    #22D9E8;   /* logo cyan  */
+  --pf-on-gold:   #04121C;
+  --pf-brand-soft:rgba(31,216,122,.14);
+  --pf-ghost:     rgba(170,245,205,.07);   /* the giant 01/02/03 numerals */
+
+  /* accents — amber is the small gold wedge in the mark */
+  --pf-amber:     #E8B84B;
+  --pf-amber-soft:rgba(232,184,75,.14);
+  --pf-green:     #34D399;
+  --pf-green-soft:rgba(52,211,153,.14);
+  --pf-violet:    #A78BFA;
+  --pf-violet-soft:rgba(167,139,250,.14);
+  --pf-pink:      #F472B6;
+  --pf-pink-soft: rgba(244,114,182,.14);
+
+  --pf-ink-panel: #030E15;
+  --pf-ink-panel-2: #0A2130;
+
+  --pf-shadow:    0 1px 2px rgba(0,0,0,.45), 0 10px 30px -12px rgba(0,0,0,.65);
+  --pf-shadow-lg: 0 2px 4px rgba(0,0,0,.45), 0 24px 60px -20px rgba(0,0,0,.8);
+
+  --pf-r-lg: 26px;
+
+  position: relative;
+  isolation: isolate;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: radial-gradient(130% 85% at 50% -8%, #0A2635, #05131B 58%) fixed;
+  color: var(--pf-text);
+  color-scheme: dark;
+  overflow-x: hidden;
+}
+
+/* ── The canvas: the artwork's dotted grid, drifting, plus two slow brand
+      lights. Both layers are fixed and sit behind everything, so they read as
+      one continuous background across every section and page. ───────────── */
+.landing-page::before,
+.landing-page::after {
+  content: '';
+  position: fixed;
+  inset: -12%;
+  z-index: -1;
+  pointer-events: none;
+}
+.landing-page::before {
+  background-image:
+    radial-gradient(rgba(120,230,170,.30) 1px, transparent 1px),
+    linear-gradient(rgba(120,230,170,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120,230,170,.05) 1px, transparent 1px);
+  background-size: 26px 26px, 104px 104px, 104px 104px;
+  opacity: .5;
+  animation: df-canvas-drift 70s linear infinite;
+}
+.landing-page::after {
+  background:
+    radial-gradient(42% 38% at 12% 88%, rgba(31,216,122,.16), transparent 70%),
+    radial-gradient(44% 40% at 88% 8%, rgba(34,217,232,.14), transparent 70%);
+  animation: df-canvas-breathe 16s ease-in-out infinite alternate;
+}
+
+@keyframes df-canvas-drift   { to { transform: translate3d(26px, 26px, 0); } }
+@keyframes df-canvas-breathe { to { transform: translate3d(2%, -2%, 0) scale(1.06); opacity: .75; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-page::before, .landing-page::after { animation: none; }
+}
+
+.landing-page * { scroll-margin-top: 96px; }
+.landing-page ::selection { background: var(--pf-gold); color: var(--pf-on-gold); }
+
+/* ── layout ──────────────────────────────────────────────────────────────── */
+.pf-wrap { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: 20px; }
+@media (min-width: 640px) { .pf-wrap { padding-inline: 28px; } }
+/* Wide monitors: 1200px left the navbar and every section floating in the
+   middle of a ~1990px screen. Bumped together so nav stays aligned with the
+   sections below it. */
+@media (min-width: 1536px) { .pf-wrap { max-width: 1400px; } }
+
+.pf-section { padding-block: 64px; }
+@media (min-width: 768px) { .pf-section { padding-block: 96px; } }
+.pf-section--tight { padding-block: 48px; }
+.pf-section--alt { background: var(--pf-bg-soft); }
+.pf-section--card { background: color-mix(in srgb, var(--pf-card) 80%, transparent); }
+
+/* ── type ────────────────────────────────────────────────────────────────── */
+.pf-eyebrow {
+  font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--pf-brand);
+}
+.pf-h1 {
+  font-size: clamp(2.6rem, 6.2vw, 4.6rem); font-weight: 800; line-height: 1.03;
+  letter-spacing: -.035em; color: var(--pf-text);
+}
+.pf-h2 {
+  font-size: clamp(2rem, 4.4vw, 3.4rem); font-weight: 800; line-height: 1.06;
+  letter-spacing: -.03em; color: var(--pf-text);
+}
+.pf-h3 { font-size: 1.15rem; font-weight: 700; letter-spacing: -.01em; color: var(--pf-text); }
+.pf-lead { font-size: clamp(1rem, 1.5vw, 1.15rem); line-height: 1.65; color: var(--pf-muted); }
+.pf-body { font-size: .95rem; line-height: 1.65; color: var(--pf-muted); }
+.pf-small { font-size: .82rem; line-height: 1.6; color: var(--pf-faint); }
+.pf-accent { color: var(--pf-brand); }
+
+/* ── surfaces ────────────────────────────────────────────────────────────── */
+.pf-card {
+  background: var(--pf-card);
+  border: 1px solid var(--pf-border);
+  border-radius: var(--pf-r-lg);
+  box-shadow: var(--pf-shadow);
+}
+.pf-card--flat { box-shadow: none; }
+.pf-card--hover { transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+.pf-card--hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--pf-shadow-lg);
+  border-color: var(--pf-border-strong);
+}
+.pf-inset {
+  background: var(--pf-card-alt);
+  border: 1px solid var(--pf-border);
+  border-radius: 14px;
+}
+
+/* ── buttons ─────────────────────────────────────────────────────────────── */
+.pf-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border-radius: 999px; font-weight: 650; font-size: .92rem; line-height: 1;
+  padding: 14px 26px; border: 1px solid transparent; cursor: pointer;
+  transition: transform .18s ease, background .18s ease, box-shadow .18s ease, color .18s ease, border-color .18s ease;
+  white-space: nowrap; text-decoration: none;
+}
+.pf-btn:active { transform: translateY(1px); }
+/* The logo's green→cyan arrow gradient, with navy ink — same in both themes. */
+.pf-btn--primary {
+  background: linear-gradient(135deg, var(--pf-gold), var(--pf-gold-2));
+  color: var(--pf-on-gold);
+  box-shadow: 0 8px 22px -10px rgba(31,216,122,.85);
+}
+.pf-btn--primary:hover {
+  background: linear-gradient(135deg, #35DC85, #4AE6F2);
+  box-shadow: 0 14px 30px -10px rgba(34,217,232,.95);
+}
+.pf-btn--ghost {
+  background: var(--pf-card); color: var(--pf-text); border-color: var(--pf-border-strong);
+}
+.pf-btn--ghost:hover { border-color: var(--pf-brand); color: var(--pf-brand); }
+.pf-btn--sm { padding: 10px 18px; font-size: .85rem; }
+.pf-btn--lg { padding: 17px 34px; font-size: 1rem; }
+
+/* ── chips / pills ───────────────────────────────────────────────────────── */
+.pf-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 14px; border-radius: 999px; font-size: .78rem; font-weight: 600;
+  background: var(--pf-brand-soft); color: var(--pf-brand);
+  border: 1px solid transparent;
+}
+.pf-chip--outline { background: var(--pf-card); color: var(--pf-muted); border-color: var(--pf-border); }
+
+/* icon tile used on every card header */
+.pf-tile {
+  width: 46px; height: 46px; border-radius: 14px;
+  display: grid; place-items: center; flex: none;
+}
+.pf-tile--brand  { background: linear-gradient(135deg, var(--pf-gold), var(--pf-gold-2)); color: var(--pf-on-gold); }
+.pf-tile--soft   { background: var(--pf-brand-soft); color: var(--pf-brand); }
+.pf-tile--amber  { background: var(--pf-amber-soft); color: var(--pf-amber); }
+.pf-tile--green  { background: var(--pf-green-soft); color: var(--pf-green); }
+.pf-tile--violet { background: var(--pf-violet-soft);color: var(--pf-violet); }
+.pf-tile--pink   { background: var(--pf-pink-soft);  color: var(--pf-pink); }
+.pf-tile--ink    { background: #0E2A3A;              color: var(--pf-gold); }
+
+/* the oversized ghost step numeral */
+.pf-numeral {
+  font-size: 3.4rem; font-weight: 800; line-height: 1;
+  letter-spacing: -.05em; color: var(--pf-ghost);
+}
+
+/* ── segmented toggle (2-Step / 1-Step) ──────────────────────────────────── */
+.pf-seg {
+  display: inline-flex; padding: 6px; gap: 4px; border-radius: 999px;
+  background: var(--pf-card); border: 1px solid var(--pf-border); box-shadow: var(--pf-shadow);
+}
+.pf-seg button {
+  border: 0; background: transparent; cursor: pointer;
+  padding: 12px 26px; border-radius: 999px;
+  font-size: .92rem; font-weight: 650; color: var(--pf-muted);
+  transition: background .2s ease, color .2s ease;
+}
+.pf-seg button[data-active="true"] {
+  background: linear-gradient(135deg, var(--pf-gold), var(--pf-gold-2));
+  color: var(--pf-on-gold);
+}
+
+/* ── comparison table ────────────────────────────────────────────────────── */
+.pf-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.pf-table th, .pf-table td {
+  padding: 20px 18px; text-align: center; vertical-align: middle;
+  border-bottom: 1px solid var(--pf-border);
+}
+.pf-table tr:last-child th, .pf-table tr:last-child td { border-bottom: 0; }
+.pf-table th:first-child, .pf-table td:first-child {
+  text-align: left; color: var(--pf-text); font-weight: 650; font-size: .95rem;
+  position: sticky; left: 0; background: var(--pf-card); z-index: 1;
+}
+.pf-table td { color: var(--pf-text); font-weight: 650; font-size: 1rem; }
+.pf-table tbody tr:nth-child(even) td,
+.pf-table tbody tr:nth-child(even) th { background: var(--pf-card-alt); }
+.pf-table tbody tr:nth-child(even) td:first-child { background: var(--pf-card-alt); }
+.pf-table-sub { display: block; font-size: .8rem; font-weight: 500; color: var(--pf-faint); margin-top: 3px; }
+
+/* info dot with hover tooltip — no JS, no library */
+.pf-info {
+  display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 999px;
+  border: 1px solid var(--pf-border-strong); color: var(--pf-faint);
+  font-size: 10px; font-weight: 700; margin-left: 7px; cursor: help; position: relative;
+  vertical-align: middle;
+}
+.pf-info::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 9px); left: 50%; transform: translateX(-50%);
+  width: max-content; max-width: 240px; padding: 9px 12px; border-radius: 10px;
+  background: var(--pf-ink-panel); color: #E8ECF6; font-size: 12px; font-weight: 500;
+  line-height: 1.45; text-align: left; letter-spacing: 0;
+  opacity: 0; pointer-events: none; transition: opacity .16s ease; z-index: 30;
+  box-shadow: 0 12px 30px -10px rgba(0,0,0,.5);
+}
+.pf-info:hover::after { opacity: 1; }
+
+/* ── dark code panel (hero mock) ─────────────────────────────────────────── */
+.pf-panel {
+  background: var(--pf-ink-panel);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  box-shadow: 0 30px 70px -30px rgba(9,12,25,.7);
+  overflow: hidden;
+}
+.pf-panel-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 13px 16px; border-bottom: 1px solid rgba(255,255,255,.07);
+  background: var(--pf-ink-panel-2);
+}
+.pf-dot { width: 11px; height: 11px; border-radius: 999px; }
+.pf-code { padding: 18px 16px; font-family: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13.5px; line-height: 1.85; }
+.pf-code .ln { color: #414C6B; user-select: none; display: inline-block; width: 22px; }
+.pf-code .k  { color: #7FB0FF; }
+.pf-code .s  { color: #6EE7A8; }
+.pf-code .p  { color: #8C97B4; }
+
+/* ── misc ────────────────────────────────────────────────────────────────── */
+.pf-divider { height: 1px; background: var(--pf-border); border: 0; }
+.pf-marquee { display: flex; gap: 34px; width: max-content; animation: pf-marquee 55s linear infinite; }
+@keyframes pf-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+.pf-rise { opacity: 0; transform: translateY(14px); animation: pf-rise .6s cubic-bezier(.22,.8,.3,1) forwards; }
+@keyframes pf-rise { to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-page *, .landing-page *::before, .landing-page *::after {
+    animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important; scroll-behavior: auto !important;
+  }
+}
+
+/* hide scrollbar on the horizontally scrollable pricing table */
+.pf-scroll-x { overflow-x: auto; scrollbar-width: thin; }
+.pf-scroll-x::-webkit-scrollbar { height: 8px; }
+.pf-scroll-x::-webkit-scrollbar-thumb { background: var(--pf-border-strong); border-radius: 999px; }
+
+
+/* ── Hero ────────────────────────────────────────────────────────────────────
+   Full-bleed emerald wash, headline, two actions, four numbers — and the brand
+   mark itself drifting across the backdrop as glowing tiles. Every colour is a
+   token, so the light/dark switch carries the whole section; the reduced-motion
+   block at the bottom stops all of it.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* The nav bar is white so the wordmark reads at a glance — it carries the
+   logo's own navy plate, which needs a light surface behind it. Tokens are
+   redefined locally, so every child (links, buttons, the mobile sheet) turns
+   dark-on-light without a rule of its own. */
+/* ── Nav bar ─────────────────────────────────────────────────────────────────
+   A floating white island rather than a full-width strip: narrower than the
+   page, rounded, with the hero's navy visible down both sides. ─────────────── */
+.df-nav {
+  --pf-card:       #FFFFFF;
+  --pf-card-alt:   #F3F8F5;
+  --pf-border:     #DCE9E2;
+  --pf-border-strong: #C2D6CB;
+  --pf-text:       #08160F;
+  --pf-muted:      #4B6357;
+  --pf-faint:      #7D948A;
+  --pf-brand:      #0B8F62;
+  --pf-brand-2:    #0E7C8C;
+  --pf-brand-soft: #E2F8EE;
+  color: var(--pf-text);
+  padding: 14px 16px 0;
+  background: transparent;
+}
+
+.df-navbar {
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
+  height: 68px;
+  padding-inline: 18px 14px;
+  border-radius: 20px;
+  background: var(--pf-card);
+  border: 1px solid var(--pf-border);
+  box-shadow: 0 10px 30px -18px rgba(6,20,14,.55);
+  transition: box-shadow .25s ease, background .25s ease;
+}
+.df-navbar--scrolled {
+  background: color-mix(in srgb, var(--pf-card) 88%, transparent);
+  backdrop-filter: saturate(180%) blur(14px);
+  box-shadow: 0 16px 40px -20px rgba(6,20,14,.7);
+}
+@media (min-width: 1536px) { .df-navbar { max-width: 1280px; } }
+
+/* brand lockup: the square mark, then the name in type */
+.df-brand { display: inline-flex; align-items: center; gap: 9px; }
+/* the mark is a letterform, not a tile — a touch larger reads better beside
+   the name, and it carries no background of its own */
+.df-brand img { width: 42px; height: 42px; display: block; }
+.df-brand-name {
+  font-size: 1.16rem; font-weight: 800; letter-spacing: -.02em;
+  color: var(--pf-text); white-space: nowrap;
+}
+.df-brand-name i { font-style: normal; color: var(--pf-brand); }
+@media (max-width: 400px) { .df-brand-name { font-size: 1rem; } }
+
+/* the mobile sheet hangs off the island, matching its width and radius */
+.df-mobile-sheet {
+  width: 100%;
+  max-width: 1120px;
+  margin: 10px auto 0;
+  padding: 10px 20px 18px;
+  border-radius: 20px;
+  background: var(--pf-card);
+  border: 1px solid var(--pf-border);
+  box-shadow: 0 18px 44px -22px rgba(6,20,14,.7);
+}
+
+/* The hero keeps the logo's canvas tokens. */
+.df-hero {
+  --pf-card:       #0A2130;
+  --pf-card-alt:   #0E2A3A;
+  --pf-border:     rgba(120,230,170,.14);
+  --pf-border-strong: rgba(120,230,170,.30);
+  --pf-text:       #EAF5EF;
+  --pf-muted:      #9FB5AB;
+  --pf-faint:      #7E958B;
+  --pf-brand:      #35DC85;
+  --pf-brand-2:    #49E8F0;
+  --pf-brand-soft: rgba(31,216,122,.14);
+  --pf-ghost:      rgba(170,245,205,.07);
+  color: var(--pf-text);
+}
+
+.df-hero {
+  position: relative;
+  overflow: hidden;
+  /* transparent on purpose — the page canvas (grid + navy) runs straight
+     through, so the hero is not a separate dark block sitting on the page */
+  background: transparent;
+}
+
+.df-hero-glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(10px);
+  animation: df-drift 14s ease-in-out infinite alternate;
+}
+.df-hero-glow--green {
+  left: -200px; bottom: -220px; width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(31,216,122,.20), transparent 64%);
+}
+.df-hero-glow--cyan {
+  right: -180px; top: -240px; width: 720px; height: 720px;
+  background: radial-gradient(circle, rgba(34,217,232,.16), transparent 66%);
+  animation-delay: -7s;
+}
+
+/* the mark's dotted grid, fading out before it reaches the copy */
+.df-hero-grid {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 26px 26px;
+  color: var(--pf-brand);
+  opacity: .16;
+  mask-image: radial-gradient(85% 70% at 68% 34%, #000, transparent 76%);
+  -webkit-mask-image: radial-gradient(85% 70% at 68% 34%, #000, transparent 76%);
+}
+
+.df-badge {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 8px 16px; border-radius: 999px;
+  background: var(--pf-card); border: 1px solid var(--pf-border);
+  font-size: .72rem; font-weight: 700; letter-spacing: .16em;
+  color: var(--pf-muted);
+}
+.df-badge-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--pf-gold);
+  box-shadow: 0 0 0 4px var(--pf-brand-soft);
+  animation: df-live 2.2s ease-in-out infinite;
+}
+
+.df-h1 {
+  margin: 26px 0 0;
+  font-size: clamp(2.7rem, 7vw, 5.4rem);
+  font-weight: 800; line-height: 1.02; letter-spacing: -.04em;
+  color: var(--pf-text);
+  max-width: 16ch;
+}
+.df-gradient-text {
+  background: linear-gradient(115deg, var(--pf-gold), var(--pf-gold-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.df-hero-lead {
+  margin: 22px 0 0;
+  max-width: 44rem;
+  font-size: clamp(1rem, 1.4vw, 1.18rem);
+  line-height: 1.7;
+  color: var(--pf-muted);
+}
+
+.df-hero-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 34px; }
+
+/* four numbers, edge to edge like the hero's own footer */
+.df-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 56px;
+}
+@media (min-width: 900px) { .df-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.df-stat {
+  padding: 22px 24px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--pf-card) 72%, transparent);
+  border: 1px solid var(--pf-border);
+  backdrop-filter: blur(6px);
+  transition: border-color .22s ease, transform .22s ease;
+}
+.df-stat:hover { border-color: var(--pf-border-strong); transform: translateY(-3px); }
+.df-stat b {
+  display: block;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem); font-weight: 800; letter-spacing: -.035em;
+  color: var(--pf-text);
+}
+.df-stat span {
+  display: block; margin-top: 4px;
+  font-size: .74rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--pf-faint);
+}
+
+/* copy rises in, staggered by an inline animation-delay */
+.df-in {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: df-in .7s cubic-bezier(.22,.8,.3,1) forwards;
+}
+
+/* ── Market strip (under the hero) ───────────────────────────────────────── */
+.df-strip {
+  background: var(--pf-bg-soft);
+  border-block: 1px solid var(--pf-border);
+}
+.df-strip-row {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 22px; padding-block: 22px;
+}
+.df-strip-label { display: flex; align-items: center; gap: 13px; }
+.df-strip-label b { display: block; font-size: .96rem; font-weight: 700; color: var(--pf-text); }
+.df-strip-label em {
+  display: block; margin-top: 2px; font-style: normal;
+  font-size: .72rem; font-weight: 600; letter-spacing: .11em; text-transform: uppercase;
+  color: var(--pf-faint);
+}
+.df-strip-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.df-brand-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 16px; border-radius: 12px;
+  background: var(--pf-card); border: 1px solid var(--pf-border);
+  font-size: .82rem; font-weight: 700; letter-spacing: .02em;
+  color: var(--pf-text);
+  transition: border-color .2s ease, transform .2s ease;
+}
+.df-brand-chip:hover { border-color: var(--pf-brand); transform: translateY(-2px); }
+
+.df-tape {
+  overflow: hidden;
+  padding-block: 12px;
+  border-top: 1px solid var(--pf-border);
+  background: var(--pf-bg);
+}
+
+@keyframes df-in    { to { opacity: 1; transform: none; } }
+@keyframes df-live  { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+@keyframes df-drift { to { transform: translate3d(30px, -24px, 0) scale(1.08); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .df-in { opacity: 1; transform: none; animation: none; }
+  .df-hero-glow, .df-badge-dot { animation: none; }
+}
+
+
+/* ── Pricing table on phones ─────────────────────────────────────────────────
+   Six tiers will always be wider than a phone, so the table scrolls (the first
+   column is already sticky). What made it feel broken was the desktop padding:
+   20px x 18px per cell pushed the total width far past the viewport, so barely
+   one tier was visible at a time. Tightening the cells fits ~2 tiers per screen
+   and shortens the scroll a lot.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .pf-table th, .pf-table td { padding: 13px 10px; }
+  .pf-table td { font-size: .92rem; }
+  .pf-table th:first-child, .pf-table td:first-child { font-size: .84rem; line-height: 1.35; }
+  .pf-table-sub { font-size: .72rem; }
+}
+
+.pf-scroll-hint {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px 0;
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--pf-faint);
+}
+.pf-scroll-hint span { animation: pf-nudge 1.8s ease-in-out infinite; }
+@keyframes pf-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+@media (prefers-reduced-motion: reduce) { .pf-scroll-hint span { animation: none; } }
+
+
+/* ── Pricing: card on phones, table on desktop ───────────────────────────────
+   Six tiers x nine rules cannot be read on a 390px screen no matter how the
+   table is tuned — the earlier attempt (tighter cells + a swipe hint) still
+   showed one and a half columns. Below 768px we drop the comparison entirely:
+   pick a size, read that one plan. Both views render from the same `specs`
+   array, so they can't disagree.
+   ─────────────────────────────────────────────────────────────────────────── */
+.pf-price-mobile { display: none; }
+
+@media (max-width: 767px) {
+  .pf-price-mobile { display: block; }
+  .pf-price-table-wrap { display: none; }
+}
+
+.pf-size-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px;
+  margin-bottom: 16px;
+  background: var(--pf-bg-soft);
+  border: 1px solid var(--pf-border);
+  border-radius: 999px;
+}
+.pf-size-row::-webkit-scrollbar { display: none; }
+.pf-size-row button {
+  flex: 1 0 auto;
+  min-width: 62px;
+  padding: 9px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--pf-muted);
+  font-size: .9rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .18s ease, color .18s ease;
+}
+.pf-size-row button[data-active="true"] {
+  background: var(--pf-card);
+  color: var(--pf-text);
+  box-shadow: var(--pf-shadow);
+}
+
+.pf-price-card { position: relative; padding: 26px 20px 20px; }
+
+.pf-price-flag {
+  position: absolute;
+  top: -11px; left: 50%; transform: translateX(-50%);
+  padding: 4px 13px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--pf-gold), var(--pf-gold-2));
+  color: var(--pf-on-gold);
+  font-size: .68rem; font-weight: 800;
+  letter-spacing: .1em; text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pf-price-head { text-align: center; margin-bottom: 18px; }
+.pf-price-size {
+  font-size: .82rem; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--pf-muted);
+}
+.pf-price-fee {
+  margin-top: 6px;
+  font-size: 2.5rem; font-weight: 800; letter-spacing: -.04em; line-height: 1;
+  color: var(--pf-text);
+}
+.pf-price-note { margin-top: 7px; font-size: .78rem; color: var(--pf-faint); }
+
+.pf-price-specs { margin: 20px 0 0; }
+.pf-price-specs > div {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+  padding: 11px 0;
+  border-top: 1px solid var(--pf-border);
+}
+.pf-price-specs dt {
+  font-size: .85rem; color: var(--pf-muted); line-height: 1.35;
+}
+.pf-price-specs dd {
+  margin: 0;
+  font-size: .95rem; font-weight: 700; text-align: right;
+  color: var(--pf-text); white-space: nowrap;
+}
+/* The bracketed rupee figure sits under its percentage instead of beside it. */
+.pf-price-specs dd .pf-table-sub { font-size: .72rem; font-weight: 500; margin-top: 1px; }
+
+
+/* ── Segmented control on phones ─────────────────────────────────────────────
+   Desktop padding (12px x 26px) plus "2-Step Assessment" labels ran the three
+   tabs past a 390px screen, clipping "Instant". Shrink the control, let it use
+   the full width, and drop the word "Assessment" — the heading right above it
+   already says Assessments.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .pf-seg { display: flex; width: 100%; padding: 4px; gap: 3px; }
+  .pf-seg button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 10px 6px;
+    font-size: .82rem;
+    white-space: nowrap;
+  }
+  .pf-seg-long { display: none; }
+}

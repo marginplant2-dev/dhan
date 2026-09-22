@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" role="img" aria-label="SBI — State Bank of India">
+  <!-- cyan keyhole roundel -->
+  <circle cx="46" cy="50" r="42" fill="#1BA7DD"/>
+  <circle cx="46" cy="42" r="13" fill="#ffffff"/>
+  <polygon points="40,44 52,44 56,90 36,90" fill="#ffffff"/>
+  <!-- wordmark -->
+  <text x="104" y="76" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="72" letter-spacing="-1" fill="#23409A">SBI</text>
+</svg>

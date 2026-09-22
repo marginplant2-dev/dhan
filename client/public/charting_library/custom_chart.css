@@ -1,0 +1,14 @@
+/* Custom TradingView chart CSS — injected via custom_css_url */
+/* Styles the horizontal line text labels to have a boxed/pill appearance */
+
+/* Target the drawing label containers rendered by the chart */
+.tv-linetool-horzline .label,
+.tv-linetool-horzline__label,
+div[class*="label"][class*="horz"],
+.drawing-label {
+    background: rgba(38, 166, 154, 0.9) !important;
+    padding: 2px 8px !important;
+    border-radius: 4px !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}

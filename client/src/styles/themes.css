@@ -1,0 +1,95 @@
+/* DhanFunded theme system — the logo's green→cyan arrow on its navy.
+   Buy/sell stay green/red: those are trading semantics, not brand colour. */
+
+/* Default: dark (the brand's native look) */
+:root,
+[data-theme="dark"] {
+  --bg-primary: #05131B;
+  --bg-secondary: #0A2130;
+  --bg-tertiary: #0E2A3A;
+  --bg-hover: #16384A;
+  --border-color: #1B3B4E;
+  --card-bg: #0A2130;
+  --text-primary: #EAF5EF;
+  --text-secondary: #9FB5AB;
+  --text-muted: #718A80;
+
+  /* brand — logo green → logo cyan (token names kept so every component
+     that already reads --gold picks the new brand up untouched) */
+  --gold: #1FD87A;
+  --gold-2: #22D9E8;
+  --gold-soft: rgba(31, 216, 122, 0.14);
+  --on-gold: #04121C;
+  --gold-grad: linear-gradient(135deg, #1FD87A, #22D9E8);
+
+  --accent-primary: #35DC85;
+  --accent-secondary: #C9CBD4;   /* the logo's silver */
+  --info: #49E8F0;
+
+  --success: #26a69a;
+  --danger: #ef5350;
+  --warning: #ff9800;
+  --buy-color: #26a69a;
+  --sell-color: #ef5350;
+}
+
+/* Light Mode */
+[data-theme="light"] {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F7FBF9;
+  --bg-tertiary: #E9F2ED;
+  --bg-hover: #E2EFE8;
+  --border-color: #DCE9E2;
+  --card-bg: #FFFFFF;
+  --text-primary: #0A2130;
+  --text-secondary: #4B6357;
+  --text-muted: #7D948A;
+
+  --gold: #1FD87A;
+  --gold-2: #22D9E8;
+  --gold-soft: #E2F8EE;
+  --on-gold: #04121C;
+  --gold-grad: linear-gradient(135deg, #1FD87A, #22D9E8);
+
+  --accent-primary: #0B8F62;      /* legible brand green for text/links on white */
+  --accent-secondary: #566D60;
+  --info: #0E7C8C;
+
+  --success: #0f9d63;
+  --danger: #e04b4b;
+  --warning: #A97A11;
+  --buy-color: #0f9d63;
+  --sell-color: #e04b4b;
+}
+
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}

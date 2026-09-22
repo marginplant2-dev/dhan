@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /subadmin
+Disallow: /subadmin-panel
+Disallow: /subadmin-panel/
+Disallow: /broker
+Disallow: /broker-panel
+Disallow: /broker-panel/
+Disallow: /app
+Disallow: /app/
+Disallow: /api/
+
+Sitemap: https://dhanfunded.com/sitemap.xml

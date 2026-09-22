@@ -1,0 +1,790 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   DhanFunded — auth design system (light)
+
+   Palette matches the landing site's LIGHT theme, which is now the default
+   for the whole site (see useLandingTheme).
+   NOTE: the card is white, so AuthShell must use dhanfunded-wordmark.png (the
+   light cut). dhanfunded-wordmark-dark.png is pre-flattened on #0A2130 and
+   would render as a black plate here.
+
+   Used by <AuthShell> → Login, Register, ForgotPassword, AdminLogin,
+   SubAdminLogin, BrokerLogin. Class names are unchanged from the old light
+   sheet, so page markup did not have to churn.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ac-page {
+  /* The auth screens sit on the same navy canvas as the website. */
+  --a-bg:         #05131B;
+  --a-card:       #0A2130;
+  --a-card-2:     #0E2A3A;
+  --a-field:      #0C2534;
+  --a-border:     rgba(120, 230, 170, 0.14);
+  --a-border-2:   rgba(120, 230, 170, 0.28);
+
+  --a-text:       #EAF5EF;
+  --a-muted:      #9FB5AB;
+  --a-faint:      #7E958B;
+
+  /* --a-gold is the legible brand colour (text, borders, links) on the card;
+     --a-fill / --a-fill-2 are the logo's bright arrow gradient, used as a fill
+     behind dark ink. */
+  --a-gold:       #35DC85;
+  --a-gold-2:     #49E8F0;
+  --a-fill:       #1FD87A;
+  --a-fill-2:     #22D9E8;
+  --a-gold-soft:  rgba(31,216,122, 0.14);
+  --a-on-gold:    #04121C;
+
+  /* Status hues tuned to glow on the navy card. */
+  --a-danger:     #FF7A6B;
+  --a-danger-bg:  rgba(255, 122, 107, 0.12);
+  --a-ok:         #34D399;
+  --a-ok-bg:      rgba(52, 211, 153, 0.13);
+  --a-info:       #49E8F0;
+  --a-info-bg:    rgba(73, 232, 240, 0.12);
+
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px 32px;
+  background: var(--a-bg);
+  color: var(--a-text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
+  overflow-x: hidden;
+}
+
+/* ── Background: the logo's two lights (green, cyan) + a faint grid ─────── */
+
+.ac-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ac-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+}
+
+.ac-orb-1 {
+  width: 520px;
+  height: 520px;
+  top: -180px;
+  left: -140px;
+  background: radial-gradient(circle, rgba(31, 216, 122, 0.20), transparent 70%);
+  animation: ac-drift-1 22s ease-in-out infinite alternate;
+}
+
+.ac-orb-2 {
+  width: 460px;
+  height: 460px;
+  bottom: -200px;
+  right: -120px;
+  background: radial-gradient(circle, rgba(34, 217, 232, 0.20), transparent 70%);
+  animation: ac-drift-2 28s ease-in-out infinite alternate;
+}
+
+.ac-grid {
+  position: absolute;
+  inset: -1px;
+  background-image:
+    linear-gradient(rgba(120, 230, 170, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 230, 170, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 100%);
+}
+
+@keyframes ac-drift-1 {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(70px, 60px, 0) scale(1.12); }
+}
+
+@keyframes ac-drift-2 {
+  from { transform: translate3d(0, 0, 0) scale(1.08); }
+  to   { transform: translate3d(-60px, -50px, 0) scale(1); }
+}
+
+/* ── Card ────────────────────────────────────────────────────────────────── */
+
+.ac-card {
+  position: relative;
+  width: 100%;
+  max-width: 424px;
+  background: var(--a-card);
+  border: 1px solid var(--a-border);
+  border-radius: 20px;
+  padding: 30px 24px 26px;
+  box-shadow:
+    0 18px 44px -20px rgba(0, 0, 0, 0.55),
+    0 2px 6px -2px rgba(0, 0, 0, 0.35);
+  animation: ac-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Gold hairline across the top edge. */
+.ac-card::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--a-fill), transparent);
+  opacity: 0.65;
+}
+
+@keyframes ac-rise {
+  from { opacity: 0; transform: translateY(18px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Staggered entrance for the card's own blocks and each form row. */
+.ac-card > *,
+.ac-form > * {
+  animation: ac-fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.ac-card > *:nth-child(1), .ac-form > *:nth-child(1) { animation-delay: 0.08s; }
+.ac-card > *:nth-child(2), .ac-form > *:nth-child(2) { animation-delay: 0.14s; }
+.ac-card > *:nth-child(3), .ac-form > *:nth-child(3) { animation-delay: 0.20s; }
+.ac-card > *:nth-child(4), .ac-form > *:nth-child(4) { animation-delay: 0.26s; }
+.ac-card > *:nth-child(5), .ac-form > *:nth-child(5) { animation-delay: 0.32s; }
+.ac-card > *:nth-child(6), .ac-form > *:nth-child(6) { animation-delay: 0.38s; }
+.ac-card > *:nth-child(n + 7),
+.ac-form > *:nth-child(n + 7) { animation-delay: 0.44s; }
+
+@keyframes ac-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Header / brand ──────────────────────────────────────────────────────── */
+
+.ac-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.ac-brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  margin-bottom: 14px;
+}
+
+.ac-brand img {
+  height: 34px;
+  width: auto;
+  display: block;
+}
+
+/* Legacy square-logo slot (kept so older markup does not break). */
+.ac-logo {
+  width: 54px;
+  height: 54px;
+  border-radius: 15px;
+  background: var(--a-card-2);
+  border: 1px solid var(--a-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.ac-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.ac-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 11px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: var(--a-gold-soft);
+  border: 1px solid rgba(0, 51, 102, 0.28);
+  color: #003366;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ac-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 5px;
+  color: var(--a-text);
+  letter-spacing: -0.02em;
+}
+
+.ac-subtitle {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--a-muted);
+  margin: 0;
+  max-width: 30ch;
+}
+
+/* ── Form ────────────────────────────────────────────────────────────────── */
+
+.ac-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.ac-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ac-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--a-muted);
+  letter-spacing: 0.01em;
+}
+
+.ac-field .ac-required { color: var(--a-gold); }
+
+.ac-input,
+.ac-form input[type="text"],
+.ac-form input[type="email"],
+.ac-form input[type="tel"],
+.ac-form input[type="password"],
+.ac-form select {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--a-border);
+  background: var(--a-field);
+  font-size: 15px;
+  color: var(--a-text);
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.ac-form input:hover:not(:focus),
+.ac-form select:hover:not(:focus) { border-color: var(--a-border-2); }
+
+.ac-form input:focus,
+.ac-form select:focus {
+  border-color: var(--a-gold);
+  background: var(--a-card-2);
+  box-shadow: 0 0 0 3px var(--a-gold-soft);
+}
+
+.ac-form input::placeholder { color: var(--a-faint); }
+
+/* Native dropdown list is a separate surface — needs its own dark colours. */
+.ac-form select option { background: var(--a-card-2); color: var(--a-text); }
+
+/* Chrome autofill paints its own yellow; repaint it dark. */
+.ac-form input:-webkit-autofill,
+.ac-form input:-webkit-autofill:hover,
+.ac-form input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--a-text);
+  -webkit-box-shadow: 0 0 0 1000px var(--a-field) inset;
+  caret-color: var(--a-text);
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.ac-password-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ac-password-wrap input { padding-right: 46px; text-overflow: ellipsis; }
+
+.ac-password-toggle {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--a-faint);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.ac-password-toggle:hover { color: var(--a-gold); background: var(--a-gold-soft); }
+
+.ac-phone-row { display: flex; gap: 8px; }
+.ac-phone-row select { width: 112px; flex-shrink: 0; }
+.ac-phone-row input { flex: 1; min-width: 0; }
+
+.ac-hint { font-size: 11.5px; color: var(--a-faint); }
+
+.ac-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.ac-remember {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--a-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.ac-remember input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--a-gold);
+  cursor: pointer;
+}
+
+.ac-forgot,
+.ac-link {
+  color: var(--a-gold);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.ac-forgot:hover,
+.ac-link:hover { color: var(--a-gold-2); text-decoration: underline; }
+
+/* ── Submit ──────────────────────────────────────────────────────────────── */
+
+.ac-submit {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--a-fill), var(--a-fill-2));
+  color: var(--a-on-gold);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  margin-top: 4px;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  box-shadow: 0 8px 22px -10px rgba(0, 51, 102, 0.55);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+}
+
+/* Shimmer sweep on hover. */
+.ac-submit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.45) 50%, transparent 65%);
+  transform: translateX(-120%);
+}
+
+.ac-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px -10px rgba(0, 51, 102, 0.65);
+}
+
+.ac-submit:hover:not(:disabled)::after { animation: ac-sweep 0.75s ease; }
+
+.ac-submit:active:not(:disabled) { transform: translateY(0); filter: brightness(0.95); }
+
+.ac-submit:disabled {
+  background: var(--a-card-2);
+  color: var(--a-faint);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+@keyframes ac-sweep {
+  from { transform: translateX(-120%); }
+  to   { transform: translateX(120%); }
+}
+
+.ac-spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  animation: ac-spin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes ac-spin { to { transform: rotate(360deg); } }
+
+/* ── Status messages ─────────────────────────────────────────────────────── */
+
+.ac-error,
+.ac-success,
+.ac-info {
+  padding: 11px 13px;
+  border-radius: 11px;
+  font-size: 13px;
+  line-height: 1.45;
+  animation: ac-fade-up 0.3s ease both;
+}
+
+.ac-error   { background: var(--a-danger-bg); border: 1px solid rgba(248, 113, 113, 0.3); color: var(--a-danger); }
+.ac-success { background: var(--a-ok-bg);     border: 1px solid rgba(52, 211, 153, 0.3);  color: var(--a-ok); }
+.ac-info    { background: var(--a-info-bg);   border: 1px solid rgba(138, 180, 255, 0.28); color: var(--a-info); }
+.ac-info strong { color: var(--a-text); }
+
+/* ── Divider / Google ────────────────────────────────────────────────────── */
+
+.ac-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 2px 0;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--a-faint);
+}
+
+.ac-divider::before,
+.ac-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--a-border-2), transparent);
+}
+
+.ac-google-btn {
+  width: 100%;
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid var(--a-border-2);
+  background: var(--a-card-2);
+  color: var(--a-text);
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  font-family: inherit;
+}
+
+.ac-google-btn:hover { background: var(--a-card-2); border-color: var(--a-gold); transform: translateY(-1px); }
+.ac-google-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+
+.ac-footer {
+  margin-top: 20px;
+  padding-top: 17px;
+  border-top: 1px solid var(--a-border);
+  text-align: center;
+  font-size: 13px;
+  color: var(--a-muted);
+}
+
+.ac-footer p { margin: 0; }
+.ac-footer p + p { margin-top: 9px; }
+.ac-footer a { color: var(--a-gold); font-weight: 600; text-decoration: none; }
+.ac-footer a:hover { color: var(--a-gold-2); text-decoration: underline; }
+
+.ac-links { color: var(--a-faint); font-size: 12.5px; }
+.ac-links a { color: var(--a-muted); font-weight: 500; }
+.ac-links a:hover { color: var(--a-gold); }
+
+.ac-install-row {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+/* InstallAppButton ships Tailwind blue utilities; a one-class-deeper selector
+   re-skins it to the gold system without touching the shared component. */
+.ac-install-row > button {
+  background: transparent;
+  border: 1px solid var(--a-border-2);
+  color: var(--a-muted);
+  box-shadow: none;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.ac-install-row > button:hover {
+  background: transparent;
+  border-color: var(--a-gold);
+  color: var(--a-gold);
+}
+
+.ac-back {
+  background: none;
+  border: none;
+  color: var(--a-muted);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  transition: color 0.15s ease;
+}
+
+.ac-back:hover { color: var(--a-text); }
+
+.ac-otp-input {
+  letter-spacing: 10px;
+  text-align: center;
+  font-size: 22px !important;
+  font-weight: 700;
+  padding-left: 10px !important;
+}
+
+.ac-legal {
+  margin: 20px 0 0;
+  font-size: 11.5px;
+  color: var(--a-faint);
+  text-align: center;
+  max-width: 424px;
+  line-height: 1.6;
+  animation: ac-fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+
+.ac-legal a { color: var(--a-muted); text-decoration: none; }
+.ac-legal a:hover { color: var(--a-gold); }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (min-width: 480px) {
+  .ac-card { padding: 34px 30px 28px; }
+}
+
+@media (max-width: 380px) {
+  .ac-card { padding: 26px 18px 22px; }
+  .ac-title { font-size: 20px; }
+}
+
+/* Short viewports (mobile landscape / small laptops): top-align so the card
+   never gets clipped by the vertical centring. */
+@media (max-height: 760px) {
+  .ac-page { justify-content: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ac-page *,
+  .ac-page *::before,
+  .ac-page *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Split layout — brand panel beside the form on desktop.
+
+   Mobile keeps the original single centred card (the panel is display:none, so
+   it costs nothing on a phone). The two-column grid only switches on at 960px,
+   below which a 50/50 split would squeeze the form fields.
+
+   To use a photo instead of the designed panel, set --ac-hero on .ac-aside:
+       .ac-aside { --ac-hero: url('/auth-hero.jpg'); }
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ac-main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ac-aside { display: none; }
+
+@media (min-width: 960px) {
+  .ac-page--split {
+    display: grid;
+    grid-template-columns: 1.02fr 1fr;
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+    gap: 0;
+  }
+
+  .ac-aside {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    height: 100dvh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    padding: 56px 52px;
+    border-right: 1px solid var(--a-border);
+    background-color: var(--a-card);
+    background-image: var(--ac-hero, none);
+    background-size: cover;
+    background-position: center;
+  }
+
+  /* Brand wash + a bottom scrim. The scrim is what keeps the copy readable if a
+     photograph is dropped in behind it. */
+  .ac-aside::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(120% 80% at 12% 8%, rgba(31, 216, 122, .22), transparent 60%),
+      radial-gradient(90% 70% at 88% 12%, rgba(34, 217, 232, .18), transparent 62%),
+      linear-gradient(180deg, rgba(5, 19, 27, .25) 0%, rgba(5, 19, 27, .78) 66%, rgba(5, 19, 27, .92) 100%);
+  }
+
+  .ac-aside-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 430px;
+  }
+
+  .ac-aside-mark { width: 190px; height: auto; opacity: .96; }
+
+  .ac-aside-quote {
+    margin: 0;
+    font-size: clamp(1.24rem, 1.65vw, 1.6rem);
+    line-height: 1.32;
+    font-weight: 700;
+    letter-spacing: -.022em;
+    color: var(--a-text);
+    text-wrap: balance;
+  }
+
+  .ac-aside-stats {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    padding-top: 26px;
+    border-top: 1px solid var(--a-border);
+  }
+  .ac-aside-stats > div { min-width: 0; }
+  .ac-aside-stats dt {
+    font-size: 1.24rem;
+    font-weight: 800;
+    letter-spacing: -.03em;
+    color: var(--a-gold);
+    font-variant-numeric: tabular-nums;
+  }
+  .ac-aside-stats dd {
+    margin: 5px 0 0;
+    font-size: .77rem;
+    line-height: 1.4;
+    color: var(--a-muted);
+  }
+
+  /* The form column scrolls on its own so a tall form (Register) never pushes
+     the brand panel off-screen. */
+  .ac-page--split .ac-main {
+    min-height: 100dvh;
+    padding: 48px 32px;
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 1400px) {
+  .ac-page--split { grid-template-columns: 1.15fr 1fr; }
+  .ac-aside { padding: 72px 76px; }
+}
+
+
+/* ── Register on desktop: two columns so the whole form fits without scrolling.
+      Pairing fields is the only compaction that costs nothing — shrinking the
+      46px inputs would push them under the 44px touch-target floor.
+      Single column below 960px, where two would squeeze the inputs. ── */
+@media (min-width: 960px) {
+  .ac-page--split .ac-card {
+    max-width: 500px;
+    padding: 26px 26px 22px;
+  }
+  .ac-page--split .ac-header { margin-bottom: 16px; }
+  .ac-page--split .ac-brand img { height: 30px; }
+
+  .ac-form--2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 14px;
+  }
+  /* Rows that must not be halved: the phone row already holds its own
+     country-code + number split, and buttons/messages read as full-width. */
+  .ac-form--2col > .ac-field--full,
+  .ac-form--2col > .ac-submit,
+  .ac-form--2col > .ac-error,
+  .ac-form--2col > .ac-success,
+  .ac-form--2col > .ac-info {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* ── Compact auth card ──────────────────────────────────────────────────
+   Layout-only overrides, appended last so they win over the equal-specificity
+   rules above: a smaller card and tighter spacing. The colours come from the
+   tokens at the top of this file (the brand navy canvas) — this block used to
+   force an older navy palette and hide the animated background, which left the
+   login screens looking nothing like the rest of the site. */
+.ac-page { padding: 32px 16px 28px; }
+.ac-card {
+  max-width: 392px;
+  padding: 26px 22px 22px;
+  border-radius: 16px;
+  box-shadow: 0 14px 36px -18px rgba(0, 0, 0, 0.6), 0 2px 6px -2px rgba(0, 0, 0, 0.4);
+}
+.ac-card::before {
+  opacity: 1; left: 0; right: 0; top: 0; height: 3px;
+  border-radius: 16px 16px 0 0;
+  background: linear-gradient(90deg, var(--a-fill), var(--a-fill-2));
+}
+.ac-header { margin-bottom: 18px; }
+.ac-brand img { height: 30px; }
+.ac-title { font-size: 21px; letter-spacing: -0.015em; }
+.ac-subtitle { font-size: 13.5px; }
+.ac-submit {
+  height: 44px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--a-fill), var(--a-fill-2));
+  color: var(--a-on-gold);
+}
+.ac-submit:hover:not(:disabled) { filter: brightness(1.06); }
+.ac-form input:focus, .ac-form select:focus {
+  border-color: var(--a-gold);
+  box-shadow: 0 0 0 3px var(--a-gold-soft);
+}

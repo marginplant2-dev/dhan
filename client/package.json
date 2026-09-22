@@ -1,0 +1,45 @@
+{
+  "name": "dhanfunded-client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node prerender.mjs",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@amcharts/amcharts5": "^5.15.6",
+    "@web3modal/ethers": "^5.1.11",
+    "ethers": "^6.16.0",
+    "framer-motion": "^12.38.0",
+    "heic2any": "^0.0.4",
+    "lightweight-charts": "^5.1.0",
+    "lucide-react": "^0.563.0",
+    "metaapi.cloud-sdk": "^29.3.3",
+    "ogl": "^1.0.11",
+    "qrcode": "^1.5.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-icons": "^5.6.0",
+    "react-router-dom": "^7.13.0",
+    "socket.io-client": "^4.8.3",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "autoprefixer": "^10.4.27",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.8",
+    "puppeteer": "^23.11.1",
+    "tailwindcss": "^3.4.19",
+    "vite": "^7.2.4"
+  }
+}

@@ -1,0 +1,293 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@200;400;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent-blue: #35DC85;
+  --accent-blue-glow: rgba(43, 78, 255, 0.15);
+  --gradient-angle: 0deg;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  min-height: 100%;
+  /* Disable pinch / double-tap zoom (iOS Safari ignores user-scalable=no) */
+  touch-action: pan-x pan-y;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Allow scrolling on auth pages */
+body.auth-page {
+  overflow: auto;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Landing Page Styles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Custom selection */
+.landing-page ::selection {
+  background: rgba(59,91,255,0.3);
+  color: white;
+}
+
+/* Scrollbar */
+.landing-page ::-webkit-scrollbar {
+  width: 6px;
+}
+.landing-page ::-webkit-scrollbar-track {
+  background: #E9F2ED;
+}
+.landing-page ::-webkit-scrollbar-thumb {
+  background: #35DC85;
+  border-radius: 3px;
+}
+
+/* Animations */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes border-spin {
+  from { --gradient-angle: 0deg; }
+  to { --gradient-angle: 360deg; }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0%); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(43, 78, 255, 0.25); }
+  50% { box-shadow: 0 0 40px rgba(43, 78, 255, 0.45); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ring-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1);   opacity: 1;    }
+  50%       { transform: translate(-50%, -50%) scale(1.06); opacity: 0.7; }
+}
+
+@keyframes ring-rotate-cw {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes ring-rotate-ccw {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1);    filter: blur(24px); }
+  50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.12); filter: blur(32px); }
+}
+
+@keyframes char-reveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Animate fade up utility */
+.landing-page .animate-fade-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+/* Gradient blur top */
+.landing-page .gradient-blur {
+  position: fixed;
+  z-index: 40;
+  inset: 0 0 auto 0;
+  height: 100px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.9), transparent);
+  -webkit-mask-image: linear-gradient(to bottom, white, transparent);
+  mask-image: linear-gradient(to bottom, white, transparent);
+}
+
+/* Text stroke */
+.landing-page .text-stroke {
+  -webkit-text-stroke: 2px rgba(0, 0, 0, 0.04);
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Glow button */
+.landing-page .glow-btn {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Float animation */
+.landing-page .float-anim {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Marquee */
+.landing-page .marquee-track {
+  animation: marquee 120s linear infinite;
+}
+
+/* Spin border button */
+.landing-page .spin-border-btn {
+  position: relative;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: rgba(43, 78, 255, 0.06);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  border: 1px solid rgba(43, 78, 255, 0.15);
+}
+
+.landing-page .spin-border-btn:hover .spin-ring {
+  opacity: 1;
+}
+
+.landing-page .spin-ring {
+  position: absolute;
+  inset: -100%;
+  animation: spin 3s linear infinite;
+  background: conic-gradient(from 90deg at 50% 50%, transparent 0%, transparent 75%, #35DC85 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Card base */
+.landing-page .card-light {
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.landing-page .card-light:hover {
+  border-color: rgba(43, 78, 255, 0.3);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Section alternating bg */
+.landing-page .section-alt {
+  background: #f1f5f9;
+}
+
+/* ── Scroll Reveal Animations ────────────────────────────────────────────── */
+.landing-page .scroll-reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.landing-page .scroll-reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.landing-page .scroll-reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.landing-page .scroll-reveal-left.in-view {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.landing-page .scroll-reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.landing-page .scroll-reveal-right.in-view {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Stagger children */
+.landing-page .stagger-child {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.landing-page .stagger-child.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Section divider ─────────────────────────────────────────────────────── */
+.landing-page .section-divider {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #35DC85 30%, #35DC85 70%, transparent);
+  opacity: 0.25;
+}
+
+/* ── Dark section (testimonials) ────────────────────────────────────────── */
+.landing-page .section-dark {
+  background: #1A1F2E;
+  color: #FFFFFF;
+}
+
+/* ── Stat band ───────────────────────────────────────────────────────────── */
+.landing-page .stat-band {
+  background: linear-gradient(135deg, #35DC85 0%, #4B6AFF 100%);
+}
+
+/* ── Market circle card ─────────────────────────────────────────────────── */
+.landing-page .market-circle {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.landing-page .market-circle:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(43, 78, 255, 0.18);
+}
+
+/* Font family helper */
+.landing-page .font-manrope {
+  font-family: 'Manrope', sans-serif;
+}
