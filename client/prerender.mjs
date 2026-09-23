@@ -41,24 +41,8 @@ const PORT = 4179;
 // and are behind auth, so prerendering them would be pointless and leak markup.
 const ROUTES = [
   '/', '/how-it-works', '/challenges', '/instruments', '/pricing', '/faqs',
-  '/prop-firm-india', '/nifty-prop-firm', '/banknifty-prop-firm', '/sensex-prop-firm',
-  '/funded-trading-account-india', '/instant-funding-prop-firm-india', '/prop-trading-india',
-  '/prop-challenge-india',
-  '/inr-upi-prop-firm-india', '/indian-stock-market-prop-firm',
-  '/about', '/contact-us', '/blog',
+  '/about', '/contact-us',
   '/privacy-policy', '/terms', '/refund-policy', '/risk-disclaimer',
-
-  // Every blog post is listed in sitemap.xml. Without these, nginx falls back
-  // to index.html and each of the eight URLs served a byte-identical copy of
-  // the HOMEPAGE to crawlers — eight duplicates of /, not eight articles.
-  '/blog/best-prop-firm-india-2026',
-  '/blog/best-nifty-prop-trading-challenge-india',
-  '/blog/how-prop-firms-work',
-  '/blog/risk-management-funded-learners',
-  '/blog/why-learners-fail-challenges',
-  '/blog/how-payouts-work',
-  '/blog/psychology-consistent-learners',
-  '/blog/funded-vs-personal-capital',
 ];
 
 const MIME = {
