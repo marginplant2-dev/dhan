@@ -272,7 +272,11 @@ class MetaApiStreamingService {
     }
     try {
       const zerodhaService = require('./zerodha.service');
-      const z = zerodhaService.getPrice(sym) || zerodhaService.getPrice(symbol);
+      // getFreshPrice, not getPrice: this resolver only feeds position marking
+      // and SL/TP evaluation, and a dead contract's final tick sits in the
+      // cache forever. Marking a position off one books a loss that never
+      // happened. No fresh tick means the position keeps its existing mark.
+      const z = zerodhaService.getFreshPrice(sym) || zerodhaService.getFreshPrice(symbol);
       if (z) {
         // Prefer real bid/ask from Zerodha depth (critical for options which
         // have wide spreads). Fall back to synthetic spread only when depth

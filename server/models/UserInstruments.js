@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const User = require('./User');
 const ZerodhaSettings = require('./ZerodhaSettings');
 const { istCalendarDaysFromTodayTo } = require('../services/indianFnOExpiryFilter');
+const { isExpired: isExpiredInstrument } = require('../services/instrumentExpiry');
 
 const FNO_INSTRUMENT_CATEGORIES = new Set([
   'NSE FUT',
@@ -18,8 +19,15 @@ function parseExpiryRaw(raw) {
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
-/** True when saved row is Indian F&O with expiry strictly before today (IST calendar). */
-function isExpiredFnOUserInstrument(category, expiryRaw) {
+/**
+ * True when a saved row is an Indian F&O contract that died before today.
+ *
+ * It used to answer from `expiryRaw` alone, which is null on everything the
+ * picker subscribed — so dead options stayed on watchlists indefinitely.
+ * The symbol carries the date, so ask that first.
+ */
+function isExpiredFnOUserInstrument(category, expiryRaw, symbol) {
+  if (symbol && isExpiredInstrument({ symbol, expiry: expiryRaw })) return true;
   if (!FNO_INSTRUMENT_CATEGORIES.has(category)) return false;
   const d = parseExpiryRaw(expiryRaw);
   if (!d) return false;
@@ -111,7 +119,7 @@ userInstrumentsSchema.statics.getInstrumentsForUser = async function (userId) {
   const instruments = await this.find({ userId }).sort({ category: 1, symbol: 1 });
 
   const expiredRows = instruments.filter((row) =>
-    isExpiredFnOUserInstrument(row.category, row.expiry)
+    isExpiredFnOUserInstrument(row.category, row.expiry, row.symbol)
   );
   const expiredIds = expiredRows.map((row) => row._id);
   const expiredSymbolsUpper = new Set(

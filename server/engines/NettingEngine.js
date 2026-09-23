@@ -13,6 +13,7 @@
  */
 
 const { NettingPosition } = require('../models/Position');
+const { isExpired: isExpiredInstrument } = require('../services/instrumentExpiry');
 const Trade = require('../models/Trade');
 const TradeModeSettings = require('../models/Settings');
 const User = require('../models/User');
@@ -2029,6 +2030,14 @@ class NettingEngine {
       lotSize: orderLotSize,    // Lot size passed from frontend (fallback)
       isCloseOperation = false  // Skip minLot validation for close operations
     } = orderData;
+
+    // A contract that expired before today has no live price — its last tick
+    // sits in the cache forever and would mark this position the instant it
+    // opened. Refuse it here regardless of what the screen showed.
+    if (isExpiredInstrument({ symbol, expiry: orderData?.expiry })) {
+      throw new Error('This contract has expired and can no longer be traded');
+    }
+
 
     const mergedMD = marketData && typeof marketData === 'object' ? { ...marketData } : {};
     const pxOrder = Number(price);

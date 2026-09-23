@@ -12,6 +12,7 @@
  */
 
 const { HedgingPosition } = require('../models/Position');
+const { isExpired: isExpiredInstrument } = require('../services/instrumentExpiry');
 const Trade = require('../models/Trade');
 const TradeModeSettings = require('../models/Settings');
 const User = require('../models/User');
@@ -505,6 +506,14 @@ class HedgingEngine {
       isMarketOpen = false,
       exchange: orderExchange  // Exchange passed from frontend
     } = orderData;
+
+    // A contract that expired before today has no live price — its last tick
+    // sits in the cache forever and would mark this position the instant it
+    // opened. Refuse it here regardless of what the screen showed.
+    if (isExpiredInstrument({ symbol, expiry: orderData?.expiry })) {
+      throw new Error('This contract has expired and can no longer be traded');
+    }
+
 
     // Check if this is an Indian market instrument
     const instrument = await this.getInstrumentDetails(symbol);

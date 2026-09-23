@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { dropExpired, isExpired } = require('./services/instrumentExpiry');
 
 const express = require('express');
 const cors = require('cors');
@@ -3392,7 +3393,7 @@ app.get('/api/zerodha/instruments/search', async (req, res) => {
       }
     }
     
-    res.json({ success: true, instruments: formattedInstruments });
+    res.json({ success: true, instruments: dropExpired(formattedInstruments) });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -3479,7 +3480,9 @@ app.get('/api/zerodha/instruments/all', async (req, res) => {
 app.get('/api/zerodha/instruments/subscribed', async (req, res) => {
   try {
     const settings = await ZerodhaSettings.getSettings();
-    res.json({ success: true, instruments: settings?.subscribedInstruments || [] });
+    // A contract that died yesterday must not be offered today, whatever
+    // the stored expiry says — dropExpired reads the date off the symbol.
+    res.json({ success: true, instruments: dropExpired(settings?.subscribedInstruments || []) });
   } catch (error) {
     console.error('Error fetching subscribed instruments:', error);
     // Return empty array instead of 500 to prevent frontend crash

@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { isExpired, withResolvedExpiry, dropExpired } = require('./instrumentExpiry');
 const crypto = require('crypto');
 const WebSocket = require('ws');
 const ZerodhaSettings = require('../models/ZerodhaSettings');
@@ -115,6 +116,22 @@ class ZerodhaService {
     return this.ticksCache[symbol] || null;
   }
 
+  /**
+   * The cached tick, but only while it is recent enough to act on.
+   *
+   * getPrice() hands back whatever is in the cache with no idea how old it
+   * is. When a contract dies its ticks stop and its last one sits there
+   * forever, so anything marking positions or firing stops off the cache
+   * was working from a dead price. Display can keep using getPrice();
+   * anything that moves money should use this.
+   */
+  getFreshPrice(symbol, maxAgeMs = 10 * 60 * 1000) {
+    const tick = this.ticksCache[symbol];
+    if (!tick) return null;
+    const age = Date.now() - (tick.timestamp || 0);
+    return age <= maxAgeMs ? tick : null;
+  }
+
   // Get all cached prices
   getAllPrices() {
     return this.ticksCache;
@@ -213,14 +230,11 @@ class ZerodhaService {
     const todayIST = new Date(nowIST.getFullYear(), nowIST.getMonth(), nowIST.getDate()).getTime();
     const originalCount = settings.subscribedInstruments.length;
 
-    settings.subscribedInstruments = settings.subscribedInstruments.filter(inst => {
-      if (!inst.expiry) return true;
-      const exp = new Date(inst.expiry);
-      if (isNaN(exp.getTime())) return true;
-      const expIST = new Date(exp.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-      const expDay = new Date(expIST.getFullYear(), expIST.getMonth(), expIST.getDate()).getTime();
-      return expDay >= todayIST;
-    });
+    // Reading the date off the symbol rather than the stored field: rows
+    // saved without an expiry used to survive this sweep forever.
+    settings.subscribedInstruments = settings.subscribedInstruments.filter(
+      (inst) => !isExpired(inst)
+    );
 
     const removedCount = originalCount - settings.subscribedInstruments.length;
     if (removedCount > 0) {
@@ -1122,6 +1136,15 @@ class ZerodhaService {
 
   // Add instrument to subscription
   async addInstrument(instrument) {
+    // The picker posts whatever it has, which never includes an expiry —
+    // so every option used to save as expiry: null and then look immortal
+    // to every filter downstream. Read it off the symbol, and refuse the
+    // contract outright if that date has already passed.
+    const resolved = withResolvedExpiry(instrument);
+    if (isExpired(resolved)) {
+      return { success: false, error: 'Contract has expired and cannot be subscribed' };
+    }
+    instrument = resolved;
     const settings = await ZerodhaSettings.getSettings();
     
     // Check if already subscribed
