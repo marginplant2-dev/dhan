@@ -4,73 +4,69 @@ import LandingShell from '../components/LandingShell';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
+/**
+ * This section used to be a dated founding story — an apartment, an office
+ * move, headcount, "never delayed a payout". None of it was true of this
+ * platform, and a page that takes money should not invent its own history.
+ * What replaces it is how the thing actually works, which needs no dates.
+ */
 const milestones = [
   {
-    date: 'June 2023',
-    title: 'The conversation that started it all',
-    desc: 'A late-night discussion between two Mumbai people about how Indian retail people never get a fair shot at real capital. The idea was simple — build the prop firm we wished existed.',
+    date: 'The premise',
+    title: 'Capital is not the scarce part',
+    desc: 'Plenty of Indian traders have a method that works and an account too small for it to matter. What is missing is capital willing to back a tested process on the instruments they already trade.',
   },
   {
-    date: 'October 2023',
-    title: 'First prototype, built on weekends',
-    desc: 'Our CTO started coding the simulated evaluation engine after office hours. No fancy office, just a Bandra apartment and a lot of chai. The first version handled NIFTY only.',
+    date: 'The measure',
+    title: 'A rule is only fair if you can read it first',
+    desc: 'Every target, every limit and every payout condition is a rupee figure published before you pay, and the same figure your dashboard counts down while you trade. Nothing appears for the first time at payout.',
   },
   {
-    date: 'February 2024',
-    title: 'DhanFunded registered',
-    desc: 'Officially incorporated under the Companies Act. Registered office in Mumbai. Got our PAN, GSTIN, and a proper bank account. The hobby became a real business.',
+    date: 'The environment',
+    title: 'Live prices, simulated capital',
+    desc: 'Quotes come from NSE and BSE as they happen; orders stay inside the platform. The risk stays ours to carry, and we hold none of your trading capital.',
   },
   {
-    date: 'May 2024',
-    title: 'Beta launch with 50 people',
-    desc: 'Invited 50 friends and friends-of-friends from learning communities to test the platform. Their feedback shaped the rules, the dashboard, and the payout process we use today.',
+    date: 'The enforcement',
+    title: 'The platform applies the limits, not a person',
+    desc: 'Daily and overall limits are checked on every tick and acted on at the price that broke them. No reviewer decides afterwards whether your account survived.',
   },
   {
-    date: 'August 2024',
-    title: 'Payout process built end to end',
-    desc: 'KYC, approval and INR bank transfer were wired together so a funded participant could be paid without anything being handled manually.',
+    date: 'The payout',
+    title: 'Fixed cycle, fixed share, INR',
+    desc: 'Fourteen days funded, five trading days used, 5% profit, and no single day carrying more than 30% of it. Meet those and your share goes to a bank account in your own name.',
   },
   {
-    date: 'December 2024',
-    title: 'Crossed 200 active people',
-    desc: 'Feedback from early testers shaped the drawdown rules, the objectives dashboard and the payout cycle the platform runs on today.',
-  },
-  {
-    date: 'February 2025',
-    title: 'Moved into our first proper office',
-    desc: 'Ten people, one floor, one big window facing the Mumbai skyline. The garage phase was over. We finally had a place to put a coffee machine.',
-  },
-  {
-    date: '2026',
-    title: 'DhanFunded opened to everyone',
-    desc: 'The platform went live publicly on dhanfunded.com — 1-Step, 2-Step and Instant assessments on NIFTY, BANKNIFTY and SENSEX, with payouts in INR.',
+    date: 'The scope',
+    title: 'What we deliberately do not do',
+    desc: 'No tips, no advice, no managed accounts, no forex or crypto, no monthly subscription. A narrow product is easier to keep honest than a broad one.',
   },
 ];
 
 const reasons = [
   {
-    title: 'We are Indian, top to bottom',
-    desc: 'Built in India, registered in India, run by Indians. We understand SEBI rules, NSE/BSE quirks, and what Indian intraday people actually need — because we are them.',
+    title: 'One market, properly',
+    desc: 'NIFTY, BANKNIFTY and SENSEX derivatives, Indian hours, Indian settlement. Better to cover one market well than list forty badly.',
   },
   {
-    title: 'INR payments, INR payouts',
-    desc: 'No FX conversion games. You pay in rupees, you get paid in rupees, straight to your Indian bank account. No PayPal, no crypto, no nonsense.',
+    title: 'Rupees at both ends',
+    desc: 'You pay in rupees and you are paid in rupees, into an account in your own name. Nothing is converted, so nothing is lost converting it.',
   },
   {
-    title: 'Transparent rules, no fine print',
-    desc: 'Every rule is on the Challenges page. Every fee is on the Pricing page. We do not hide the consistency rule in clause 47 of a 30-page T&C document.',
+    title: 'Limits you can quote back to us',
+    desc: 'Targets, drawdowns, the one-day cap and the payout conditions live on the pricing and challenge pages. A rule that is not written there is not applied to your account.',
   },
   {
-    title: 'Real human support',
-    desc: 'When you message us, an actual person replies. Usually within a few hours during market days. No chatbots pretending to be helpful.',
+    title: 'A person reads your message',
+    desc: 'Support is email, phone and WhatsApp, answered by people who can open your account and tell you which tick broke which limit.',
   },
   {
-    title: 'We pay on time. Always.',
-    desc: 'Payouts processed within 5–7 business days of approval. We have never delayed a single payout to date. This is the promise the entire business is built on.',
+    title: 'Judged by numbers alone',
+    desc: 'No interview, no sales call, no discretionary approval. Your objectives either clear inside the limits or they do not.',
   },
   {
-    title: 'Built for the long run',
-    desc: 'We are not a flash-sale prop firm with US-style marketing tactics. We are building a platform that will be here in 2030. That changes how we make every decision.',
+    title: 'Built to stay narrow',
+    desc: 'No upsells, no subscription, and no promise that the rules bend for a good week. The product is an evaluation and a payout.',
   },
 ];
 
@@ -129,31 +125,31 @@ export default function AboutPage() {
       {/* Why we started */}
       <section className="py-14 md:py-20 px-6 bg-[color:var(--pf-card-alt)]">
         <div className="max-w-4xl mx-auto">
-          <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">Our Story</p>
+          <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">Why this exists</p>
           <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em' }} className="text-[color:var(--pf-text)] mb-8">
-            Why we started <span className="text-[color:var(--pf-brand)]">DhanFunded</span>
+            What this platform is <span className="text-[color:var(--pf-brand)]">DhanFunded</span>
           </h2>
           <div className="space-y-5 text-base sm:text-lg text-[color:var(--pf-muted)] leading-relaxed">
             <p>
-              In 2023, two of us were sitting at a chai stall in Bandra arguing about prop firms.
-              We had both tried the foreign ones — paid the fee in dollars, dealt with the FX conversion,
-              used instruments we did not understand, lost the account because the rules were written for
-              someone else's market.
+              Most funded-trader programmes an Indian trader can reach were built for a different
+              market. The fee is charged in dollars, the instruments are someone else's index, and
+              the rules are tuned to a session that opens when ours has closed.
             </p>
             <p>
-              The conversation kept coming back to one question: <em className="text-[color:var(--pf-text)] not-italic font-semibold">why does an Indian person
-              have to jump through American hoops to get funded?</em> Indian people know NIFTY and BANKNIFTY
-              better than anyone. They wake up at 9:00 AM IST, they follow index options, they live in INR.
-              Why should they pay in USD and study S&P futures to prove their skill?
+              The question that produced this platform was a narrow one:
+              <em className="text-[color:var(--pf-text)] not-italic font-semibold"> what would an evaluation
+              look like if it were designed around NIFTY, BANKNIFTY and SENSEX from the first line?</em>
+              Indian hours. Contracts traders here already follow. Limits quoted in rupees rather than
+              converted into them.
             </p>
             <p>
-              So we built the prop firm we wished existed. INR payments. NIFTY, BANKNIFTY and SENSEX only.
-              Indian market hours. Rules written in plain English. Payouts in your Indian bank account, not
-              a Wise transfer that takes a week and eats 3% in fees.
+              That is what this is. One market, covered properly. Fees and payouts in INR to an Indian
+              bank account. Every target and limit published before you pay, and enforced by the platform
+              rather than argued about afterwards.
             </p>
             <p>
-              That is the whole pitch. We are not trying to be the biggest prop firm in the world. We just
-              want to be the best one for Indian people.
+              It is not built to be the largest programme available. It is built to be the one whose
+              rules an Indian index trader can read, plan around and hold us to.
             </p>
           </div>
         </div>
@@ -200,12 +196,12 @@ export default function AboutPage() {
       <section className="py-14 md:py-24 px-6 bg-[#0A2130]">
         <div className="max-w-4xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
-            <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">Our Journey</p>
+            <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">How it works</p>
             <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em' }} className="text-white mb-4">
-              From a chai stall to a funded prop firm
+              How this platform is put together
             </h2>
             <p className="text-base sm:text-lg text-[#9FB5AB]">
-              The milestones that brought us here. No filters, no rounding up.
+              No founding legend — just the six decisions the product is built on.
             </p>
           </div>
 
@@ -236,7 +232,7 @@ export default function AboutPage() {
           <div className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
             <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">Why Us</p>
             <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em' }} className="text-[color:var(--pf-text)] mb-4">
-              Why professionals pick <span className="text-[color:var(--pf-brand)]">DhanFunded</span>
+              Why traders stay with <span className="text-[color:var(--pf-brand)]">DhanFunded</span>
             </h2>
             <p className="text-base sm:text-lg text-[color:var(--pf-muted)]">
               No marketing fluff. These are the actual reasons people stick with us.

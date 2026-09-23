@@ -14,7 +14,6 @@ const PricingTable = lazy(() => import('./components/PricingTable'));
 const ProcessSteps = lazy(() => import('./components/ProcessSteps'));
 const WhyLoveUs = lazy(() => import('./components/WhyLoveUs'));
 const TechBenefits = lazy(() => import('./components/TechBenefits'));
-const TopicLinks = lazy(() => import('./components/TopicLinks'));
 const FAQ = lazy(() => import('./components/FAQ'));
 const CtaBand = lazy(() => import('./components/CtaBand'));
 const Footer = lazy(() => import('./components/Footer'));
@@ -105,7 +104,6 @@ export default function NewLandingPage() {
         <ProcessSteps />
         <WhyLoveUs />
         <TechBenefits />
-        <TopicLinks />
         <FAQ />
         <CtaBand />
         <Footer />

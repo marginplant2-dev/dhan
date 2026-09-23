@@ -92,18 +92,7 @@ const PricingPage = lazy(() => import('./pages/Landing/pages/PricingPage'));
 const FAQsPage = lazy(() => import('./pages/Landing/pages/FAQsPage'));
 const LandingContactPage = lazy(() => import('./pages/Landing/pages/ContactPage'));
 const InstrumentsPage = lazy(() => import('./pages/Landing/pages/InstrumentsPage'));
-const PropFirmIndiaPage = lazy(() => import('./pages/Landing/pages/PropFirmIndiaPage'));
-const NiftyPropFirmPage = lazy(() => import('./pages/Landing/pages/NiftyPropFirmPage'));
-const BankniftyPropFirmPage = lazy(() => import('./pages/Landing/pages/BankniftyPropFirmPage'));
-const SensexPropFirmPage = lazy(() => import('./pages/Landing/pages/SensexPropFirmPage'));
-const FundedAccountIndiaPage = lazy(() => import('./pages/Landing/pages/FundedAccountIndiaPage'));
-const InstantFundingIndiaPage = lazy(() => import('./pages/Landing/pages/InstantFundingIndiaPage'));
-const PropTradingIndiaPage = lazy(() => import('./pages/Landing/pages/PropTradingIndiaPage'));
-const PropChallengeIndiaPage = lazy(() => import('./pages/Landing/pages/PropChallengeIndiaPage'));
 const NotFoundPage = lazy(() => import('./pages/Landing/pages/NotFoundPage'));
-const InrUpiPropFirmPage = lazy(() => import('./pages/Landing/pages/InrUpiPropFirmPage'));
-const IndianStockMarketPropFirmPage = lazy(() => import('./pages/Landing/pages/IndianStockMarketPropFirmPage'));
-const BlogPage = lazy(() => import('./pages/Landing/pages/BlogPage'));
 // ResultsPage is retired — the payout ledger had nothing true to show yet.
 // The file stays in the repo; it is simply not routed.
 const ChallengesPage = lazy(() => import('./pages/Landing/pages/ChallengesPage'));
@@ -4762,18 +4751,6 @@ function AppRouter() {
         <Route path="/instruments" element={<InstrumentsPage />} />
         {/* Topic landing pages — each carries its own copy, FAQ schema and
             breadcrumbs; they are not variations of one template. */}
-        <Route path="/prop-firm-india" element={<PropFirmIndiaPage />} />
-        <Route path="/nifty-prop-firm" element={<NiftyPropFirmPage />} />
-        <Route path="/banknifty-prop-firm" element={<BankniftyPropFirmPage />} />
-        <Route path="/sensex-prop-firm" element={<SensexPropFirmPage />} />
-        <Route path="/funded-trading-account-india" element={<FundedAccountIndiaPage />} />
-        <Route path="/instant-funding-prop-firm-india" element={<InstantFundingIndiaPage />} />
-        <Route path="/prop-trading-india" element={<PropTradingIndiaPage />} />
-        <Route path="/prop-challenge-india" element={<PropChallengeIndiaPage />} />
-        <Route path="/inr-upi-prop-firm-india" element={<InrUpiPropFirmPage />} />
-        <Route path="/indian-stock-market-prop-firm" element={<IndianStockMarketPropFirmPage />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/:slug" element={<BlogPage />} />
         
         <Route path="/challenges" element={<ChallengesPage />} />
         <Route path="/login" element={

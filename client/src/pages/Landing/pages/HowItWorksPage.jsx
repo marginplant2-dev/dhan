@@ -8,30 +8,30 @@ const steps = [
   {
     number: '01',
     title: 'Choose Your Plan',
-    desc: 'Pick a Qualifier tier that matches your learning style. Each plan comes with a defined simulated capital size, profit target, and clear risk rules. We offer 1-Step and 2-Step evaluations.',
+    desc: 'Choose the account size whose daily limit your usual losing day already fits inside. Each size carries its own target, daily room and overall room, all quoted in rupees.',
   },
   {
     number: '02',
     title: 'Follow Rules',
-    desc: 'Intraday on NIFTY/BANKNIFTY within our risk rules — Max Daily Loss, Max Drawdown, and mandatory Intraday Square-off by 3:15 PM. All activity happens in a simulated environment.',
+    desc: 'Trade NIFTY, BANKNIFTY and SENSEX intraday on live prices. Positions square off by 3:15 PM IST, and the dashboard counts down both limits while you are in the market.',
   },
   {
     number: '03',
     title: 'Hit Your Targets',
-    desc: 'Achieve your profit target while staying within loss limits. Consistency and discipline are rewarded, not just big wins. Take as many market days as you need within the plan validity.',
+    desc: 'Reach the target without touching either limit, across at least five trading days. There is no prize for getting there in one session — a single day may carry only 40% of the target.',
   },
   {
     number: '04',
     title: 'Earn Your Rewards',
-    desc: 'Pass the evaluation, complete KYC verification, and unlock your performance-based reward payout directly to your verified Indian bank account. Simple, transparent, no hidden steps.',
+    desc: 'Once the account is funded, complete KYC and your share is transferred in INR to a bank account in your own name on the published 14-day cycle.',
   },
 ];
 
 const rules = [
-  { label: 'Max Daily Loss', value: '3% – 5%', desc: 'Maximum loss allowed in a single market day. Breaching this disqualifies the evaluation.' },
-  { label: 'Max Total Drawdown', value: '8% – 12%', desc: 'Maximum cumulative loss from your peak balance. Stay within this limit throughout your evaluation.' },
-  { label: 'Intraday Square-off', value: '3:15 PM', desc: 'All positions must be closed before 3:15 PM IST. No overnight holding allowed.' },
-  { label: 'Profit Target', value: '8% – 15%', desc: 'The profit percentage you need to achieve to pass the evaluation successfully.' },
+  { label: 'Max Daily Loss', value: '3% – 5%', desc: 'How far the account may fall in one session before it is closed. Measured from the balance the session opened with.' },
+  { label: 'Max Total Drawdown', value: '8% – 12%', desc: 'The floor for the account as a whole. Cross it at any point and the evaluation ends there.' },
+  { label: 'Intraday Square-off', value: '3:15 PM', desc: 'Everything is squared off by 3:15 PM IST — nothing carries into the next session.' },
+  { label: 'Profit Target', value: '8% – 15%', desc: 'What the account has to be up by, as a share of its starting balance, before the phase counts as cleared.' },
   { label: 'Minimum Active Days', value: '5 days', desc: 'You must be active for at least 5 separate days to qualify. This ensures consistency over time.' },
   { label: 'Instruments Allowed', value: 'NIFTY, BANKNIFTY, SENSEX', desc: 'Options buying and selling are both supported. Futures, overnight positions, copy execution and algo execution are not allowed.' },
 ];

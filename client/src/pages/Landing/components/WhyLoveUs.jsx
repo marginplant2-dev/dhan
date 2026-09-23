@@ -2,28 +2,28 @@ import { CalendarCheck, Headphones, IndianRupee, Percent, ScrollText, Wallet } f
 
 const ITEMS = [
   {
-    Icon: CalendarCheck, tile: 'pf-tile--soft', title: 'Biweekly Payouts',
-    desc: 'Request a payout every 14 days once you are funded. No waiting for an arbitrary review window.',
+    Icon: CalendarCheck, tile: 'pf-tile--soft', title: 'A fixed payout clock',
+    desc: 'Fourteen days, every time. The conditions are written down, so you know the date you become eligible before you start.',
   },
   {
-    Icon: Wallet, tile: 'pf-tile--ink', title: 'Streamlined Process',
-    desc: 'Sign up, clear the assessment, get funded. No sales calls, no interviews, no hidden approval steps.',
+    Icon: Wallet, tile: 'pf-tile--ink', title: 'Nobody to convince',
+    desc: 'No interview, no call, no discretionary review. Your numbers decide, and they are the only thing that does.',
   },
   {
-    Icon: Percent, tile: 'pf-tile--green', title: 'Up to 80% Share',
-    desc: 'You keep the overwhelming majority of your performance. The split is fixed before you start.',
+    Icon: Percent, tile: 'pf-tile--green', title: 'Up to 80% is yours',
+    desc: 'Eighty per cent on evaluated accounts, seventy on Instant. The split is set the day you buy and does not move.',
   },
   {
-    Icon: IndianRupee, tile: 'pf-tile--amber', title: 'Built for INR',
-    desc: 'Indian instruments, Indian market hours, Indian bank payouts. No currency conversion, no FX spread.',
+    Icon: IndianRupee, tile: 'pf-tile--amber', title: 'Rupees, start to finish',
+    desc: 'Indian indices, Indian hours, Indian bank. Nothing is priced in dollars, so nothing is lost converting it back.',
   },
   {
-    Icon: ScrollText, tile: 'pf-tile--violet', title: 'Rules in Plain English',
-    desc: 'Every target, drawdown limit and payout condition is published on this page before you pay a rupee.',
+    Icon: ScrollText, tile: 'pf-tile--violet', title: 'Limits you can quote',
+    desc: 'Every target and limit is a rupee figure on the pricing page, and the same figure in your dashboard while you trade.',
   },
   {
-    Icon: Headphones, tile: 'pf-tile--pink', title: 'Support That Replies',
-    desc: 'WhatsApp, email and Telegram — answered by people who actually know the platform.',
+    Icon: Headphones, tile: 'pf-tile--pink', title: 'Answers from people who trade',
+    desc: 'WhatsApp, email or phone, answered by people who can read your account and tell you what actually happened.',
   },
 ];
 
@@ -33,7 +33,7 @@ export default function WhyLoveUs() {
       <div className="pf-wrap">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <p className="pf-eyebrow mb-4">Why participants stay</p>
-          <h2 className="pf-h2">Everything is on the table</h2>
+          <h2 className="pf-h2">Why traders stay</h2>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

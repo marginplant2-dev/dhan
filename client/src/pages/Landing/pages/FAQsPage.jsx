@@ -9,43 +9,28 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 // Fallback shown only if the admin-managed API returns nothing (or is down) —
 // the live content comes from GET /api/faqs (managed in Admin → Content).
+/* Shown only if /api/faqs cannot be reached — the page normally renders the
+   full set from the database (see server/services/contentSeed.service.js). */
 const FALLBACK_FAQ = {
   'General': [
-    { q: 'What is DhanFunded?', a: 'DhanFunded is a simulated prop firm evaluation platform built for Indian intraday people. You participate with virtual capital under defined rules and earn rewards upon successful completion. We are not a broker and do not execute live orders on NSE or BSE.' },
-    { q: 'How does DhanFunded work?', a: 'You choose an account size, follow the evaluation rules, and demonstrate consistent performance. Based on your performance, you gain access to larger simulated capital and reward opportunities.' },
-    { q: 'Is DhanFunded a real learning platform?', a: 'DhanFunded operates in a simulated environment designed for skill evaluation and learning. It does not execute orders in live markets on your behalf — the market data is real, but the orders never reach the exchange.' },
-    { q: 'Is this legal in India?', a: 'Yes. DhanFunded operates as a simulated evaluation platform. It is not a broker or SEBI-registered intermediary. Simulated participation is legal in India. We provide a skill evaluation service, not investment advice or brokerage services.' },
-    { q: 'Who is this platform for?', a: 'This platform is built for serious Indian intraday people who want to prove their market discipline and earn performance-based rewards without risking their own capital. Whether you follow NIFTY, BANKNIFTY or SENSEX — if you have a consistent strategy, this is for you.' },
-    { q: 'Is this suitable for beginners?', a: 'Yes. DhanFunded is designed for both beginners and experienced people. Beginners can start with smaller account sizes and gradually scale up as they gain confidence and consistency.' },
-    { q: 'Why choose DhanFunded over others?', a: 'Transparent rules, fast onboarding, Indian market focus, scalable account sizes and a structured evaluation system. DhanFunded is built specifically for Indian people who want to grow with discipline and proper risk management.' },
-    { q: 'Is DhanFunded safe and trustworthy?', a: 'We focus on transparency, clear rules and structured processes to build a reliable ecosystem for people. Every fee, rule, drawdown limit and payout timeline is published up-front. We prioritise fairness and long-term trust over short-term marketing tactics.' },
+    { q: 'What exactly is DhanFunded?', a: 'An evaluation desk. You trade Indian index derivatives on simulated capital against rules published before you pay, and if your results clear those rules you are given a funded account and paid a share of what it makes.' },
+    { q: 'Is any of this real money in the market?', a: 'No. Prices come from live NSE and BSE feeds, but your orders stay inside our system and never reach an exchange. We are not a broker and hold none of your trading capital. What is real is the payout on a funded account.' },
+    { q: 'Can a platform like this operate in India?', a: 'Yes. A simulated environment that pays for measured performance is not broking, portfolio management or investment advice, so it needs no SEBI registration. We give no tips and no advice, and we never handle your trading capital.' },
   ],
-  'Evaluation': [
-    { q: 'Which instruments can I be assessed on?', a: 'You can participate on NIFTY, BANKNIFTY, and SENSEX options — both buying and selling are supported. Futures, overnight positions, copy execution and algo execution are not allowed. All activity happens in a simulated environment with real-time market data.' },
-    { q: 'What are the risk rules?', a: 'Each plan has a Max Daily Loss limit (3-5%), a Max Total Drawdown limit (8-12%), and mandatory intraday square-off at 3:15 PM IST. Breaking any rule disqualifies the current evaluation. These rules are designed to promote discipline.' },
-    { q: 'What is the loss limit?', a: 'Each account comes with predefined risk parameters — a daily loss limit and an overall drawdown limit. Both are shown in your dashboard from day one and they exist to enforce discipline and proper risk management.' },
-    { q: 'What happens if I break a rule?', a: 'If you breach the daily loss limit, max drawdown, or fail to close positions by 3:15 PM, your evaluation is disqualified. You can purchase a new plan and restart. There are no penalties beyond losing the evaluation attempt.' },
-    { q: 'Can I participate anytime during market hours?', a: 'Yes. You can participate during official Indian market hours (9:15 AM to 3:15 PM IST) using whichever style suits your strategy, as long as you follow the platform rules. All positions must be squared off before 3:15 PM.' },
-    { q: 'Can I use my own strategy?', a: 'Yes. You are free to use your own strategy as long as it follows the platform guidelines and risk-management rules. Discretionary decision-making is encouraged; copy execution and algo execution are not permitted.' },
-    { q: 'Is the market data real?', a: 'Yes, we use real-time market data feeds from NSE. However, all orders are simulated — no actual orders are placed on the exchange. This gives you a realistic experience without real market risk.' },
+  'Trading': [
+    { q: 'What can I trade?', a: 'NIFTY, BANKNIFTY and SENSEX derivatives on NSE and BSE. Nothing in forex, crypto, commodities or overseas markets.' },
+    { q: 'Which rules can end my account?', a: 'A daily loss beyond the programme limit, a cumulative loss beyond the overall limit, or the evaluation running past its allowed days. All of it measured against the starting balance.' },
+    { q: 'Why cap what I can make in one day?', a: 'Because one outsized day says nothing about whether you can repeat it. No day may carry more than 40% of the target during an evaluation, or 30% of the profit on a funded account. The money stays in your balance either way.' },
   ],
   'Payouts': [
-    { q: 'How do I get paid?', a: 'After passing the evaluation and completing KYC verification, you become eligible for performance-based rewards paid directly to your verified Indian bank account. Payouts are processed within 5-7 business days.' },
-    { q: 'How are profits shared?', a: 'DhanFunded offers a reward share of up to 80% of simulated profits, rewarding people based on performance. The exact split depends on your plan tier and is shown before purchase.' },
-    { q: 'Can I withdraw profits anytime?', a: 'Profit withdrawals follow a structured payout schedule designed to ensure consistency and fair usage. Specific timelines and conditions are clearly defined in your dashboard so you always know when the next withdrawal window opens.' },
-    { q: 'Is there any hidden fee involved?', a: 'No. DhanFunded follows a transparent pricing model. All fees are clearly mentioned before you purchase any account — there are no recurring charges, no FX conversion fees and no surprise deductions on payouts.' },
-    { q: 'Is my evaluation fee refundable?', a: 'Evaluation fees are non-refundable except in case of payment errors.' },
-    { q: 'What is the profit split?', a: 'People who successfully pass the evaluation receive up to 80% of the simulated profits as performance rewards. The exact split depends on your plan tier and is clearly stated before purchase.' },
+    { q: 'What share do I keep?', a: '80% on accounts funded through the 1-Step and 2-Step routes, and 70% on Instant Funding, which skips the evaluation entirely.' },
+    { q: 'When can I request money?', a: 'After 14 days funded, five trading days used, at least 5% profit, and no single day making up more than 30% of it. Requests then run on a 14-day cycle.' },
+    { q: 'Is the evaluation fee refundable?', a: 'No — it pays for the evaluation you took, not its result. A failed account can be reset for half the original fee, calculated on the full fee even if you bought with a coupon.' },
   ],
   'Account': [
-    { q: 'How do I create an account?', a: 'Click "Get Started" on any page, fill in your basic details (name, email, phone), verify your email, and you are ready to purchase an evaluation plan. The entire process takes less than 2 minutes.' },
-    { q: 'How long does it take to get started?', a: 'Account setup and activation typically happen within 24 hours of payment, so you can start your evaluation challenge quickly without unnecessary waiting.' },
-    { q: 'How much capital can I access?', a: 'Depending on the plan, you can access simulated capital up to ₹25,00,000 and beyond, allowing you to scale your potential without risking large personal funds.' },
-    { q: 'Do I need prior market experience to join?', a: 'No, but having basic knowledge of the markets helps. Beginners can start with smaller account sizes and improve their skills while learning risk management on the platform.' },
-    { q: 'How do I track my performance?', a: 'You get access to a dashboard where you can monitor profit and loss, current risk-limit usage, full activity history and your progress toward the profit target — all updated in real time.' },
-    { q: 'What documents do I need for KYC?', a: 'You will need a valid PAN card, Aadhaar card, and a bank account in your name. KYC is required only after you pass the evaluation and before your first payout. We verify these digitally.' },
-    { q: 'Can I have multiple evaluations at once?', a: 'Yes, you can run multiple evaluation accounts simultaneously. Each plan operates independently with its own rules, capital, and tracking.' },
-    { q: 'Is there any max payout cap per account?', a: 'Yes. The maximum withdrawal cap is 10% of the account size per funded account. For example, on a ₹25,00,000 account the maximum withdrawal is ₹2,50,000. Payouts are split into 14-day cycles within the 30-day funded account life.' },
+    { q: 'How soon can I start?', a: 'Create an account, verify your email, and the practice environment opens straight away. An evaluation goes live as soon as its payment is approved, usually the same working day.' },
+    { q: 'When is KYC needed?', a: 'Only before your first payout, never to start an evaluation. PAN, Aadhaar and a bank account in your own name, verified digitally.' },
+    { q: 'Can I run more than one account?', a: 'Yes. Each carries its own balance, objectives and limits, and a breach on one does not touch another.' },
   ],
 };
 

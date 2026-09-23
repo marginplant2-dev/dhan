@@ -15,13 +15,9 @@ const LINKS = [
 ];
 
 const MORE = [
-  { label: 'Prop Firm India', to: '/prop-firm-india' },
-  { label: 'NIFTY Prop Firm', to: '/nifty-prop-firm' },
-  { label: 'BANKNIFTY Prop Firm', to: '/banknifty-prop-firm' },
   { label: 'About us', to: '/about' },
   { label: 'Instruments', to: '/instruments' },
   { label: 'FAQs', to: '/faqs' },
-  { label: 'Blog', to: '/blog' },
 ];
 
 export default function Navbar() {

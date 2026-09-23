@@ -35,7 +35,7 @@ export default function TrustPanel() {
                 </p>
               </div>
             </div>
-            <span className="pf-chip">Controlled simulated research environment</span>
+            <span className="pf-chip">Simulated environment, real payouts</span>
           </div>
 
           <hr className="pf-divider mb-8" />

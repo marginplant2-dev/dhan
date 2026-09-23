@@ -61,33 +61,33 @@ function ObjectiveList() {
 
 const MAIN = [
   {
-    Icon: Gauge, tile: 'pf-tile--violet', title: 'Live Objectives Tracker',
-    desc: 'Profit target, daily loss, maximum loss and active days are recalculated on every tick — you always know exactly where you stand.',
+    Icon: Gauge, tile: 'pf-tile--violet', title: 'Know where you stand',
+    desc: 'Target, daily room, overall room and days used are recomputed on every tick, so the number you are trading against is never a guess.',
     Art: ProgressDonut,
   },
   {
-    Icon: Activity, tile: 'pf-tile--brand', title: 'Automated Risk Engine',
-    desc: 'Drawdown limits are enforced by the platform. Breach a limit and positions are squared off at the exact price that triggered it.',
+    Icon: Activity, tile: 'pf-tile--brand', title: 'The limit is not a suggestion',
+    desc: 'Limits are enforced by the platform, not by a reviewer later. Touch one and positions close at the price that touched it.',
     Art: RiskSpark,
   },
   {
-    Icon: LineChart, tile: 'pf-tile--amber', title: 'Performance Analytics',
-    desc: 'Per-day P&L, win rate and consistency broken down per account, so you can see which habits are actually costing you.',
+    Icon: LineChart, tile: 'pf-tile--amber', title: 'Where your money actually goes',
+    desc: 'Day by day P&L, win rate and how lopsided your best day was — per account, so a habit that costs you is visible before it fails you.',
     Art: ObjectiveList,
   },
 ];
 
 const SECONDARY = [
   {
-    Icon: CalendarRange, tile: 'pf-tile--soft', title: 'Unhurried Assessment Windows',
-    desc: 'Take the days you need. We would rather see a real process than a rushed one.',
+    Icon: CalendarRange, tile: 'pf-tile--soft', title: 'Time to trade properly',
+    desc: 'Thirty to sixty days depending on the programme. Long enough to trade your setup when it appears instead of forcing one.',
   },
   {
-    Icon: Layers, tile: 'pf-tile--pink', title: 'Realistic Simulated Fills',
+    Icon: Layers, tile: 'pf-tile--pink', title: 'Fills that behave',
     desc: 'Indian instruments with spreads, margins and lot sizes modelled on standard broker conditions.',
   },
   {
-    Icon: Percent, tile: 'pf-tile--green', title: 'Performance-Based Payouts',
+    Icon: Percent, tile: 'pf-tile--green', title: 'Paid on results only',
     desc: 'Clear the objectives, request your share. The split and cycle are fixed up front.',
   },
 ];
@@ -98,7 +98,7 @@ export default function TechBenefits() {
       <div className="pf-wrap">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <p className="pf-eyebrow mb-4">Under the hood</p>
-          <h2 className="pf-h2 mb-5">Technology &amp; Benefits</h2>
+          <h2 className="pf-h2 mb-5">What the platform does for you</h2>
           <p className="pf-lead">The platform does the rule-keeping so you can concentrate on the process.</p>
         </div>
 

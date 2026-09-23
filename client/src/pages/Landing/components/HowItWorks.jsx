@@ -57,23 +57,23 @@ function PayoutBar() {
 
 const STEPS = [
   {
-    n: '01', title: 'Sign Up & Choose Program', tile: 'pf-tile--brand', Icon: UserPlus,
-    desc: 'Create your profile and enrol in the assessment that fits you. Onboarding takes minutes — no paperwork upfront.',
+    n: '01', title: 'Pick a size you can defend', tile: 'pf-tile--brand', Icon: UserPlus,
+    desc: 'Open an account with an email, look at the limits for each size in rupees, and buy the one your worst week already fits inside.',
     Art: FormSkeleton,
   },
   {
-    n: '02', title: 'Clear the Assessment', tile: 'pf-tile--soft', Icon: Target,
-    desc: 'Operate with simulated capital inside our controlled research environment and meet every objective within the risk rules.',
+    n: '02', title: 'Trade it like it is yours', tile: 'pf-tile--soft', Icon: Target,
+    desc: 'Live NSE and BSE prices, simulated capital, and a dashboard that shows exactly how much of each limit you have left as you trade.',
     Art: ScoreGauge,
   },
   {
-    n: '03', title: 'Get Your Pro Account', tile: 'pf-tile--amber', Icon: Trophy,
-    desc: 'Pass and a funded Pro Account is issued to you automatically — fresh balance, tracked objectives, live dashboard.',
+    n: '03', title: 'Clear it and get funded', tile: 'pf-tile--amber', Icon: Trophy,
+    desc: 'Meet the target inside the limits and a funded account is issued the same day — fresh balance, new objectives, nothing to negotiate.',
     Art: FundedBadge,
   },
   {
-    n: '04', title: 'Take Your Share', tile: 'pf-tile--green', Icon: Wallet,
-    desc: 'Keep up to 80% as a performance share. Request a payout every 14 days and receive it via UPI or bank transfer.',
+    n: '04', title: 'Get paid every fortnight', tile: 'pf-tile--green', Icon: Wallet,
+    desc: 'Request your share on a 14-day cycle. It lands in your own Indian bank account by UPI or transfer — no conversion, no waiting on a review window.',
     Art: PayoutBar,
   },
 ];
@@ -84,7 +84,7 @@ export default function HowItWorks() {
       <div className="pf-wrap">
         <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16">
           <p className="pf-eyebrow mb-4">The roadmap</p>
-          <h2 className="pf-h2 mb-5">How It Works</h2>
+          <h2 className="pf-h2 mb-5">Four steps, no surprises</h2>
           <p className="pf-lead">
             Four steps from sign-up to payout. Every rule, target and limit is published
             before you pay — nothing is decided after the fact.

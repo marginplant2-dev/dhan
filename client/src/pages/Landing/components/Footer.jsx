@@ -18,22 +18,7 @@ const COLUMNS = {
     // is a trust signal both for readers and for search engines.
     { label: 'Reviews on Trustpilot', href: 'https://www.trustpilot.com/review/dhanfunded.com', external: true },
     { label: 'FAQs', href: '/faqs' },
-    { label: 'Blog', href: '/blog' },
     { label: 'Contact us', href: '/contact-us' },
-  ],
-  // The topic pages were reachable only from sitemap.xml — nothing on the site
-  // linked to them, so crawlers treated them as orphans and users never saw them.
-  Markets: [
-    { label: 'Prop firm in India', href: '/prop-firm-india' },
-    { label: 'Prop trading in India', href: '/prop-trading-india' },
-    { label: 'Prop challenge rules', href: '/prop-challenge-india' },
-    { label: 'Funded trading account', href: '/funded-trading-account-india' },
-    { label: 'Instant funding', href: '/instant-funding-prop-firm-india' },
-    { label: 'NIFTY prop firm', href: '/nifty-prop-firm' },
-    { label: 'BANKNIFTY prop firm', href: '/banknifty-prop-firm' },
-    { label: 'SENSEX prop firm', href: '/sensex-prop-firm' },
-    { label: 'INR fees & UPI payouts', href: '/inr-upi-prop-firm-india' },
-    { label: 'Indian stock market only', href: '/indian-stock-market-prop-firm' },
   ],
   Legal: [
     { label: 'Privacy Policy', href: '/privacy-policy' },
@@ -64,7 +49,7 @@ export default function Footer() {
     <footer style={{ background: INK, borderTop: `1px solid ${LINE}` }}>
       <div className="pf-wrap py-14 md:py-20">
 
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1fr]">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <Link to="/" className="inline-block mb-5">
               <img src={logoOnDark} alt="DhanFunded" width={1162} height={320} className="h-14 w-auto" />

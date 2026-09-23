@@ -3,21 +3,21 @@ import { ArrowRight, BadgeCheck, CircleCheck, LineChart, Wallet } from 'lucide-r
 const STEPS = [
   {
     n: '01', Icon: CircleCheck, tile: 'pf-tile--brand', title: 'Clear the Assessment',
-    desc: 'Complete your assessment phase(s) inside the controlled simulated risk environment and meet every objective.',
+    desc: 'Finish the phase your programme asks for, inside its limits, with at least five trading days used.',
   },
   {
     n: '02', Icon: BadgeCheck, tile: 'pf-tile--ink', title: 'Get Your Pro Account',
-    desc: 'Your funded Pro Account is issued automatically once the objectives are verified.',
+    desc: 'Objectives are verified and the funded account appears in your dashboard — usually the same working day.',
     badge: 'Under 24 hours',
   },
   {
     n: '03', Icon: LineChart, tile: 'pf-tile--green', title: 'Perform',
-    desc: 'Operate within the funded risk rules and watch your objectives update on the live dashboard.',
+    desc: 'Trade the funded account against its own limits, which are tighter than the evaluation on two of the three programmes.',
     badge: '14-day cycle',
   },
   {
     n: '04', Icon: Wallet, tile: 'pf-tile--soft', title: 'Request Payouts',
-    desc: 'Submit a payout request from your dashboard and receive it via UPI or bank transfer.',
+    desc: 'Once the cycle and conditions are met, raise the request from the dashboard and take your share in INR.',
     badge: 'Every 14 days',
   },
 ];
@@ -28,7 +28,7 @@ export default function ProcessSteps() {
       <div className="pf-wrap">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <p className="pf-eyebrow mb-4">After you pass</p>
-          <h2 className="pf-h2">From cleared to paid</h2>
+          <h2 className="pf-h2">After you pass</h2>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

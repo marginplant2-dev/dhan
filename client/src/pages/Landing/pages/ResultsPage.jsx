@@ -178,9 +178,9 @@ export default function ResultsPage() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              ['Clear the assessment', 'Hit the performance target without breaching the daily or overall loss limit. The dashboard tracks every objective live.'],
+              ['Clear the assessment', 'Reach the target with both limits intact. Every objective updates live, so nothing about passing is a surprise.'],
               ['Get a funded account', `A funded account is issued with its own balance, with no second fee. Your performance share is ${splitSentence}.`],
-              ['Request the payout', 'Once the account is at least 5% in profit over a minimum of 5 trading days, request a payout from your dashboard every 14 days. It is reviewed, then transferred in INR to your bank account.'],
+              ['Request the payout', 'With the account 5% up, five trading days used and fourteen days on the clock, raise the request from your dashboard. It is checked against those conditions and paid in INR.'],
             ].map(([title, body], i) => (
               <div key={title} className="border border-[color:var(--pf-border)] rounded-2xl p-6 sm:p-8">
                 <div className="text-xs font-bold tracking-[.16em] text-[color:var(--pf-brand)] mb-3">STEP {i + 1}</div>

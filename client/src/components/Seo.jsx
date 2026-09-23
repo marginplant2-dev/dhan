@@ -20,146 +20,70 @@ const OG_IMAGE = `${SITE}/landing/img/dhanfunded-og.png`;
 
 const PAGES = {
   '/': {
-    title:
-      "DhanFunded — Prop Firm India | Funded NIFTY & BANKNIFTY Accounts",
+    title: "DhanFunded — Simulated Index Trading Evaluations in India",
     description:
-      "India-only prop trading assessments on NSE and BSE index options — NIFTY, BANKNIFTY and SENSEX. Accounts from ₹1 Lakh to ₹50 Lakh, one-time fees from ₹2,700, 80% performance share paid in INR every 14 days. No forex, no crypto, no subscription.",
+      "Show what your strategy can do on NIFTY, BANKNIFTY and SENSEX without staking your own money. Rules published in rupees before you pay, account sizes from ₹1 Lakh, and 80% of what you make paid to an Indian bank every fortnight.",
   },
   '/how-it-works': {
-    title:
-      "How DhanFunded Works — Assessment, Rules and Payout Steps",
+    title: "How an Evaluation Runs at DhanFunded — Step by Step",
     description:
-      "The exact path from buying an assessment to your first payout: phase targets, the daily and overall loss limits that end an account, how a funded account is issued, and when you can request money.",
+      "What happens between paying for an evaluation and receiving money: the targets each phase asks for, the two loss limits that close an account, how a funded account is issued, and what has to be true before a payout is released.",
   },
   '/challenges': {
-    title:
-      "Compare 1-Step, 2-Step and Instant Funding — DhanFunded",
+    title: "1-Step, 2-Step or Instant — Which DhanFunded Programme Fits",
     description:
-      "Side-by-side rules for all three DhanFunded programmes: 2-Step (8% then 5%, 60 days, ₹2,700), 1-Step (10%, 45 days) and Instant Funding (no assessment, 3% daily limit). Account sizes ₹1 Lakh to ₹50 Lakh.",
+      "Three routes to a funded account, compared line by line: targets, daily and overall limits, time allowed and profit share. Pick by how you trade, not by the fee.",
   },
   '/instruments': {
-    title:
-      "Tradable Instruments — NIFTY, BANKNIFTY, SENSEX | DhanFunded",
+    title: "What You Can Trade — NIFTY, BANKNIFTY and SENSEX Derivatives",
     description:
-      "Every index derivative you can trade inside a DhanFunded assessment, with lot sizes and session timings for NIFTY, BANKNIFTY and SENSEX.",
+      "The index derivatives available inside a DhanFunded evaluation, with contract sizes and session timings. Indian indices only — nothing in forex, crypto or overseas markets.",
   },
   '/pricing': {
-    title:
-      "DhanFunded Pricing — Assessment Fees from ₹2,700",
+    title: "DhanFunded Evaluation Fees — Pay Once, Per Account Size",
     description:
-      "One-time fees with no subscription. 2-Step is ₹2,700, 1-Step ₹3,900 and Instant Funding ₹4,100 on a ₹1 Lakh account, with every loss limit and profit target published in rupees.",
+      "Every account size with its one-time fee, target and loss limits in rupees. No monthly billing, no platform charge, and the same numbers on the page as in your dashboard.",
   },
   '/faqs': {
-    title:
-      "DhanFunded FAQs — Rules, Payouts, KYC and Refunds",
+    title: "DhanFunded Questions — Rules, Payouts, KYC, Resets",
     description:
-      "Straight answers on drawdown limits, what fails an account, the 80% performance share, the 14-day payout cycle, KYC, and why assessment fees are non-refundable.",
+      "Plain answers to what traders actually ask: what ends an account, how the consistency rule is measured, when a payout can be requested, what a reset costs, and why the environment is simulated.",
   },
   '/about': {
-    title:
-      "About DhanFunded — Simulated Evaluation Built for India",
+    title: "About DhanFunded — Why We Evaluate Instead of Teach",
     description:
-      "Why DhanFunded runs INR-denominated assessments on Indian index derivatives, how the simulated environment differs from live exchange trading, and what the platform does and does not do.",
+      "A simulated evaluation desk for Indian index traders: what the platform is, what it deliberately is not, and how a rules-first environment separates a disciplined strategy from a lucky week.",
   },
   '/contact-us': {
-    title:
-      "Contact DhanFunded — Support for Indian Participants",
+    title: "Talk to DhanFunded — Support for Traders and Payouts",
     description:
-      "Reach DhanFunded support about assessments, payouts, KYC or your account. Email and phone support for participants across India.",
+      "Questions about an evaluation, a funded account, KYC or a payout request? Reach the DhanFunded team by email, phone or WhatsApp.",
   },
-  '/blog': {
-    title:
-      "DhanFunded Blog — Funded Trading Guides for India",
-    description:
-      "Practical guides on passing a funded evaluation in India: sizing inside a daily loss limit, the rules that fail most accounts, how payouts actually reach your bank, and choosing between 1-Step and 2-Step.",
-  },
-  // Topic landing pages. SeoLanding passes title/description explicitly, but
-  // keeping them here means a direct hit still gets the right tags before the
-  // page component mounts.
-  '/prop-firm-india': {
-    title:
-      "Prop Firm in India — Funded Accounts on NIFTY & BANKNIFTY | DhanFunded",
-    description:
-      "A prop firm assessment built for Indian index derivatives. Accounts from ₹1 Lakh to ₹50 Lakh, one-time fees from ₹2,700, 80% performance share and payouts every 14 days in INR.",
-  },
-  '/nifty-prop-firm': {
-    title:
-      "NIFTY Prop Firm — Funded NIFTY Options Account | DhanFunded",
-    description:
-      "Trade NIFTY 50 index options in a rules-based assessment. Lot size 65, a ₹4,000 daily loss limit on a ₹1 Lakh account, 80% performance share paid in INR every 14 days.",
-  },
-  '/banknifty-prop-firm': {
-    title:
-      "BANKNIFTY Prop Firm — Funded BANKNIFTY Trading | DhanFunded",
-    description:
-      "Trade BANKNIFTY index options in a rules-based assessment. Lot size 35, the same published loss limits as every programme, 80% performance share paid in INR every 14 days.",
-  },
-  '/sensex-prop-firm': {
-    title:
-      "SENSEX Prop Firm — Funded SENSEX Options Account | DhanFunded",
-    description:
-      "Trade BSE SENSEX index options in a rules-based assessment. Accounts from ₹1 Lakh, fees from ₹2,700, loss limits published in rupees, and 80% of the profit paid in INR every 14 days.",
-  },
-  '/funded-trading-account-india': {
-    title:
-      "Funded Trading Account in India — Get Funded from ₹2,700 | DhanFunded",
-    description:
-      "How to get a funded trading account in India: one assessment from ₹2,700 on a ₹1 Lakh account, loss limits published in rupees, and 80% of the profit paid to your Indian bank account every 14 days.",
-  },
-  '/instant-funding-prop-firm-india': {
-    title:
-      "Instant Funding Prop Firm India — No Evaluation, ₹4,100 | DhanFunded",
-    description:
-      "Instant funding in India with no assessment phase: from a one-time ₹4,100 on a ₹1 Lakh account (sizes up to ₹50 Lakh), a 3% daily and 6% overall loss limit, and 70% of the profit paid in INR every 14 days.",
-  },
-  '/prop-trading-india': {
-    title:
-      "Prop Trading in India — How It Works and What to Check | DhanFunded",
-    description:
-      "What proprietary trading means in India, how a simulated evaluation works on NSE and BSE index options, what it costs, what you can lose, and the five things to check before paying any firm a fee.",
-  },
-  '/inr-upi-prop-firm-india': {
-    title:
-      "Prop Firm That Pays in INR — UPI Fees, Indian Bank Payouts | DhanFunded",
-    description:
-      "An Indian prop firm evaluation priced in rupees: pay the one-time fee by UPI from \u20b92,700, trade NIFTY, BANKNIFTY and SENSEX, and receive your reward share in INR to your own bank account every 14 days. No dollars, no conversion, no LRS.",
-  },
-  '/indian-stock-market-prop-firm': {
-    title:
-      "Prop Firm for the Indian Stock Market — NSE & BSE Only | DhanFunded",
-    description:
-      "An evaluation built for NSE and BSE index options — NIFTY, BANKNIFTY and SENSEX during Indian market hours. No forex, no crypto, no US futures. One-time fee from \u20b92,700, rewards paid in INR.",
-  },
-  '/prop-challenge-india': {
-    title:
-      "Prop Challenge India \u2014 Rules, Targets & Loss Limits | DhanFunded",
-    description:
-      "What a prop trading challenge in India actually asks of you: profit targets, daily and overall loss limits, time windows and what happens after you pass. Fees from \u20b92,700, one-time.",
-  },
+
   '/privacy-policy': {
     title: 'Privacy Policy | DhanFunded',
-    description: 'How DhanFunded collects, uses, stores and protects your personal information.',
+    description: 'What personal information DhanFunded collects, why it is collected, how long it is kept and how it is protected.',
   },
   '/terms': {
     title: 'Terms & Conditions | DhanFunded',
-    description: 'The terms governing your use of the DhanFunded assessment platform and funded accounts.',
+    description: 'The agreement covering DhanFunded evaluations, funded accounts, payouts and account closure.',
   },
   '/refund-policy': {
     title: 'Refund Policy | DhanFunded',
-    description: 'When assessment fees are refundable at DhanFunded, and how to request a refund.',
+    description: 'When an evaluation fee can be refunded, when it cannot, and how to raise a refund request.',
   },
   '/risk-disclaimer': {
     title: 'Risk Disclaimer | DhanFunded',
     description:
-      'Important risk information about the DhanFunded simulated evaluation environment. Read before participating in any assessment.',
+      'What a simulated evaluation is and is not. Read this before paying for an evaluation or trading a funded account at DhanFunded.',
   },
   '/login': {
-    title: 'Login | DhanFunded',
-    description: 'Sign in to your DhanFunded account to continue your assessment or manage your funded account.',
+    title: 'Sign In | DhanFunded',
+    description: 'Sign in to continue an evaluation, check objectives or request a payout on your funded account.',
   },
   '/register': {
-    title: 'Create Account | DhanFunded',
-    description: 'Create a free DhanFunded account and start an INR-denominated trading assessment on Indian indices.',
+    title: 'Create Your Account | DhanFunded',
+    description: 'Open a free DhanFunded account, try the practice environment, and start an evaluation when you are ready.',
   },
 
   // Staff entrances. robots.txt already disallows these; the noindex flag is the

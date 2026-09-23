@@ -28,7 +28,7 @@ export default function CtaBand() {
             <p className="text-[.78rem] font-bold tracking-[.22em] uppercase mb-4" style={{ color: 'var(--pf-gold)' }}>
               Trade · Prove · Get Funded
             </p>
-            <h2 className="pf-h2 mb-5" style={{ color: '#fff' }}>Ready to prove your process?</h2>
+            <h2 className="pf-h2 mb-5" style={{ color: '#fff' }}>Think your process holds up?</h2>
             <p className="text-[1.02rem] leading-relaxed mb-8 max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,.72)' }}>
               Pick an account size, clear the objectives, and take your share. Every rule is
               published before you pay.

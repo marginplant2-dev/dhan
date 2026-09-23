@@ -40,9 +40,9 @@ function buildPhases(c) {
 }
 
 function challengeTagline(c) {
-  if (c.stepsCount === 0) return 'No evaluation. Get the account, start the same day.';
+  if (c.stepsCount === 0) return 'Skip the evaluation entirely — funded from the first session, on tighter limits.';
   if (c.stepsCount === 1) return 'One phase. Pass once and you\'re funded.';
-  return 'Two phases, lower entry fee. Built for professionals.';
+  return 'Two phases at 8% then 5%, and the lowest fee of the three.';
 }
 
 export default function ChallengesPage() {
@@ -108,7 +108,7 @@ export default function ChallengesPage() {
                     <span className="text-sm text-[color:var(--pf-brand)] font-medium">{challengeTagline(c)}</span>
                   </div>
                   <p className="text-sm sm:text-base text-[color:var(--pf-muted)] leading-relaxed max-w-3xl">
-                    {c.description || 'Participate in a simulated account provided by the platform. Follow the rules, hit the target, get paid.'}
+                    {c.description || 'Trade platform capital in a simulated environment. Clear the target inside the limits, and the account starts paying you a share.'}
                   </p>
                 </div>
 
@@ -152,19 +152,19 @@ export default function ChallengesPage() {
             {[
               {
                 t: 'Daily DD vs Max DD',
-                d: 'Daily Drawdown resets every market day at 9:15 AM. Max Drawdown is the total loss limit from your peak — it never resets until you pass.',
+                d: 'The daily limit starts fresh at 9:15 AM each session. The overall limit does not reset at all — it is a fixed floor under the account for as long as it runs.',
               },
               {
                 t: 'Why minimum active days?',
-                d: 'We want consistency, not luck. Five days proves the strategy is repeatable. One lucky session does not make you a professional.',
+                d: 'Five trading days is the smallest sample that shows a method rather than a moment. They need not be consecutive, and there is no upper limit on how many you use.',
               },
               {
                 t: 'Max one-day profit rule',
-                d: 'No single day can contribute more than 40% of your total target. This stops people from passing on one massive position.',
+                d: 'A single session may carry at most 40% of the target. The profit is still credited — the day simply cannot be the reason you passed.',
               },
               {
                 t: 'Consistency rule (Instant only)',
-                d: 'Your best market day cannot be more than 30% of total profits. Keeps the playing field fair for funded people.',
+                d: 'On a funded account the best day may hold at most 30% of the profit being paid out. It is the same idea as the evaluation cap, applied to money that is about to leave our side.',
               },
               {
                 t: 'News-based participation',

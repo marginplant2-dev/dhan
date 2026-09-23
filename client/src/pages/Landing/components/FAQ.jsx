@@ -37,8 +37,8 @@ export default function FAQ() {
       <div className="pf-wrap grid lg:grid-cols-3 gap-10 lg:gap-16">
         <div>
           <p className="pf-eyebrow mb-4">FAQs</p>
-          <h2 className="pf-h2 mb-5">Questions, answered</h2>
-          <p className="pf-lead mb-7">Everything worth knowing before you pay for an assessment.</p>
+          <h2 className="pf-h2 mb-5">Before you pay</h2>
+          <p className="pf-lead mb-7">The things traders ask us most — rules, money and what ends an account.</p>
           <Link to="/faqs" className="pf-btn pf-btn--ghost">Read all FAQs</Link>
         </div>
 
