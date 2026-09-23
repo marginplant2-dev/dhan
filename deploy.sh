@@ -148,6 +148,12 @@ server {
     # Fall back to the bare shell, NOT index.html: index.html is the
     # prerendered homepage, so using it served a 200 copy of the front page for
     # every unknown URL. The shell boots React, which renders a noindexed 404.
+    # Pages removed on purpose (they duplicated another site's copy). A 410
+    # tells crawlers to drop the URL instead of re-queuing a soft 404.
+    location ~ ^/(prop-firm-india|nifty-prop-firm|banknifty-prop-firm|sensex-prop-firm|funded-trading-account-india|instant-funding-prop-firm-india|prop-trading-india|prop-challenge-india|inr-upi-prop-firm-india|indian-stock-market-prop-firm|blog)(/|\$) {
+        return 410;
+    }
+
     location / { try_files \$uri \$uri.html \$uri/ /spa-shell.html; }
 
     # Must come before the regex rule below — an exact-match location outranks
