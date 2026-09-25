@@ -452,25 +452,26 @@
 
   /* ── Index cards: three in view ─────────────────────────────────────── */
   .dh-indices {
-    display: flex; gap: 10px; margin-top: 14px;
+    display: flex; gap: 8px; margin-top: 14px;
     overflow-x: auto; scroll-snap-type: x mandatory;
     padding-bottom: 4px; scrollbar-width: none;
   }
   .dh-indices::-webkit-scrollbar { display: none; }
   .dh-index {
-    flex: 0 0 43%;
-    min-width: 150px;
+    /* three across the viewport, so no price needs a swipe */
+    flex: 0 0 calc((100% - 16px) / 3);
+    min-width: 0;
     scroll-snap-align: start;
     display: block;                 /* name, price, change stack; no squeeze */
-    padding: 12px 13px;
+    padding: 10px;
     box-shadow: none;
   }
   .dh-index-mark { display: none; }
-  .dh-index-name { font-size: .62rem; }
+  .dh-index-name { font-size: .56rem; letter-spacing: .06em; }
   .dh-index-row { display: block; margin-top: 3px; }
-  .dh-index-price { font-size: 1.05rem; display: block; }
-  .dh-index-chg { font-size: .68rem; display: block; margin-top: 2px; }
-  .dh-index-spark { width: 100%; height: 26px; margin-top: 6px; }
+  .dh-index-price { font-size: .92rem; display: block; letter-spacing: -.02em; }
+  .dh-index-chg { font-size: .6rem; display: block; margin-top: 2px; }
+  .dh-index-spark { width: 100%; height: 22px; margin-top: 5px; }
 
   /* ── Demo strip ─────────────────────────────────────────────────────── */
   .dh-demo { gap: 12px; padding: 14px; margin-top: 16px; }
@@ -488,9 +489,9 @@
   }
 
   /* ── Heading, tabs ──────────────────────────────────────────────────── */
-  .dh-section-head { flex-direction: column; align-items: stretch; gap: 12px; margin-bottom: 4px; }
-  .dh-head-right { flex-direction: column-reverse; align-items: stretch; gap: 10px; }
-  .dh-viewall { align-self: flex-end; margin-top: -34px; }
+  .dh-section-head { flex-direction: column; align-items: stretch; gap: 10px; margin-bottom: 4px; }
+  .dh-head-right { flex-direction: column; align-items: stretch; gap: 10px; }
+  .dh-viewall { align-self: flex-end; }
   .dh-tabs {
     overflow-x: auto; scrollbar-width: none;
     background: transparent; border: 0; padding: 0; gap: 8px;
@@ -505,23 +506,29 @@
 
   /* ── Challenge cards: two in view, big enough to read ───────────────── */
   .dh-cards {
-    display: flex; gap: 12px;
+    display: flex; gap: 10px;
     overflow-x: auto; scroll-snap-type: x mandatory;
     padding: 14px 0 6px; scrollbar-width: none;
   }
   .dh-cards::-webkit-scrollbar { display: none; }
   .dh-card {
-    flex: 0 0 min(82%, 320px); scroll-snap-align: start;
-    padding: 20px 18px 18px;
+    /* two side by side, with the next one's edge just showing */
+    flex: 0 0 calc((100% - 10px) / 2);
+    scroll-snap-align: start;
+    padding: 16px 13px 14px;
   }
-  .dh-card-size { font-size: 1.14rem; }
-  .dh-card-note { font-size: .78rem; margin-bottom: 16px; }
-  .dh-card-mark { top: 18px; right: 16px; width: 32px; height: 32px; }
-  .dh-card-stat { padding: 10px 7px; }
-  .dh-card-stat b { font-size: .92rem; }
-  .dh-card-stat span { font-size: .6rem; }
-  .dh-card-fee { font-size: 1.26rem; }
-  .dh-buy { height: 44px; font-size: .86rem; }
+  .dh-card-size { font-size: .96rem; letter-spacing: -.02em; }
+  .dh-card-note { font-size: .68rem; margin-bottom: 12px; min-height: 2.2em; }
+  .dh-card-mark { top: 13px; right: 11px; width: 26px; height: 26px; border-radius: 9px; }
+  .dh-card-flag { font-size: .54rem; padding: 3px 8px; left: 12px; }
+  .dh-card-stats { border-radius: 10px; }
+  .dh-card-stat { padding: 8px 3px; }
+  .dh-card-stat b { font-size: .8rem; }
+  .dh-card-stat span { font-size: .5rem; letter-spacing: .02em; line-height: 1.25; }
+  .dh-card-price { margin: 12px 0 10px; gap: 6px; }
+  .dh-card-fee { font-size: 1.02rem; }
+  .dh-card-was { font-size: .72rem; }
+  .dh-buy { height: 38px; font-size: .76rem; gap: 5px; }
   /* the popular card leads in green, as in the reference */
   .dh-card[data-popular="true"] { border-color: #16C79A; }
   .dh-card[data-popular="true"] .dh-card-flag { background: #16C79A; color: #04251A; }
