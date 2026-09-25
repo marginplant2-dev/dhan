@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import InstallAppButton from '../../../components/InstallAppButton';
 import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
 // The bar is white, so it carries the light cut of the lockup: navy lettering,
 // green second half, no plate behind it. Dark surfaces use the reversed cut.
@@ -114,6 +115,11 @@ export default function Navbar() {
               utilities and wins on equal specificity — so the button stayed
               visible at every width. Hiding a plain wrapper works because
               nothing else sets display on it. */}
+          {/* Installs the PWA: the browser's own prompt on Android/desktop,
+              step-by-step help on iOS. Hides itself once installed. */}
+          <span className="hidden lg:inline-flex">
+            <InstallAppButton label="Download App" variant="ghost" className="!px-4 !py-2" />
+          </span>
           <span className="hidden xl:inline-flex">
             <Link to="/login" className="pf-btn pf-btn--ghost pf-btn--sm">Login</Link>
           </span>
@@ -152,7 +158,8 @@ export default function Navbar() {
                 {l.label}
               </NavLink>
             ))}
-            <Link to="/login" className="pf-btn pf-btn--ghost mt-5">Login</Link>
+            <InstallAppButton label="Download App" variant="primary" className="mt-5 w-full justify-center" />
+            <Link to="/login" className="pf-btn pf-btn--ghost mt-3">Login</Link>
           </div>
         </div>
       )}

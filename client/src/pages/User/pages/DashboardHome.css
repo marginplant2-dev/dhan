@@ -36,7 +36,7 @@
   position: relative;
   overflow: hidden;
   color: #fff;
-  padding: 44px 0 58px;
+  padding: 32px 0 44px;
   background: #041026 url('/brand/hero-desktop.webp') center right / cover no-repeat;
 }
 @media (max-width: 720px) {
@@ -61,7 +61,7 @@
   margin-bottom: 12px;
 }
 .dh-banner h1 {
-  font-size: clamp(1.9rem, 3.6vw, 3rem);
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
   font-weight: 800;
   letter-spacing: -.03em;
   line-height: 1.1;
@@ -77,7 +77,7 @@
   text-shadow: 0 1px 10px rgba(0,0,0,.4);
 }
 
-.dh-banner-feats { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.dh-banner-feats { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
 .dh-feat {
   display: flex; align-items: center; gap: 11px;
   padding: 11px 15px;
@@ -437,7 +437,7 @@
 
   /* ── Banner ─────────────────────────────────────────────────────────── */
   .dh-banner {
-    padding: 18px 0 20px;
+    padding: 14px 0 16px;
     /* contain, not cover: the bull keeps its proportions and stays sharp */
     background: #061634 url('/brand/hero-mobile.webp') right center / auto 100% no-repeat;
   }
@@ -448,7 +448,7 @@
   }
   .dh-banner-inner { position: relative; z-index: 1; display: block; }
   .dh-banner-eyebrow { display: none; }
-  .dh-banner h1 { font-size: 1.62rem; line-height: 1.14; }
+  .dh-banner h1 { font-size: 1.42rem; line-height: 1.14; }
   .dh-banner p { font-size: .82rem; margin-top: 8px; max-width: 17rem; }
 
   /* chips: one swiped row, never a stack */
@@ -568,3 +568,28 @@
   .dh-tile b { font-size: .8rem; }
   .dh-tile span { font-size: .68rem; }
 }
+
+/* ── Icon holders ────────────────────────────────────────────────────────────
+   One rule for every circle and tile that holds an icon. An inline <svg> rides
+   the text baseline, so without this the glyph sits low inside its box — which
+   is what made the marks look off-centre in every card.
+   ─────────────────────────────────────────────────────────────────────────── */
+.dh-feat-icon,
+.dh-index-mark,
+.dh-card-mark,
+.dh-tile-icon,
+.dh-demo-icon,
+.dh-step-n {
+  display: grid;
+  place-items: center;
+  line-height: 0;
+}
+.dh-feat-icon > svg,
+.dh-index-mark > svg,
+.dh-card-mark > svg,
+.dh-tile-icon > svg,
+.dh-demo-icon > svg {
+  display: block;
+}
+/* the number badge keeps its own line box — a digit is type, not an icon */
+.dh-step-n { line-height: 28px; display: inline-block; }

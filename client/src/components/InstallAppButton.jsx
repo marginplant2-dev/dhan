@@ -77,8 +77,8 @@ export default function InstallAppButton({ className = '', label = 'Install App'
     'inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-sm transition-all whitespace-nowrap';
   const styles =
     variant === 'ghost'
-      ? 'border border-[#DCE9E2] text-[#0A2130] hover:border-[#35DC85] hover:text-[#35DC85]'
-      : 'bg-[#35DC85] text-white shadow-[0_6px_20px_rgba(43,78,255,0.3)] hover:bg-[#4B6AFF]';
+      ? 'border border-[#E3EAF3] text-[#09264B] hover:border-[#16C79A] hover:text-[#12A870]'
+      : 'bg-[#16C79A] text-white shadow-[0_8px_22px_-10px_rgba(18,168,112,0.9)] hover:brightness-105';
 
   return (
     <>

@@ -130,10 +130,10 @@ def compose(size, bull_scale, bull_right_pad, text_side_cover):
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
 
-    desktop = compose((2400, 560), bull_scale=1.18, bull_right_pad=60, text_side_cover=(0.28, 0.62))
+    desktop = compose((2400, 420), bull_scale=1.18, bull_right_pad=60, text_side_cover=(0.28, 0.62))
     desktop.save(OUT / "hero-desktop.webp", "WEBP", quality=84, method=6)
 
-    mobile = compose((900, 560), bull_scale=1.02, bull_right_pad=-40, text_side_cover=(0.02, 0.66))
+    mobile = compose((900, 420), bull_scale=1.02, bull_right_pad=-40, text_side_cover=(0.02, 0.66))
     mobile.save(OUT / "hero-mobile.webp", "WEBP", quality=82, method=6)
 
     for f in ("hero-desktop.webp", "hero-mobile.webp"):
