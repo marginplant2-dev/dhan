@@ -261,30 +261,56 @@
   background: var(--accent-primary); color: #fff;
 }
 
-/* ── Steps strip ─────────────────────────────────────────────────────────── */
+/* ── Steps card ──────────────────────────────────────────────────────────────
+   The blue card from the reference: a heading, the three onboarding steps with
+   their state, and the action. The number badge carries its own line box so a
+   single digit sits dead centre at any size.
+   ─────────────────────────────────────────────────────────────────────────── */
 .dh-steps {
   display: flex; align-items: center; gap: 26px; flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 26px; padding: 24px 26px;
-  border-radius: 16px;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  background: linear-gradient(120deg, #062F67, #0B3E78 48%, #1268E8);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 16px 34px -26px rgba(9,38,75,.7);
+  color: #fff;
 }
-.dh-steps-title { font-size: 1.04rem; font-weight: 800; color: var(--text-primary); }
-.dh-steps-list { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; flex: 1; justify-content: center; }
-.dh-step { display: flex; align-items: center; gap: 10px; }
+.dh-steps-title { font-size: 1.08rem; font-weight: 800; color: #fff; }
+.dh-steps .dh-sub { color: rgba(255,255,255,.78); }
+
+.dh-steps-list {
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  flex: 1; justify-content: center;
+}
+.dh-step { display: flex; align-items: center; gap: 11px; }
+
 .dh-step-n {
-  width: 28px; height: 28px; border-radius: 999px; flex: none;
-  display: grid; place-items: center;
-  background: var(--accent-primary); color: #fff;
-  font-size: .76rem; font-weight: 800; line-height: 1;
+  width: 30px; height: 30px; flex: none;
+  border-radius: 999px;
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.34);
+  color: #fff;
+  font-size: .8rem; font-weight: 800;
   font-variant-numeric: tabular-nums;
-  padding-left: .5px;            /* optical centring for a single digit */
+  /* a fixed line box is what keeps the digit centred — a flex/grid child with
+     inherited line-height drifts by a pixel or two, which shows at 30px */
+  display: inline-block;
+  line-height: 28px;
+  text-align: center;
 }
-.dh-step-n[data-done="true"] { background: var(--success); }
-.dh-step b { display: block; font-size: .84rem; font-weight: 700; color: var(--text-primary); }
-.dh-step span { display: block; font-size: .72rem; color: var(--text-muted); }
-.dh-step-arrow { color: var(--text-muted); }
+.dh-step-n[data-done="true"] {
+  background: #16C79A; border-color: #16C79A; color: #04251A;
+}
+.dh-step b { display: block; font-size: .86rem; font-weight: 700; color: #fff; }
+.dh-step span { display: block; font-size: .72rem; color: rgba(255,255,255,.74); }
+.dh-step-arrow { color: rgba(255,255,255,.5); }
+
+.dh-steps .dh-buy {
+  background: #fff; border-color: #fff; color: #0B3E78;
+  width: auto; padding: 0 22px;
+}
+.dh-steps .dh-buy:hover { filter: brightness(.96); }
 
 /* ── Accounts + demo ─────────────────────────────────────────────────────── */
 .dh-acc-grid {
@@ -382,8 +408,12 @@
 }
 .dh-tile {
   padding: 16px; border-radius: 14px;
-  background: var(--card-bg); border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 6px 18px -16px rgba(9,38,75,.5);
+  transition: border-color .2s ease, transform .2s ease;
 }
+.dh-tile:hover { border-color: var(--accent-primary); transform: translateY(-2px); }
 .dh-tile-icon {
   width: 38px; height: 38px; border-radius: 12px;
   display: grid; place-items: center; margin-bottom: 10px;
@@ -400,23 +430,9 @@
    stretched to fill a tall box, which is what washed it out.
    ═══════════════════════════════════════════════════════════════════════════ */
 @media (max-width: 720px) {
-  .dh-home {
-    --card-bg: #0C1E3A;
-    --border-color: rgba(120,170,235,.18);
-    --bg-tertiary: #0A1830;
-    --text-primary: #EAF2FF;
-    --text-secondary: #9FB4D4;
-    --text-muted: #7E93B4;
-    --accent-primary: #1268E8;
-    --gold-soft: rgba(18,104,232,.18);
-    background: #050D1E;
-    color: var(--text-primary);
-  }
-
   .dh-wrap { padding-inline: 14px; }
   .dh-section { margin-top: 24px; }
   .dh-h2 { font-size: 1.22rem; }
-  .dh-h2 em { color: #EAF2FF; }
   .dh-eyebrow { display: none; }
 
   /* ── Banner ─────────────────────────────────────────────────────────── */
@@ -534,21 +550,17 @@
   .dh-card[data-popular="true"] .dh-card-flag { background: #16C79A; color: #04251A; }
   .dh-card[data-popular="true"] .dh-buy { background: #16C79A; border-color: #16C79A; color: #04251A; }
 
-  /* ── Steps: the blue card ───────────────────────────────────────────── */
+  /* ── Steps card ─────────────────────────────────────────────────────── */
   .dh-steps {
-    flex-direction: column; align-items: flex-start; gap: 14px;
+    flex-direction: column; align-items: stretch; gap: 14px;
     padding: 18px;
-    background: linear-gradient(135deg, #0B3E78, #1268E8);
-    border-color: rgba(255,255,255,.16);
   }
-  .dh-steps-title, .dh-steps .dh-sub { color: #fff; }
-  .dh-steps .dh-sub { opacity: .82; }
-  .dh-steps-list { flex-direction: column; align-items: flex-start; gap: 12px; justify-content: flex-start; width: 100%; }
-  .dh-step b { color: #fff; }
-  .dh-step span { color: rgba(255,255,255,.74); }
-  .dh-step-n { background: #fff; color: #0B3E78; }
+  .dh-steps-list {
+    flex-direction: column; align-items: flex-start; gap: 12px;
+    justify-content: flex-start; width: 100%;
+  }
   .dh-step-arrow { display: none; }
-  .dh-steps .dh-buy { background: #fff; border-color: #fff; color: #0B3E78; width: 100%; }
+  .dh-steps .dh-buy { width: 100%; }
 
   .dh-tiles { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .dh-tile { padding: 13px; }
