@@ -41,7 +41,7 @@ const BusinessPage = () => {
         }
       }
     } catch (err) {
-      console.error('Error fetching IB profile:', err);
+      console.error('Error fetching referral partner profile:', err);
     } finally {
       setLoading(false);
     }
@@ -139,12 +139,12 @@ const BusinessPage = () => {
     return (
       <div className="business-page">
         <div className="page-header">
-          <h1>🤝 IB Partner Program</h1>
+          <h1>🤝 Referral Partner Programme</h1>
           <p>Earn commissions by referring people to our platform</p>
         </div>
 
         <div className="ib-benefits">
-          <h2>Why Become an IB?</h2>
+          <h2>Why Become a Referral Partner?</h2>
           <div className="benefits-grid">
             <div className="benefit-card">
               <span className="icon">💰</span>
@@ -171,7 +171,7 @@ const BusinessPage = () => {
 
         <div className="apply-section">
           <button className="btn-apply" onClick={() => setShowApplyModal(true)}>
-            Apply to Become an IB
+            Apply to Become a Referral Partner
           </button>
         </div>
 
@@ -191,12 +191,12 @@ const BusinessPage = () => {
     return (
       <div className="business-page">
         <div className="page-header">
-          <h1>🤝 IB Application</h1>
+          <h1>🤝 Referral Partner Application</h1>
         </div>
         <div className="status-card pending">
           <span className="icon">⏳</span>
           <h2>Application Pending</h2>
-          <p>Your IB application is being reviewed. We'll notify you once it's approved.</p>
+          <p>Your referral partner application is being reviewed. We'll notify you once it's approved.</p>
           <p className="applied-date">Applied: {new Date(ibProfile.appliedAt).toLocaleDateString()}</p>
         </div>
       </div>
@@ -208,12 +208,12 @@ const BusinessPage = () => {
     return (
       <div className="business-page">
         <div className="page-header">
-          <h1>🤝 IB Application</h1>
+          <h1>🤝 Referral Partner Application</h1>
         </div>
         <div className="status-card rejected">
           <span className="icon">❌</span>
           <h2>Application Rejected</h2>
-          <p>Unfortunately, your IB application was not approved.</p>
+          <p>Unfortunately, your referral partner application was not approved.</p>
           {ibProfile.rejectedReason && (
             <p className="reason">Reason: {ibProfile.rejectedReason}</p>
           )}
@@ -237,17 +237,17 @@ const BusinessPage = () => {
     return (
       <div className="business-page">
         <div className="page-header">
-          <h1>🤝 IB Program</h1>
+          <h1>🤝 Referral Partner</h1>
         </div>
         <div className="status-card rejected" style={{ borderColor: '#f59e0b' }}>
           <span className="icon">🚫</span>
-          <h2>You have been suspended from the IB program</h2>
-          <p>Your IB account has been suspended by an administrator. You cannot access the IB dashboard until you reapply and get approved again.</p>
+          <h2>You have been suspended from the referral partner programme</h2>
+          <p>Your referral partner account has been suspended by an administrator. You cannot access the referral dashboard until you reapply and get approved again.</p>
           {ibProfile.adminNotes && (
             <p className="reason"><strong>Reason:</strong> {ibProfile.adminNotes}</p>
           )}
           <button className="btn-reapply" onClick={() => setShowApplyModal(true)}>
-            Reapply to IB Program
+            Reapply to Referral Partner
           </button>
         </div>
         {showApplyModal && (
@@ -265,7 +265,7 @@ const BusinessPage = () => {
   return (
     <div className="business-page">
       <div className="page-header">
-        <h1>🤝 IB Dashboard</h1>
+        <h1>🤝 Referral Dashboard</h1>
         <div className="referral-code-box">
           <span>Your Referral Code:</span>
           <code>{ibProfile.referralCode}</code>
@@ -350,7 +350,7 @@ const BusinessPage = () => {
                 </div>
               )}
               <div className="info-item">
-                <span className="label">IB Level:</span>
+                <span className="label">Partner level:</span>
                 <span className="value">Level {ibProfile.level}</span>
               </div>
             </div>
@@ -458,7 +458,7 @@ const ApplyModal = ({ onClose, onSubmit, error }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
-        <h2>Apply to Become an IB</h2>
+        <h2>Apply to Become a Referral Partner</h2>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -498,11 +498,11 @@ const ApplyModal = ({ onClose, onSubmit, error }) => {
             />
           </div>
           <div className="form-group">
-            <label>Market/IB Experience</label>
+            <label>Market & referral experience</label>
             <textarea 
               value={formData.experience}
               onChange={e => setFormData({...formData, experience: e.target.value})}
-              placeholder="Describe your experience in the markets or as an IB"
+              placeholder="Describe your experience in the markets, or referring traders"
               rows="3"
             />
           </div>

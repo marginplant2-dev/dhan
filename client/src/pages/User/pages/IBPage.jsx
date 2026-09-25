@@ -226,7 +226,7 @@ function IBPage() {
   useEffect(() => { fetchProfile(); }, [fetchProfile]);
 
   if (profileStatus === 'loading') {
-    return <div style={{ padding: 24, color: 'var(--text-secondary)' }}>Loading IB profile…</div>;
+    return <div style={{ padding: 24, color: 'var(--text-secondary)' }}>Loading referral partner profile…</div>;
   }
 
   return (
@@ -280,9 +280,9 @@ function IBPage() {
       `}</style>
       <div className="ib-page-wrap">
         <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-          Home / <span style={{ color: 'var(--text-primary)' }}>IB Program</span>
+          Home / <span style={{ color: 'var(--text-primary)' }}>Referral Partner</span>
         </div>
-        <h1 style={{ color: 'var(--text-primary)', margin: '0 0 18px' }}>🤝 IB Program</h1>
+        <h1 style={{ color: 'var(--text-primary)', margin: '0 0 18px' }}>🤝 Referral Partner</h1>
 
         {profileStatus === 'none' && (
           <ApplyForm user={user} onApplied={fetchProfile} onError={setError} error={error} />
@@ -302,8 +302,8 @@ function IBPage() {
         )}
         {profileStatus === 'suspended' && (
           <StatusCard
-            title="IB Account Suspended"
-            body={profile?.adminNotes || 'Your IB account has been suspended.'}
+            title="Referral account suspended"
+            body={profile?.adminNotes || 'Your referral partner account has been suspended.'}
             action={
               <>
                 <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 16, marginBottom: 12 }}>
@@ -706,7 +706,7 @@ function Withdraw({ ib, onChanged }) {
 
   return (
     <form onSubmit={submit} style={cardStyle}>
-      <h3 style={{ margin: '0 0 8px', color: 'var(--text-primary)' }}>Withdraw IB Earnings</h3>
+      <h3 style={{ margin: '0 0 8px', color: 'var(--text-primary)' }}>Withdraw referral earnings</h3>
       <div className="ib-stat-grid ib-stat-grid-3" style={{ marginBottom: 14 }}>
         <Stat label="Available" value={fmtInr(available)} color="#10b981" />
         <Stat label="Pending" value={fmtInr(ib.wallet?.pendingWithdrawal)} color="#f59e0b" />

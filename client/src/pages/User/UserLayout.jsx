@@ -2498,7 +2498,7 @@ function UserLayout({ user, onLogout }) {
     { key: 'home', label: 'Dashboard', Icon: LuLayoutDashboard },
     { key: 'my-challenges', label: 'My Challenges', Icon: LuTrophy },
     { key: 'passed-challenges', label: 'Passed', Icon: LuBadgeCheck },
-    { key: 'ib', label: 'IB Program', Icon: LuHandshake },
+    { key: 'ib', label: 'Referral Partner', Icon: LuHandshake },
     { key: 'ai-options', label: 'AI Options', Icon: LuSparkles },
     { key: 'contact', label: 'Contact', Icon: LuHeadset },
   ];
