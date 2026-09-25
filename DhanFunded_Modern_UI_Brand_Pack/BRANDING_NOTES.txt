@@ -1,0 +1,17 @@
+DHAN FUNDED — UI BRAND DIRECTION
+
+Primary:
+- Deep Navy: #062F67 / #0B3E78
+- Electric Blue: #1268E8
+- Teal/Green: #16C79A
+- Soft Background: #F4F8FC
+- Text: #09264B
+
+UI direction:
+- No left sidebar.
+- Desktop: clean top navigation with compact active pill.
+- Mobile: bottom navigation with 5 primary destinations.
+- Use rounded 16–24px cards, subtle borders, soft shadows.
+- Hero sections can use dark navy + trading-chart background + bull visual.
+- Keep CTAs high contrast and consistent: Start Evaluation / Buy Challenge.
+- Use the same visual language across Dashboard, My Challenges, Passed, IB Program and Contact.

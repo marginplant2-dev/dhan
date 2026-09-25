@@ -6,7 +6,7 @@
 
 .landing-page {
   /* surfaces */
-  --pf-bg:        #F5F8FC;
+  --pf-bg:        #F4F8FC;
   --pf-bg-soft:   #EEF3FA;
   --pf-card:      #FFFFFF;
   --pf-card-alt:  #F7FAFD;
@@ -14,16 +14,16 @@
   --pf-border-strong: #CBD8E8;
 
   /* ink */
-  --pf-text:      #0F2557;
+  --pf-text:      #09264B;
   --pf-muted:     #5A6B85;
   --pf-faint:     #8A99B0;
 
   /* brand — navy primary with a blue second stop; --pf-gold / --pf-gold-2
      keep their old names so every existing component inherits it. */
-  --pf-brand:     #14306E;
-  --pf-brand-2:   #2A5BC7;
-  --pf-gold:      #14306E;
-  --pf-gold-2:    #2A5BC7;
+  --pf-brand:     #0B3E78;
+  --pf-brand-2:   #1268E8;
+  --pf-gold:      #062F67;
+  --pf-gold-2:    #1268E8;
   --pf-on-gold:   #FFFFFF;
   --pf-brand-soft:#EAF0FB;
   --pf-ghost:     #E8EEF7;   /* the giant 01/02/03 numerals */
@@ -31,7 +31,7 @@
   /* accents — green is for things that go up */
   --pf-amber:     #B4791A;
   --pf-amber-soft:#FCF3E2;
-  --pf-green:     #16C784;
+  --pf-green:     #16C79A;
   --pf-green-soft:#E6F7EF;
   --pf-violet:    #6D4AD6;
   --pf-violet-soft:#EFEAFC;

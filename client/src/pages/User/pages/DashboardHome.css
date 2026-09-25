@@ -23,24 +23,37 @@
 }
 @media (max-width: 640px) { .dh-wrap { padding-inline: 14px; } }
 
-/* ── Banner ──────────────────────────────────────────────────────────────── */
+/* ── Banner ──────────────────────────────────────────────────────────────────
+   Navy band, the candle field washed in behind it, and the bull sitting at the
+   right edge. Both are WebP crops of the brand artwork (25 KB and 14 KB) with
+   the baked-in headline cut away, so the copy below stays real text: it wraps,
+   it scales, and it does not blur on a phone.
+   ─────────────────────────────────────────────────────────────────────────── */
+
 .dh-banner {
   position: relative;
   overflow: hidden;
-  background:
-    radial-gradient(90% 140% at 12% 50%, rgba(42, 91, 199, .55), transparent 60%),
-    radial-gradient(80% 130% at 88% 50%, rgba(229, 72, 77, .30), transparent 58%),
-    linear-gradient(120deg, #0B1B45, #14306E 48%, #0B1B45);
   color: #fff;
-  padding: 34px 0 38px;
+  padding: 40px 0 54px;
+  background:
+    linear-gradient(90deg, #04193A 0%, rgba(4,25,58,.86) 42%, rgba(4,25,58,.18) 72%, rgba(4,25,58,0) 100%),
+    url('/brand/hero-candles.webp') left center / auto 100% no-repeat,
+    url('/brand/hero-bull.webp') right center / auto 118% no-repeat,
+    linear-gradient(120deg, #04193A, #062F67 55%, #04193A);
 }
-
-/* the candles behind the copy: cheap, on-brand, and no image to ship */
-.dh-banner-candles {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: .5;
+@media (min-width: 1500px) {
+  .dh-banner { background-size: auto, auto 100%, auto 128%, auto; }
+}
+/* On a phone the bull would sit under the words; it moves behind them at low
+   opacity instead, and the band tightens up. */
+@media (max-width: 720px) {
+  .dh-banner {
+    padding: 26px 0 40px;
+    background:
+      linear-gradient(180deg, rgba(4,25,58,.72), rgba(4,25,58,.92)),
+      url('/brand/hero-bull.webp') right -40px center / auto 150% no-repeat,
+      linear-gradient(140deg, #04193A, #062F67);
+  }
 }
 
 .dh-banner-inner {
@@ -52,36 +65,43 @@
   gap: 26px;
 }
 
+.dh-banner-eyebrow {
+  font-size: .68rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase;
+  color: rgba(255,255,255,.66);
+  margin-bottom: 12px;
+}
 .dh-banner h1 {
-  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+  font-size: clamp(1.9rem, 3.6vw, 3rem);
   font-weight: 800;
   letter-spacing: -.03em;
-  line-height: 1.12;
+  line-height: 1.1;
   margin: 0;
+  text-shadow: 0 2px 18px rgba(0,0,0,.45);
 }
-.dh-banner h1 em { font-style: normal; color: #16C784; }
+.dh-banner h1 em { font-style: normal; color: #16C79A; }
 .dh-banner p {
   margin: 12px 0 0;
   font-size: .98rem;
-  color: rgba(255, 255, 255, .78);
-  max-width: 34rem;
+  color: rgba(255, 255, 255, .8);
+  max-width: 30rem;
+  text-shadow: 0 1px 10px rgba(0,0,0,.4);
 }
 
-.dh-banner-feats { display: flex; flex-wrap: wrap; gap: 10px; }
+.dh-banner-feats { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
 .dh-feat {
   display: flex; align-items: center; gap: 11px;
-  padding: 12px 16px;
+  padding: 11px 15px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, .08);
-  border: 1px solid rgba(255, 255, 255, .14);
-  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, .09);
+  border: 1px solid rgba(255, 255, 255, .15);
+  backdrop-filter: blur(8px);
 }
 .dh-feat-icon {
-  width: 34px; height: 34px; border-radius: 10px;
+  width: 32px; height: 32px; border-radius: 10px;
   display: grid; place-items: center; flex: none; color: #fff;
 }
-.dh-feat b { display: block; font-size: .84rem; font-weight: 700; }
-.dh-feat span { display: block; font-size: .74rem; color: rgba(255, 255, 255, .7); }
+.dh-feat b { display: block; font-size: .82rem; font-weight: 700; }
+.dh-feat span { display: block; font-size: .72rem; color: rgba(255, 255, 255, .72); }
 
 /* ── Index strip ─────────────────────────────────────────────────────────── */
 .dh-indices {
@@ -134,6 +154,15 @@
   display: flex; align-items: flex-end; justify-content: space-between;
   gap: 18px; flex-wrap: wrap; margin-bottom: 20px;
 }
+
+/* the heading's right-hand side: tabs, with the catch-all link above them */
+.dh-head-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.dh-viewall {
+  border: 0; background: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .84rem; font-weight: 700; color: var(--accent-primary);
+}
+.dh-viewall:hover { text-decoration: underline; }
 
 /* ── Programme tabs ──────────────────────────────────────────────────────── */
 .dh-tabs {

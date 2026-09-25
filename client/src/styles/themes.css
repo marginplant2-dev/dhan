@@ -6,32 +6,32 @@
 /* Default: light */
 :root,
 [data-theme="light"] {
-  --bg-primary: #F5F8FC;
+  --bg-primary: #F4F8FC;
   --bg-secondary: #FFFFFF;
   --bg-tertiary: #EEF3FA;
   --bg-hover: #E4ECF7;
   --border-color: #E3EAF3;
   --card-bg: #FFFFFF;
-  --text-primary: #0F2557;
+  --text-primary: #09264B;
   --text-secondary: #5A6B85;
   --text-muted: #8A99B0;
 
   /* brand — navy primary, blue second stop. Token names kept so every
      component that already reads --gold picks the new brand up untouched. */
-  --gold: #14306E;
-  --gold-2: #2A5BC7;
+  --gold: #062F67;
+  --gold-2: #1268E8;
   --gold-soft: #EAF0FB;
   --on-gold: #FFFFFF;
-  --gold-grad: linear-gradient(135deg, #14306E, #2A5BC7);
+  --gold-grad: linear-gradient(135deg, #062F67, #1268E8);
 
-  --accent-primary: #14306E;
-  --accent-secondary: #16C784;
-  --info: #2A5BC7;
+  --accent-primary: #0B3E78;
+  --accent-secondary: #16C79A;
+  --info: #1268E8;
 
-  --success: #16C784;
+  --success: #16C79A;
   --danger: #E5484D;
   --warning: #E9A23B;
-  --buy-color: #16C784;
+  --buy-color: #16C79A;
   --sell-color: #E5484D;
 }
 

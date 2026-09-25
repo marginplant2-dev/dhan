@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
-import { ArrowRight, BarChart3, Gamepad2, Layers, Mail, Play, UserPlus, Zap } from 'lucide-react';
+import { ArrowRight, BarChart3, Gamepad2, LineChart, Mail, Play, ShieldCheck, UserPlus, Zap } from 'lucide-react';
 import './DashboardHome.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -33,9 +33,9 @@ const NUM = (n) => Number(n || 0).toLocaleString('en-IN', { minimumFractionDigit
 
 /** The three indices this platform trades, with the tick symbols to try. */
 const INDICES = [
-  { label: 'NIFTY 50', symbols: ['NIFTY 50', 'NIFTY50', 'NIFTY'], tone: '#16C784' },
-  { label: 'SENSEX', symbols: ['SENSEX', 'BSE SENSEX'], tone: '#2A5BC7' },
-  { label: 'BANKNIFTY', symbols: ['NIFTY BANK', 'BANKNIFTY'], tone: '#7C5CE0' },
+  { label: 'NIFTY 50', symbols: ['NIFTY 50', 'NIFTY50', 'NIFTY'], tone: '#16C79A' },
+  { label: 'SENSEX', symbols: ['SENSEX', 'BSE SENSEX'], tone: '#1268E8' },
+  { label: 'BANKNIFTY', symbols: ['NIFTY BANK', 'BANKNIFTY'], tone: '#7A5AF8' },
 ];
 
 /** A sparkline from whatever ticks we have seen this session — no history API. */
@@ -52,24 +52,6 @@ function Spark({ points, tone }) {
     <svg className="dh-index-spark" viewBox="0 0 84 32" fill="none" aria-hidden>
       <path d={`${d} L84 32 L0 32 Z`} fill={tone} opacity=".10" />
       <path d={d} stroke={tone} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-/** Candlesticks behind the banner copy — drawn, not shipped as an image. */
-function BannerCandles() {
-  const bars = [
-    [18, 58, 26], [46, 44, 44], [74, 66, 22], [102, 36, 56], [130, 52, 34],
-    [980, 48, 40], [1008, 30, 62], [1036, 58, 28], [1064, 40, 48], [1092, 62, 24],
-  ];
-  return (
-    <svg className="dh-banner-candles" viewBox="0 0 1120 120" preserveAspectRatio="none" aria-hidden>
-      {bars.map(([x, y, h], i) => (
-        <g key={i} opacity={i < 5 ? 0.55 : 0.4}>
-          <rect x={x} y={y - 12} width="2" height={h + 24} fill={i < 5 ? '#16C784' : '#E5484D'} opacity=".5" />
-          <rect x={x - 6} y={y} width="14" height={h} rx="2" fill={i < 5 ? '#16C784' : '#E5484D'} />
-        </g>
-      ))}
     </svg>
   );
 }
@@ -232,24 +214,24 @@ function DashboardPage() {
 
       {/* ── Banner ─────────────────────────────────────────────────────── */}
       <section className="dh-banner">
-        <BannerCandles />
         <div className="dh-wrap dh-banner-inner">
           <div>
-            <h1>Trade Your Skills.<br />Get <em>Funded.</em></h1>
-            <p>Prove your trading ability on simulated capital, then keep the larger share of what it makes.</p>
-          </div>
-          <div className="dh-banner-feats">
-            <div className="dh-feat">
-              <span className="dh-feat-icon" style={{ background: 'rgba(233,162,59,.22)' }}><Zap size={17} /></span>
-              <span><b>Fast Evaluation</b><span>1-Step &amp; 2-Step</span></span>
-            </div>
-            <div className="dh-feat">
-              <span className="dh-feat-icon" style={{ background: 'rgba(22,199,132,.22)' }}><Layers size={17} /></span>
-              <span><b>Published Rules</b><span>Every limit in rupees</span></span>
-            </div>
-            <div className="dh-feat">
-              <span className="dh-feat-icon" style={{ background: 'rgba(42,91,199,.3)' }}><BarChart3 size={17} /></span>
-              <span><b>NIFTY · BANKNIFTY · SENSEX</b><span>Index derivatives</span></span>
+            <div className="dh-banner-eyebrow">Indian markets · Opportunity · Virtual capital</div>
+            <h1>Trade. Prove.<br />Get <em>Funded.</em></h1>
+            <p>Show your skills, trade with discipline, and unlock virtual capital.</p>
+            <div className="dh-banner-feats">
+              <div className="dh-feat">
+                <span className="dh-feat-icon" style={{ background: 'rgba(22,199,154,.24)' }}><LineChart size={16} /></span>
+                <span><b>Real Market Conditions</b><span>NSE &amp; BSE prices</span></span>
+              </div>
+              <div className="dh-feat">
+                <span className="dh-feat-icon" style={{ background: 'rgba(233,162,59,.26)' }}><Zap size={16} /></span>
+                <span><b>Flexible Evaluation</b><span>1-Step &amp; 2-Step</span></span>
+              </div>
+              <div className="dh-feat">
+                <span className="dh-feat-icon" style={{ background: 'rgba(18,104,232,.3)' }}><ShieldCheck size={16} /></span>
+                <span><b>Transparent Rules</b><span>No hidden conditions</span></span>
+              </div>
             </div>
           </div>
         </div>
@@ -297,9 +279,13 @@ function DashboardPage() {
           <div className="dh-section-head">
             <div>
               <div className="dh-eyebrow">Choose your challenge</div>
-              <h2 className="dh-h2">Select Trading <em>Challenge</em></h2>
-              <p className="dh-sub">Every target and limit below is measured against the starting balance.</p>
+              <h2 className="dh-h2">Choose Your <em>Challenge</em></h2>
+              <p className="dh-sub">Flexible evaluation plans to match your trading style.</p>
             </div>
+            <div className="dh-head-right">
+              <button type="button" className="dh-viewall" onClick={() => navigate('/app/challenges')}>
+                View all plans <ArrowRight size={15} />
+              </button>
             {challenges.length > 1 && (
               <div className="dh-tabs">
                 {challenges.map((c) => (
@@ -315,6 +301,7 @@ function DashboardPage() {
                 ))}
               </div>
             )}
+            </div>
           </div>
 
           {programme ? (
