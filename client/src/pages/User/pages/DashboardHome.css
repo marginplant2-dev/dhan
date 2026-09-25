@@ -394,14 +394,15 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    Phone — the reference layout.
 
-   Dark shell, and anything that would stack into a tall column scrolls
-   sideways instead: the index cards, and the challenge cards at a width that
-   shows two at a time so it is obvious there are more.
+   Dark shell. Anything that would stack into a tall column scrolls sideways
+   instead: the feature chips, the index cards and the challenge cards. The
+   banner keeps the bull on the right at its own aspect rather than being
+   stretched to fill a tall box, which is what washed it out.
    ═══════════════════════════════════════════════════════════════════════════ */
 @media (max-width: 720px) {
   .dh-home {
     --card-bg: #0C1E3A;
-    --border-color: rgba(120,170,235,.16);
+    --border-color: rgba(120,170,235,.18);
     --bg-tertiary: #0A1830;
     --text-primary: #EAF2FF;
     --text-secondary: #9FB4D4;
@@ -412,35 +413,84 @@
     color: var(--text-primary);
   }
 
-  .dh-section { margin-top: 26px; }
-  .dh-h2 { font-size: 1.25rem; }
+  .dh-wrap { padding-inline: 14px; }
+  .dh-section { margin-top: 24px; }
+  .dh-h2 { font-size: 1.22rem; }
   .dh-h2 em { color: #EAF2FF; }
   .dh-eyebrow { display: none; }
 
-  /* index cards: one row, swiped */
+  /* ── Banner ─────────────────────────────────────────────────────────── */
+  .dh-banner {
+    padding: 18px 0 20px;
+    /* contain, not cover: the bull keeps its proportions and stays sharp */
+    background: #061634 url('/brand/hero-mobile.webp') right center / auto 100% no-repeat;
+  }
+  .dh-banner::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(100deg, #061634 34%, rgba(6,22,52,.72) 58%, rgba(6,22,52,.12) 100%);
+  }
+  .dh-banner-inner { position: relative; z-index: 1; display: block; }
+  .dh-banner-eyebrow { display: none; }
+  .dh-banner h1 { font-size: 1.62rem; line-height: 1.14; }
+  .dh-banner p { font-size: .82rem; margin-top: 8px; max-width: 17rem; }
+
+  /* chips: one swiped row, never a stack */
+  .dh-banner-feats {
+    margin-top: 14px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+    gap: 8px;
+  }
+  .dh-banner-feats::-webkit-scrollbar { display: none; }
+  .dh-feat { flex: 0 0 auto; padding: 9px 12px; border-radius: 12px; }
+  .dh-feat-icon { width: 28px; height: 28px; border-radius: 9px; }
+  .dh-feat b { font-size: .74rem; }
+  .dh-feat span { font-size: .64rem; }
+
+  /* ── Index cards: three in view ─────────────────────────────────────── */
   .dh-indices {
-    display: flex; gap: 12px; margin-top: 14px;
+    display: flex; gap: 10px; margin-top: 14px;
     overflow-x: auto; scroll-snap-type: x mandatory;
     padding-bottom: 4px; scrollbar-width: none;
   }
   .dh-indices::-webkit-scrollbar { display: none; }
   .dh-index {
-    flex: 0 0 74%; scroll-snap-align: start;
-    padding: 14px; gap: 10px;
+    flex: 0 0 43%;
+    min-width: 150px;
+    scroll-snap-align: start;
+    display: block;                 /* name, price, change stack; no squeeze */
+    padding: 12px 13px;
     box-shadow: none;
   }
-  .dh-index-spark { width: 64px; }
+  .dh-index-mark { display: none; }
+  .dh-index-name { font-size: .62rem; }
+  .dh-index-row { display: block; margin-top: 3px; }
+  .dh-index-price { font-size: 1.05rem; display: block; }
+  .dh-index-chg { font-size: .68rem; display: block; margin-top: 2px; }
+  .dh-index-spark { width: 100%; height: 26px; margin-top: 6px; }
 
-  /* demo strip stays one card, but the curve makes way */
-  .dh-demo { gap: 14px; padding: 14px 16px; }
-  .dh-demo-main { min-width: 0; flex: 1 1 100%; }
-  .dh-demo-bal { text-align: left; }
-  .dh-demo-actions { flex: 1; }
-  .dh-btn-sm { flex: 1; justify-content: center; }
+  /* ── Demo strip ─────────────────────────────────────────────────────── */
+  .dh-demo { gap: 12px; padding: 14px; margin-top: 16px; }
+  .dh-demo-main { min-width: 0; flex: 1 1 100%; gap: 12px; }
+  .dh-demo-icon { width: 42px; height: 42px; }
+  .dh-demo-title { font-size: .94rem; }
+  .dh-demo-sub { font-size: .72rem; }
+  .dh-demo-bal { text-align: left; flex: 1 1 auto; }
+  .dh-demo-bal b { font-size: 1.16rem; }
+  .dh-demo-actions { flex: 0 0 auto; gap: 8px; }
+  .dh-btn-sm {
+    height: 42px; padding: 0 14px;
+    white-space: nowrap;            /* "Start trading" was breaking in two */
+    font-size: .82rem;
+  }
 
-  /* the section heading and its controls stack */
-  .dh-section-head { flex-direction: column; align-items: stretch; gap: 12px; }
-  .dh-head-right { flex-direction: row-reverse; align-items: center; justify-content: space-between; }
+  /* ── Heading, tabs ──────────────────────────────────────────────────── */
+  .dh-section-head { flex-direction: column; align-items: stretch; gap: 12px; margin-bottom: 4px; }
+  .dh-head-right { flex-direction: column-reverse; align-items: stretch; gap: 10px; }
+  .dh-viewall { align-self: flex-end; margin-top: -34px; }
   .dh-tabs {
     overflow-x: auto; scrollbar-width: none;
     background: transparent; border: 0; padding: 0; gap: 8px;
@@ -449,52 +499,53 @@
   .dh-tab {
     border: 1px solid var(--border-color);
     background: var(--card-bg);
-    padding: 8px 14px; font-size: .76rem;
+    padding: 9px 16px; font-size: .78rem; flex: 0 0 auto;
   }
   .dh-tab[data-active="true"] { border-color: var(--accent-primary); }
 
-  /* two cards in view, the third peeking — the reference's own rhythm */
+  /* ── Challenge cards: two in view, big enough to read ───────────────── */
   .dh-cards {
     display: flex; gap: 12px;
     overflow-x: auto; scroll-snap-type: x mandatory;
-    padding: 12px 0 6px; scrollbar-width: none;
+    padding: 14px 0 6px; scrollbar-width: none;
   }
   .dh-cards::-webkit-scrollbar { display: none; }
   .dh-card {
-    flex: 0 0 min(72%, 290px); scroll-snap-align: start;
-    padding: 18px 16px 16px;
+    flex: 0 0 min(82%, 320px); scroll-snap-align: start;
+    padding: 20px 18px 18px;
   }
-  .dh-card-size { font-size: 1.08rem; }
-  .dh-card-note { font-size: .76rem; margin-bottom: 14px; }
-  .dh-card-mark { top: 16px; right: 14px; width: 30px; height: 30px; }
-  .dh-card-stat { padding: 9px 6px; }
-  .dh-card-stat b { font-size: .86rem; }
-  .dh-card-stat span { font-size: .58rem; }
-  .dh-card-fee { font-size: 1.2rem; }
-  .dh-buy { height: 42px; font-size: .84rem; }
+  .dh-card-size { font-size: 1.14rem; }
+  .dh-card-note { font-size: .78rem; margin-bottom: 16px; }
+  .dh-card-mark { top: 18px; right: 16px; width: 32px; height: 32px; }
+  .dh-card-stat { padding: 10px 7px; }
+  .dh-card-stat b { font-size: .92rem; }
+  .dh-card-stat span { font-size: .6rem; }
+  .dh-card-fee { font-size: 1.26rem; }
+  .dh-buy { height: 44px; font-size: .86rem; }
   /* the popular card leads in green, as in the reference */
   .dh-card[data-popular="true"] { border-color: #16C79A; }
   .dh-card[data-popular="true"] .dh-card-flag { background: #16C79A; color: #04251A; }
   .dh-card[data-popular="true"] .dh-buy { background: #16C79A; border-color: #16C79A; color: #04251A; }
 
-  /* steps become the blue card from the reference */
+  /* ── Steps: the blue card ───────────────────────────────────────────── */
   .dh-steps {
     flex-direction: column; align-items: flex-start; gap: 14px;
     padding: 18px;
     background: linear-gradient(135deg, #0B3E78, #1268E8);
-    border-color: rgba(255,255,255,.14);
+    border-color: rgba(255,255,255,.16);
   }
   .dh-steps-title, .dh-steps .dh-sub { color: #fff; }
-  .dh-steps .dh-sub { opacity: .8; }
-  .dh-steps-list { flex-direction: column; align-items: flex-start; gap: 12px; justify-content: flex-start; }
+  .dh-steps .dh-sub { opacity: .82; }
+  .dh-steps-list { flex-direction: column; align-items: flex-start; gap: 12px; justify-content: flex-start; width: 100%; }
   .dh-step b { color: #fff; }
-  .dh-step span { color: rgba(255,255,255,.72); }
+  .dh-step span { color: rgba(255,255,255,.74); }
   .dh-step-n { background: #fff; color: #0B3E78; }
   .dh-step-arrow { display: none; }
   .dh-steps .dh-buy { background: #fff; border-color: #fff; color: #0B3E78; width: 100%; }
 
   .dh-tiles { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .dh-tile { padding: 13px; }
+  .dh-tile-icon { width: 34px; height: 34px; margin-bottom: 8px; }
   .dh-tile b { font-size: .8rem; }
   .dh-tile span { font-size: .68rem; }
 }
