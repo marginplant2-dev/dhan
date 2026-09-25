@@ -274,10 +274,12 @@
 .dh-steps-list { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; flex: 1; justify-content: center; }
 .dh-step { display: flex; align-items: center; gap: 10px; }
 .dh-step-n {
-  width: 26px; height: 26px; border-radius: 999px; flex: none;
+  width: 28px; height: 28px; border-radius: 999px; flex: none;
   display: grid; place-items: center;
   background: var(--accent-primary); color: #fff;
-  font-size: .74rem; font-weight: 800;
+  font-size: .76rem; font-weight: 800; line-height: 1;
+  font-variant-numeric: tabular-nums;
+  padding-left: .5px;            /* optical centring for a single digit */
 }
 .dh-step-n[data-done="true"] { background: var(--success); }
 .dh-step b { display: block; font-size: .84rem; font-weight: 700; color: var(--text-primary); }
@@ -371,4 +373,128 @@
 
 @media (prefers-reduced-motion: reduce) {
   .dh-card, .dh-acc { transition: none; }
+}
+
+/* ── Feature tiles ───────────────────────────────────────────────────────── */
+.dh-tiles {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px; margin-top: 18px;
+}
+.dh-tile {
+  padding: 16px; border-radius: 14px;
+  background: var(--card-bg); border: 1px solid var(--border-color);
+}
+.dh-tile-icon {
+  width: 38px; height: 38px; border-radius: 12px;
+  display: grid; place-items: center; margin-bottom: 10px;
+}
+.dh-tile b { display: block; font-size: .88rem; font-weight: 700; color: var(--text-primary); }
+.dh-tile span { display: block; font-size: .75rem; color: var(--text-muted); margin-top: 2px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Phone — the reference layout.
+
+   Dark shell, and anything that would stack into a tall column scrolls
+   sideways instead: the index cards, and the challenge cards at a width that
+   shows two at a time so it is obvious there are more.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 720px) {
+  .dh-home {
+    --card-bg: #0C1E3A;
+    --border-color: rgba(120,170,235,.16);
+    --bg-tertiary: #0A1830;
+    --text-primary: #EAF2FF;
+    --text-secondary: #9FB4D4;
+    --text-muted: #7E93B4;
+    --accent-primary: #1268E8;
+    --gold-soft: rgba(18,104,232,.18);
+    background: #050D1E;
+    color: var(--text-primary);
+  }
+
+  .dh-section { margin-top: 26px; }
+  .dh-h2 { font-size: 1.25rem; }
+  .dh-h2 em { color: #EAF2FF; }
+  .dh-eyebrow { display: none; }
+
+  /* index cards: one row, swiped */
+  .dh-indices {
+    display: flex; gap: 12px; margin-top: 14px;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    padding-bottom: 4px; scrollbar-width: none;
+  }
+  .dh-indices::-webkit-scrollbar { display: none; }
+  .dh-index {
+    flex: 0 0 74%; scroll-snap-align: start;
+    padding: 14px; gap: 10px;
+    box-shadow: none;
+  }
+  .dh-index-spark { width: 64px; }
+
+  /* demo strip stays one card, but the curve makes way */
+  .dh-demo { gap: 14px; padding: 14px 16px; }
+  .dh-demo-main { min-width: 0; flex: 1 1 100%; }
+  .dh-demo-bal { text-align: left; }
+  .dh-demo-actions { flex: 1; }
+  .dh-btn-sm { flex: 1; justify-content: center; }
+
+  /* the section heading and its controls stack */
+  .dh-section-head { flex-direction: column; align-items: stretch; gap: 12px; }
+  .dh-head-right { flex-direction: row-reverse; align-items: center; justify-content: space-between; }
+  .dh-tabs {
+    overflow-x: auto; scrollbar-width: none;
+    background: transparent; border: 0; padding: 0; gap: 8px;
+  }
+  .dh-tabs::-webkit-scrollbar { display: none; }
+  .dh-tab {
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    padding: 8px 14px; font-size: .76rem;
+  }
+  .dh-tab[data-active="true"] { border-color: var(--accent-primary); }
+
+  /* two cards in view, the third peeking — the reference's own rhythm */
+  .dh-cards {
+    display: flex; gap: 12px;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    padding: 12px 0 6px; scrollbar-width: none;
+  }
+  .dh-cards::-webkit-scrollbar { display: none; }
+  .dh-card {
+    flex: 0 0 min(72%, 290px); scroll-snap-align: start;
+    padding: 18px 16px 16px;
+  }
+  .dh-card-size { font-size: 1.08rem; }
+  .dh-card-note { font-size: .76rem; margin-bottom: 14px; }
+  .dh-card-mark { top: 16px; right: 14px; width: 30px; height: 30px; }
+  .dh-card-stat { padding: 9px 6px; }
+  .dh-card-stat b { font-size: .86rem; }
+  .dh-card-stat span { font-size: .58rem; }
+  .dh-card-fee { font-size: 1.2rem; }
+  .dh-buy { height: 42px; font-size: .84rem; }
+  /* the popular card leads in green, as in the reference */
+  .dh-card[data-popular="true"] { border-color: #16C79A; }
+  .dh-card[data-popular="true"] .dh-card-flag { background: #16C79A; color: #04251A; }
+  .dh-card[data-popular="true"] .dh-buy { background: #16C79A; border-color: #16C79A; color: #04251A; }
+
+  /* steps become the blue card from the reference */
+  .dh-steps {
+    flex-direction: column; align-items: flex-start; gap: 14px;
+    padding: 18px;
+    background: linear-gradient(135deg, #0B3E78, #1268E8);
+    border-color: rgba(255,255,255,.14);
+  }
+  .dh-steps-title, .dh-steps .dh-sub { color: #fff; }
+  .dh-steps .dh-sub { opacity: .8; }
+  .dh-steps-list { flex-direction: column; align-items: flex-start; gap: 12px; justify-content: flex-start; }
+  .dh-step b { color: #fff; }
+  .dh-step span { color: rgba(255,255,255,.72); }
+  .dh-step-n { background: #fff; color: #0B3E78; }
+  .dh-step-arrow { display: none; }
+  .dh-steps .dh-buy { background: #fff; border-color: #fff; color: #0B3E78; width: 100%; }
+
+  .dh-tiles { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .dh-tile { padding: 13px; }
+  .dh-tile b { font-size: .8rem; }
+  .dh-tile span { font-size: .68rem; }
 }

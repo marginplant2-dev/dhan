@@ -186,6 +186,7 @@ function DashboardPage() {
     setDemoBusy(false);
   };
 
+  // Only used to tell the third onboarding step whether it is done.
   const liveAccounts = myAccounts.filter((a) => ['ACTIVE', 'FUNDED', 'PASSED'].includes(a.status));
   const programme = useMemo(
     () => challenges.find((c) => c._id === activeProgramme) || challenges[0] || null,
@@ -211,13 +212,6 @@ function DashboardPage() {
     if (i === 1) return 'More room, same rules';
     return 'For a strategy that has already scaled';
   };
-
-  const statusTone = (s) => ({
-    ACTIVE: { bg: 'rgba(42,91,199,.12)', fg: '#2A5BC7' },
-    FUNDED: { bg: 'rgba(22,199,132,.14)', fg: '#0E9F6E' },
-    PASSED: { bg: 'rgba(22,199,132,.14)', fg: '#0E9F6E' },
-    FAILED: { bg: 'rgba(229,72,77,.12)', fg: '#E5484D' },
-  }[s] || { bg: 'var(--bg-tertiary)', fg: 'var(--text-muted)' });
 
   const steps = [
     { Icon: UserPlus, title: 'Create Account', sub: 'Done', done: true },
@@ -403,55 +397,27 @@ function DashboardPage() {
               Start Evaluation <ArrowRight size={16} />
             </button>
           </div>
-        </section>
 
-        {/* ── Accounts ─────────────────────────────────────────────────── */}
-        <section className="dh-section">
-          <div className="dh-section-head">
-            <div>
-              <div className="dh-eyebrow">Your accounts</div>
-              <h2 className="dh-h2">Evaluations &amp; funded</h2>
+          <div className="dh-tiles">
+            <div className="dh-tile">
+              <span className="dh-tile-icon" style={{ background: 'rgba(22,199,154,.16)', color: '#16C79A' }}><BarChart3 size={18} /></span>
+              <b>Real market data</b><span>NSE &amp; BSE prices</span>
+            </div>
+            <div className="dh-tile">
+              <span className="dh-tile-icon" style={{ background: 'rgba(122,90,248,.16)', color: '#7A5AF8' }}><Zap size={18} /></span>
+              <b>Flexible plans</b><span>1-Step &amp; 2-Step</span>
+            </div>
+            <div className="dh-tile">
+              <span className="dh-tile-icon" style={{ background: 'rgba(233,162,59,.18)', color: '#E9A23B' }}><ShieldCheck size={18} /></span>
+              <b>Clear rules</b><span>No hidden conditions</span>
+            </div>
+            <div className="dh-tile">
+              <span className="dh-tile-icon" style={{ background: 'rgba(18,104,232,.16)', color: '#1268E8' }}><LineChart size={18} /></span>
+              <b>Get funded</b><span>Trade real capital</span>
             </div>
           </div>
-
-          {loading ? (
-            <div className="dh-empty"><p>Loading your accounts…</p></div>
-          ) : liveAccounts.length === 0 ? (
-            <div className="dh-empty">
-              <p>No accounts yet. Buy a challenge above and it appears here the moment it is approved.</p>
-              <button className="dh-buy" style={{ width: 'auto', padding: '0 22px', margin: '0 auto' }}
-                      onClick={() => navigate('/app/challenges')}>
-                Start Evaluation <ArrowRight size={16} />
-              </button>
-            </div>
-          ) : (
-            <div className="dh-acc-grid">
-              {liveAccounts.map((acc) => {
-                const tone = statusTone(acc.status);
-                return (
-                  <div
-                    className="dh-acc"
-                    key={acc._id}
-                    onClick={() => {
-                      setActiveChallengeAccountId?.(acc._id);
-                      navigate('/app/challenge-dashboard');
-                    }}
-                  >
-                    <div className="dh-acc-top">
-                      <span className="dh-acc-id">{acc.accountId || acc.accountNumber || 'Account'}</span>
-                      <span className="dh-pill" style={{ background: tone.bg, color: tone.fg }}>{acc.status}</span>
-                    </div>
-                    <div className="dh-acc-bal">{INR(acc.currentBalance ?? acc.balance ?? 0)}</div>
-                    <div className="dh-acc-meta">
-                      {INR(acc.initialBalance ?? acc.accountSize ?? 0)} account
-                      {acc.currentPhase ? ` · phase ${acc.currentPhase}` : ''}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
         </section>
+
       </div>
     </div>
   );
