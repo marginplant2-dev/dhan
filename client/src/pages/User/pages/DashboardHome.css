@@ -24,35 +24,25 @@
 @media (max-width: 640px) { .dh-wrap { padding-inline: 14px; } }
 
 /* ── Banner ──────────────────────────────────────────────────────────────────
-   Navy band, the candle field washed in behind it, and the bull sitting at the
-   right edge. Both are WebP crops of the brand artwork (25 KB and 14 KB) with
-   the baked-in headline cut away, so the copy below stays real text: it wraps,
-   it scales, and it does not blur on a phone.
+   One flat image per breakpoint, built by client/scripts/gen-hero-banner.py:
+   navy wash, a drawn candle field and the bull. The pack's own banner could
+   not be used directly — it has the headline, the nav and the logo painted
+   into it, which showed through as ghost lettering behind our live text. Here
+   the artwork carries no words at all, so the copy stays real HTML.
+   24 KB desktop, 18 KB mobile.
    ─────────────────────────────────────────────────────────────────────────── */
 
 .dh-banner {
   position: relative;
   overflow: hidden;
   color: #fff;
-  padding: 40px 0 54px;
-  background:
-    linear-gradient(90deg, #04193A 0%, rgba(4,25,58,.86) 42%, rgba(4,25,58,.18) 72%, rgba(4,25,58,0) 100%),
-    url('/brand/hero-candles.webp') left center / auto 100% no-repeat,
-    url('/brand/hero-bull.webp') right center / auto 118% no-repeat,
-    linear-gradient(120deg, #04193A, #062F67 55%, #04193A);
+  padding: 44px 0 58px;
+  background: #041026 url('/brand/hero-desktop.webp') center right / cover no-repeat;
 }
-@media (min-width: 1500px) {
-  .dh-banner { background-size: auto, auto 100%, auto 128%, auto; }
-}
-/* On a phone the bull would sit under the words; it moves behind them at low
-   opacity instead, and the band tightens up. */
 @media (max-width: 720px) {
   .dh-banner {
     padding: 26px 0 40px;
-    background:
-      linear-gradient(180deg, rgba(4,25,58,.72), rgba(4,25,58,.92)),
-      url('/brand/hero-bull.webp') right -40px center / auto 150% no-repeat,
-      linear-gradient(140deg, #04193A, #062F67);
+    background: #041026 url('/brand/hero-mobile.webp') center right / cover no-repeat;
   }
 }
 
@@ -273,15 +263,15 @@
 
 /* ── Steps strip ─────────────────────────────────────────────────────────── */
 .dh-steps {
-  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  display: flex; align-items: center; gap: 26px; flex-wrap: wrap;
   justify-content: space-between;
-  margin-top: 26px; padding: 22px;
+  margin-top: 26px; padding: 24px 26px;
   border-radius: 16px;
   background: var(--card-bg);
   border: 1px solid var(--border-color);
 }
 .dh-steps-title { font-size: 1.04rem; font-weight: 800; color: var(--text-primary); }
-.dh-steps-list { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.dh-steps-list { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; flex: 1; justify-content: center; }
 .dh-step { display: flex; align-items: center; gap: 10px; }
 .dh-step-n {
   width: 26px; height: 26px; border-radius: 999px; flex: none;
@@ -322,37 +312,55 @@
 .dh-acc-meta { margin-top: 3px; font-size: .76rem; color: var(--text-muted); }
 
 .dh-demo {
-  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-  padding: 16px 18px; border-radius: 14px;
+  display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
+  margin-top: 18px;
+  padding: 16px 20px; border-radius: 16px;
   background: var(--card-bg); border: 1px solid var(--border-color);
+  box-shadow: 0 8px 24px -20px rgba(9,38,75,.5);
 }
-.dh-demo-main { display: flex; align-items: center; gap: 13px; flex: 1; min-width: 220px; }
+.dh-demo-main { display: flex; align-items: center; gap: 14px; min-width: 260px; }
 .dh-demo-icon {
-  width: 40px; height: 40px; border-radius: 12px; flex: none;
+  width: 46px; height: 46px; border-radius: 14px; flex: none;
   display: grid; place-items: center;
   background: var(--gold-soft); color: var(--accent-primary);
 }
-.dh-demo-title { font-size: .95rem; font-weight: 700; color: var(--text-primary); }
+.dh-demo-title { font-size: 1.02rem; font-weight: 800; color: var(--text-primary); }
 .dh-demo-free {
-  font-size: .6rem; font-weight: 800; letter-spacing: .08em;
-  padding: 2px 7px; border-radius: 999px;
-  background: rgba(22,199,132,.14); color: #0E9F6E; margin-left: 8px;
+  font-size: .6rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 999px;
+  background: rgba(18,104,232,.12); color: #1268E8; margin-left: 9px;
 }
-.dh-demo-sub { font-size: .76rem; color: var(--text-muted); margin-top: 2px; }
+.dh-demo-sub { font-size: .78rem; line-height: 1.5; color: var(--text-muted); margin-top: 3px; }
+
+/* the curve takes the slack in the middle and disappears when there is none */
+.dh-demo-curve { flex: 1 1 200px; min-width: 0; height: 58px; }
+@media (max-width: 900px) { .dh-demo-curve { display: none; } }
+
 .dh-demo-bal { text-align: right; }
 .dh-demo-bal b {
-  display: block; font-size: 1.1rem; font-weight: 800;
+  display: block; font-size: 1.32rem; font-weight: 800; letter-spacing: -.02em;
   color: var(--text-primary); font-variant-numeric: tabular-nums;
 }
-.dh-demo-bal span { font-size: .7rem; color: var(--text-muted); }
+.dh-demo-bal span { font-size: .74rem; color: var(--text-muted); }
 .dh-demo-actions { display: flex; gap: 8px; }
 .dh-btn-sm {
-  height: 38px; padding: 0 16px; border-radius: 10px;
-  font-size: .82rem; font-weight: 700; cursor: pointer;
+  height: 44px; padding: 0 18px; border-radius: 12px;
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: .86rem; font-weight: 700; cursor: pointer;
   border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary);
 }
 .dh-btn-sm--go { background: var(--accent-primary); border-color: var(--accent-primary); color: #fff; }
 .dh-btn-sm:disabled { opacity: .6; cursor: default; }
+
+/* the small mark in a card's top-right corner */
+.dh-card-mark {
+  position: absolute; top: 22px; right: 20px;
+  width: 34px; height: 34px; border-radius: 11px;
+  display: grid; place-items: center;
+}
+.dh-card-mark[data-i="0"] { background: rgba(22,199,154,.14); color: #0E9F6E; }
+.dh-card-mark[data-i="1"] { background: rgba(122,90,248,.14); color: #7A5AF8; }
+.dh-card-mark[data-i="2"] { background: rgba(18,104,232,.12); color: #1268E8; }
 
 .dh-empty {
   padding: 34px 20px; text-align: center;

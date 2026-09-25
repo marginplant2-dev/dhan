@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
-import { ArrowRight, BarChart3, Gamepad2, LineChart, Mail, Play, ShieldCheck, UserPlus, Zap } from 'lucide-react';
+import { ArrowRight, BarChart3, Building2, Gamepad2, LineChart, Mail, Play, ShieldCheck, TrendingUp, UserPlus, Users, Zap } from 'lucide-react';
 import './DashboardHome.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -37,6 +37,22 @@ const INDICES = [
   { label: 'SENSEX', symbols: ['SENSEX', 'BSE SENSEX'], tone: '#1268E8' },
   { label: 'BANKNIFTY', symbols: ['NIFTY BANK', 'BANKNIFTY'], tone: '#7A5AF8' },
 ];
+
+/** The rising curve in the demo strip. Decorative: it illustrates a practice
+    account, and drawing it beats shipping a screenshot of one. */
+function DemoCurve() {
+  const pts = [0, 6, 3, 11, 8, 16, 13, 22, 19, 28, 24, 34, 31, 42, 38, 48, 45, 57, 52, 64, 71];
+  const d = pts
+    .map((v, i) => `${(i / (pts.length - 1)) * 300} ${64 - (v / 71) * 52}`)
+    .map((xy, i) => (i ? 'L' : 'M') + xy)
+    .join(' ');
+  return (
+    <svg className="dh-demo-curve" viewBox="0 0 300 68" fill="none" aria-hidden>
+      <path d={`${d} L300 68 L0 68 Z`} fill="#16C79A" opacity=".12" />
+      <path d={d} stroke="#16C79A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 /** A sparkline from whatever ticks we have seen this session — no history API. */
 function Spark({ points, tone }) {
@@ -183,9 +199,9 @@ function DashboardPage() {
       ? r.profitTargetInstantPercent
       : r.profitTargetPhase1Percent;
     return [
-      { label: 'Profit Target', value: target != null ? `${target}%` : '—' },
-      { label: 'Max Daily Loss', value: r.maxDailyDrawdownPercent != null ? `${r.maxDailyDrawdownPercent}%` : '—' },
-      { label: 'Max Overall Loss', value: r.maxOverallDrawdownPercent != null ? `${r.maxOverallDrawdownPercent}%` : '—' },
+      { label: 'Profit target', value: target != null ? `${target}%` : '—' },
+      { label: 'Daily loss', value: r.maxDailyDrawdownPercent != null ? `${r.maxDailyDrawdownPercent}%` : '—' },
+      { label: 'Max loss', value: r.maxOverallDrawdownPercent != null ? `${r.maxOverallDrawdownPercent}%` : '—' },
     ];
   };
 
@@ -274,6 +290,35 @@ function DashboardPage() {
           })}
         </div>
 
+        {/* ── Practice account ─────────────────────────────────────────── */}
+        {demo && (
+          <div className="dh-demo">
+            <div className="dh-demo-main">
+              <span className="dh-demo-icon"><Gamepad2 size={20} /></span>
+              <div>
+                <div className="dh-demo-title">
+                  Demo account<span className="dh-demo-free">Free</span>
+                </div>
+                <div className="dh-demo-sub">Live NSE &amp; BSE prices · practice only<br />Profits are not paid out.</div>
+              </div>
+            </div>
+            <DemoCurve />
+            <div className="dh-demo-bal">
+              <b>{INR(demo.currentBalance ?? demo.balance ?? 0)}</b>
+              <span>Virtual balance</span>
+            </div>
+            <div className="dh-demo-actions">
+              <button className="dh-btn-sm dh-btn-sm--go" onClick={openDemo} disabled={demoBusy}>
+                {demoBusy ? 'Opening…' : 'Start trading'} <ArrowRight size={15} />
+              </button>
+              <button className="dh-btn-sm" onClick={resetDemo} disabled={demoBusy} title="Reset the virtual balance">
+                Reset
+              </button>
+            </div>
+          </div>
+        )}
+        {demoErr && <p className="dh-sub" style={{ color: '#E5484D' }}>{demoErr}</p>}
+
         {/* ── Challenges ───────────────────────────────────────────────── */}
         <section className="dh-section">
           <div className="dh-section-head">
@@ -309,6 +354,9 @@ function DashboardPage() {
               {(programme.tiers || []).slice(0, 3).map((tier, i) => (
                 <div className="dh-card" key={tier._id || i} data-popular={!!tier.isPopular}>
                   {tier.isPopular && <span className="dh-card-flag">Most popular</span>}
+                  <span className="dh-card-mark" data-i={i}>
+                    {i === 0 ? <TrendingUp size={16} /> : i === 1 ? <Users size={16} /> : <Building2 size={16} />}
+                  </span>
                   <div className="dh-card-size">{INR(tier.fundSize)} Challenge</div>
                   <p className="dh-card-note">{tierNote(programme, i)}</p>
 
@@ -356,36 +404,6 @@ function DashboardPage() {
             </button>
           </div>
         </section>
-
-        {/* ── Practice account ─────────────────────────────────────────── */}
-        {demo && (
-          <section className="dh-section">
-            <div className="dh-demo">
-              <div className="dh-demo-main">
-                <span className="dh-demo-icon"><Gamepad2 size={19} /></span>
-                <div>
-                  <div className="dh-demo-title">
-                    Demo account<span className="dh-demo-free">Free</span>
-                  </div>
-                  <div className="dh-demo-sub">Live NSE &amp; BSE prices · practice only, profits are not paid out</div>
-                </div>
-              </div>
-              <div className="dh-demo-bal">
-                <b>{INR(demo.currentBalance ?? demo.balance ?? 0)}</b>
-                <span>virtual balance</span>
-              </div>
-              <div className="dh-demo-actions">
-                <button className="dh-btn-sm dh-btn-sm--go" onClick={openDemo} disabled={demoBusy}>
-                  {demoBusy ? 'Opening…' : 'Start trading'}
-                </button>
-                <button className="dh-btn-sm" onClick={resetDemo} disabled={demoBusy} title="Reset the virtual balance">
-                  Reset
-                </button>
-              </div>
-            </div>
-            {demoErr && <p className="dh-sub" style={{ color: '#E5484D', marginTop: 8 }}>{demoErr}</p>}
-          </section>
-        )}
 
         {/* ── Accounts ─────────────────────────────────────────────────── */}
         <section className="dh-section">
