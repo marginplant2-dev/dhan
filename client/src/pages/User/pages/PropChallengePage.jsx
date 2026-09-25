@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo, Fragment } from 'react';
+import { useState, useEffect, useMemo, useRef, Fragment } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useOutletContext, useNavigate } from 'react-router-dom';
 import { compressImage, base64ByteSize } from '../../../utils/compressImage';
 import UpiQr from '../../../components/UpiQr';
@@ -52,7 +53,9 @@ function PropChallengePage() {
   const [selectedTierIndex, setSelectedTierIndex] = useState(0);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [confirmStage, setConfirmStage] = useState(1); // 1 = rules summary, 2 = UPI payment
+  // Only the payment stage is left: the rules screen that used to sit in
+  // front of it repeated what the challenge card and the rules page already say.
+  const [confirmStage, setConfirmStage] = useState(2);
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   // IB coupon state — shared by the summary panel and the confirm modal.
@@ -345,7 +348,7 @@ function PropChallengePage() {
         setCouponState({ status: 'idle', applied: null, error: null });
         setPaymentForm({ transactionRef: '', screenshotBase64: '', note: '' });
         setSelectedAdminUpiId('');
-        setConfirmStage(1);
+        setConfirmStage(2);
         setConfirmOpen(false);
         showToast(`${d.message} Check My Challenges.`, 'success');
         refetchMyAccounts();
@@ -437,6 +440,26 @@ function PropChallengePage() {
       setSelectedTierIndex(0);
     }
   }, [activeProgram, grouped]);
+
+  /**
+   * Arriving from the dashboard's "Buy Challenge": that card already told the
+   * buyer the size, the fee and the three limits, so this opens on the payment
+   * screen for exactly that tier rather than making them pick it again.
+   */
+  const location = useLocation();
+  const handledHandoff = useRef(false);
+  useEffect(() => {
+    const want = location.state?.buy;
+    if (!want || handledHandoff.current || !challenges.length) return;
+    const plan = challenges.find((c) => c._id === want.challengeId);
+    if (!plan) return;
+    handledHandoff.current = true;
+    setActiveProgram(plan.stepsCount);
+    setSelectedId(plan._id);
+    setSelectedTierIndex(Number(want.tierIndex) || 0);
+    setConfirmStage(2);
+    setConfirmOpen(true);
+  }, [location.state, challenges]);
 
   // Normalize tiers for the currently-selected plan — fall back to the
   // legacy (fundSize, challengeFee) pair when the admin hasn't populated
@@ -612,52 +635,6 @@ function PropChallengePage() {
                     </div>
                   ))}
                 </div>
-
-                {/* Rules — compact %+₹ chips derived from the selected plan's
-                    rules × fund size. Kept tight (2×2, small type) so the card
-                    height barely changes. */}
-                {selectedPlan?.rules && (() => {
-                  const r = selectedPlan.rules || {};
-                  const fundSize = Number(selectedTier.fundSize || 0);
-                  const amt = (p) => Math.round(fundSize * p / 100);
-                  const inr = (n) => `₹${Number(n).toLocaleString('en-IN')}`;
-                  // Profit targets: Instant → single instant target; 1-Step → Phase 1;
-                  // 2-Step → BOTH Phase 1 and Phase 2 targets.
-                  const p1Pct = pm.steps === 0 ? Number(r.profitTargetInstantPercent || 0) : Number(r.profitTargetPhase1Percent || 0);
-                  const p2Pct = pm.steps === 2 ? Number(r.profitTargetPhase2Percent || 0) : 0;
-                  const dailyPct = Number(r.maxDailyDrawdownPercent || 0);
-                  const maxPct = Number(r.maxOverallDrawdownPercent || 0);
-                  const oneDayOfTarget = Number(r.maxOneDayProfitPercentOfTarget || 0);
-                  const p1Amt = amt(p1Pct);
-
-                  const profitItems = [];
-                  if (p1Pct > 0) profitItems.push({ l: pm.steps === 2 ? 'Profit Target P1' : 'Profit Target', pct: p1Pct, amt: p1Amt });
-                  if (p2Pct > 0) profitItems.push({ l: 'Profit Target P2', pct: p2Pct, amt: amt(p2Pct) });
-                  if (oneDayOfTarget > 0 && p1Amt > 0) profitItems.push({ l: 'Max 1-Day Profit', pct: oneDayOfTarget, amt: Math.round(p1Amt * oneDayOfTarget / 100) });
-
-                  const lossItems = [];
-                  if (dailyPct > 0) lossItems.push({ l: 'Daily Loss', pct: dailyPct, amt: amt(dailyPct) });
-                  if (maxPct > 0) lossItems.push({ l: 'Max Loss', pct: maxPct, amt: amt(maxPct) });
-
-                  if (!profitItems.length && !lossItems.length) return null;
-
-                  const chip = (it) => (
-                    <div key={it.l} style={{ padding: '5px 7px', borderRadius: '7px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.18)' }}>
-                      <div style={{ fontSize: '8px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0.2px', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.l}</div>
-                      <div style={{ fontSize: '11px', fontWeight: 800, color: '#d97706', whiteSpace: 'nowrap' }}>{it.pct}% · {inr(it.amt)}</div>
-                    </div>
-                  );
-                  return (
-                    <div style={{ marginBottom: '14px' }}>
-                      <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-secondary)', letterSpacing: '0.5px', marginBottom: '6px' }}>RULES</div>
-                      {/* LEFT column = profit rules stacked; RIGHT column = loss rules stacked. */}
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', alignItems: 'start' }}>
-                        <div style={{ display: 'grid', gap: '6px' }}>{profitItems.map(chip)}</div>
-                        <div style={{ display: 'grid', gap: '6px' }}>{lossItems.map(chip)}</div>
-                      </div>
-                    </div>
-                  );
-                })()}
 
                 {/* Payment Options */}
                 <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-secondary)', letterSpacing: '0.5px', marginBottom: '4px' }}>PAYMENT OPTIONS</div>
@@ -968,113 +945,11 @@ function PropChallengePage() {
             }}
           >
             <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>
-              {confirmStage === 1 ? 'Confirm Purchase' : `Pay ₹${Number((couponState.applied?.finalFee != null ? couponState.applied.finalFee : selectedTier.challengeFee) || 0).toLocaleString('en-IN')} via UPI`}
+              {`Pay ₹${Number((couponState.applied?.finalFee != null ? couponState.applied.finalFee : selectedTier.challengeFee) || 0).toLocaleString('en-IN')} via UPI`}
             </div>
             <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 16 }}>
-              {confirmStage === 1
-                ? 'Please review the rules before continuing to payment.'
-                : 'Pay using any UPI app to the admin\'s UPI ID below, then enter your transaction reference + screenshot.'}
+              Scan the QR or pay to the UPI ID below, then upload the screenshot.
             </div>
-
-            {confirmStage === 1 && (<>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 16 }}>
-              <div style={{ padding: 12, borderRadius: 10, background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
-                <div style={{ fontSize: 10, color: 'var(--text-secondary)' }}>FUND SIZE</div>
-                <div style={{ fontSize: 16, fontWeight: 700 }}>₹ {Number(selectedTier.fundSize || 0).toLocaleString('en-IN')}</div>
-              </div>
-              <div style={{ padding: 12, borderRadius: 10, background: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}>
-                <div style={{ fontSize: 10, color: 'var(--text-secondary)' }}>EVALUATION FEE</div>
-                {couponState.applied ? (
-                  <>
-                    <div style={{ fontSize: 12, color: 'var(--text-secondary)', textDecoration: 'line-through' }}>
-                      ₹ {Number(couponState.applied.originalFee || 0).toLocaleString('en-IN')}
-                    </div>
-                    <div style={{ fontSize: 16, fontWeight: 700, color: '#10b981' }}>
-                      ₹ {Number(couponState.applied.finalFee || 0).toLocaleString('en-IN')}
-                    </div>
-                    <div style={{ fontSize: 10, color: '#10b981' }}>
-                      Coupon {couponState.applied.code} · −{couponState.applied.discountPercent}%
-                    </div>
-                  </>
-                ) : (
-                  <div style={{ fontSize: 16, fontWeight: 700, color: '#f59e0b' }}>₹ {Number(selectedTier.challengeFee || 0).toLocaleString('en-IN')}</div>
-                )}
-              </div>
-            </div>
-
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: 0.5, marginBottom: 8 }}>RULES YOU MUST FOLLOW</div>
-            <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, lineHeight: 1.8 }}>
-              {selectedPlan.rules?.maxDailyDrawdownPercent != null && (
-                <li>Daily drawdown limit: <strong>{selectedPlan.rules.maxDailyDrawdownPercent}%</strong></li>
-              )}
-              {selectedPlan.rules?.maxOverallDrawdownPercent != null && (
-                <li>Overall drawdown limit: <strong>{selectedPlan.rules.maxOverallDrawdownPercent}%</strong></li>
-              )}
-              {selectedPlan.rules?.profitTargetPhase1Percent != null && selectedPlan.stepsCount >= 1 && (
-                <li>Phase 1 profit target: <strong>{selectedPlan.rules.profitTargetPhase1Percent}%</strong></li>
-              )}
-              {selectedPlan.rules?.profitTargetPhase2Percent != null && selectedPlan.stepsCount === 2 && (
-                <li>Phase 2 profit target: <strong>{selectedPlan.rules.profitTargetPhase2Percent}%</strong></li>
-              )}
-              {selectedPlan.rules?.profitTargetInstantPercent != null && selectedPlan.stepsCount === 0 && (
-                <li>Profit target: <strong>{selectedPlan.rules.profitTargetInstantPercent}%</strong></li>
-              )}
-              {selectedPlan.rules?.maxOneDayProfitPercentOfTarget != null && (
-                <li>Max one-day profit: <strong>{selectedPlan.rules.maxOneDayProfitPercentOfTarget}%</strong> of target</li>
-              )}
-            </ul>
-
-            {/* Instagram payout highlights CTA */}
-            <a
-              href="https://www.instagram.com/dhanfunded"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none',
-                marginTop: 14, padding: '11px 14px', borderRadius: 12,
-                background: 'linear-gradient(135deg, rgba(245,133,41,0.10), rgba(221,42,123,0.10), rgba(129,52,175,0.10))',
-                border: '1px solid rgba(221,42,123,0.30)'
-              }}
-            >
-              <span style={{
-                flexShrink: 0, width: 34, height: 34, borderRadius: 10,
-                background: 'linear-gradient(135deg, #f58529 0%, #dd2a7b 50%, #8134af 100%)',
-                display: 'grid', placeItems: 'center', color: '#fff', fontSize: 17
-              }}>📸</span>
-              <span style={{ flex: 1, fontSize: 12.5, color: 'var(--text-primary)', fontWeight: 600, lineHeight: 1.4 }}>
-                Check out our <strong>Instagram highlights</strong> to see our latest payouts.
-              </span>
-              <span style={{ flexShrink: 0, fontSize: 12, fontWeight: 800, color: '#dd2a7b', whiteSpace: 'nowrap' }}>Follow ↗</span>
-            </a>
-
-            <div style={{
-              marginTop: 12, padding: 12, background: 'rgba(239,68,68,0.08)',
-              border: '1px solid rgba(239,68,68,0.3)', borderRadius: 10,
-              fontSize: 12, color: '#ef4444'
-            }}>
-              ⚠ The evaluation fee is <strong>non-refundable</strong>. Breaching any rule above will fail the account — the fee will not be returned.
-            </div>
-
-            <div style={{ display: 'flex', gap: 10, marginTop: 18 }}>
-              <button
-                onClick={() => setConfirmOpen(false)}
-                style={{
-                  flex: 1, padding: '12px', borderRadius: 10,
-                  background: 'var(--bg-tertiary)', color: 'var(--text-primary)',
-                  border: '1px solid var(--border-color)', cursor: 'pointer',
-                  fontWeight: 600
-                }}
-              >Cancel</button>
-              <button
-                onClick={() => setConfirmStage(2)}
-                style={{
-                  flex: 1, padding: '12px', borderRadius: 10,
-                  background: '#3b82f6', color: '#fff', border: 'none',
-                  cursor: 'pointer', fontWeight: 700
-                }}
-              >Continue to Payment →</button>
-            </div>
-            </>)}
 
             {confirmStage === 2 && (<>
               {/* Step indicator: Pay & Screenshot › Upload */}
@@ -1224,7 +1099,7 @@ function PropChallengePage() {
               {/* Back → review · Next → upload proof */}
               <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                 <button
-                  onClick={() => setConfirmStage(1)}
+                  onClick={() => setConfirmOpen(false)}
                   style={{ flex: 1, padding: '11px', borderRadius: 10, background: 'var(--bg-tertiary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', cursor: 'pointer', fontWeight: 700, fontSize: 13 }}
                 >← Back</button>
                 <button

@@ -368,7 +368,12 @@ function DashboardPage() {
                     <span className="dh-card-was">one-time</span>
                   </div>
 
-                  <button className="dh-buy" onClick={() => navigate('/app/challenges')}>
+                  <button
+                    className="dh-buy"
+                    onClick={() => navigate('/app/challenges', {
+                      state: { buy: { challengeId: programme._id, tierIndex: i } },
+                    })}
+                  >
                     Buy Challenge <ArrowRight size={16} />
                   </button>
                 </div>
