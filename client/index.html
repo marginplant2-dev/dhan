@@ -79,7 +79,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2" />
 
     <!-- ── Theme color for browser chrome ──────────────────────────────── -->
-    <meta name="theme-color" content="#0A2130" />
+    <meta name="theme-color" content="#FFFFFF" />
     <!-- ── iOS PWA / standalone mode ─────────────────────────────────── -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -179,13 +179,13 @@
     <script>
       (function() {
         var saved = localStorage.getItem('dhanfunded-dark-mode');
-        var isDark = saved === null ? true : saved === 'true';
+        var isDark = saved === null ? false : saved === 'true';
         document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
       })();
     </script>
     <style>
       html, body {
-        background-color: #05131B;
+        background-color: #F5F8FC;
         margin: 0;
         padding: 0;
         min-height: 100%;

@@ -5,93 +5,75 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .landing-page {
-  /* surfaces — the logo's own canvas. --pf-bg is transparent on purpose: the
-     animated grid lives on this element, and a section painting an opaque
-     background over it would hide the texture. */
-  --pf-bg:        transparent;
-  --pf-bg-soft:   rgba(120,230,170,.035);
-  --pf-card:      #0A2130;
-  --pf-card-alt:  #0E2A3A;
-  --pf-border:    rgba(120,230,170,.13);
-  --pf-border-strong: rgba(120,230,170,.26);
+  /* surfaces */
+  --pf-bg:        #F5F8FC;
+  --pf-bg-soft:   #EEF3FA;
+  --pf-card:      #FFFFFF;
+  --pf-card-alt:  #F7FAFD;
+  --pf-border:    #E3EAF3;
+  --pf-border-strong: #CBD8E8;
 
   /* ink */
-  --pf-text:      #EAF5EF;
-  --pf-muted:     #9FB5AB;
-  --pf-faint:     #7E958B;
+  --pf-text:      #0F2557;
+  --pf-muted:     #5A6B85;
+  --pf-faint:     #8A99B0;
 
-  /* brand — the logo's green→cyan arrow. --pf-brand is the legible brand
-     colour for text and icons; --pf-gold / --pf-gold-2 are the bright gradient
-     fills (kept under the old names so every component picks them up). */
-  --pf-brand:     #35DC85;
-  --pf-brand-2:   #49E8F0;
-  --pf-gold:      #1FD87A;   /* logo green */
-  --pf-gold-2:    #22D9E8;   /* logo cyan  */
-  --pf-on-gold:   #04121C;
-  --pf-brand-soft:rgba(31,216,122,.14);
-  --pf-ghost:     rgba(170,245,205,.07);   /* the giant 01/02/03 numerals */
+  /* brand — navy primary with a blue second stop; --pf-gold / --pf-gold-2
+     keep their old names so every existing component inherits it. */
+  --pf-brand:     #14306E;
+  --pf-brand-2:   #2A5BC7;
+  --pf-gold:      #14306E;
+  --pf-gold-2:    #2A5BC7;
+  --pf-on-gold:   #FFFFFF;
+  --pf-brand-soft:#EAF0FB;
+  --pf-ghost:     #E8EEF7;   /* the giant 01/02/03 numerals */
 
-  /* accents — amber is the small gold wedge in the mark */
-  --pf-amber:     #E8B84B;
-  --pf-amber-soft:rgba(232,184,75,.14);
-  --pf-green:     #34D399;
-  --pf-green-soft:rgba(52,211,153,.14);
-  --pf-violet:    #A78BFA;
-  --pf-violet-soft:rgba(167,139,250,.14);
-  --pf-pink:      #F472B6;
-  --pf-pink-soft: rgba(244,114,182,.14);
+  /* accents — green is for things that go up */
+  --pf-amber:     #B4791A;
+  --pf-amber-soft:#FCF3E2;
+  --pf-green:     #16C784;
+  --pf-green-soft:#E6F7EF;
+  --pf-violet:    #6D4AD6;
+  --pf-violet-soft:#EFEAFC;
+  --pf-pink:      #C93B78;
+  --pf-pink-soft: #FBEAF2;
 
-  --pf-ink-panel: #030E15;
-  --pf-ink-panel-2: #0A2130;
+  --pf-ink-panel: #0F2557;
+  --pf-ink-panel-2: #1B3568;
 
-  --pf-shadow:    0 1px 2px rgba(0,0,0,.45), 0 10px 30px -12px rgba(0,0,0,.65);
-  --pf-shadow-lg: 0 2px 4px rgba(0,0,0,.45), 0 24px 60px -20px rgba(0,0,0,.8);
+  --pf-shadow:    0 1px 2px rgba(15,37,87,.05), 0 8px 24px -14px rgba(15,37,87,.18);
+  --pf-shadow-lg: 0 2px 6px rgba(15,37,87,.06), 0 24px 56px -24px rgba(15,37,87,.26);
 
-  --pf-r-lg: 26px;
+  --pf-r-lg: 20px;
 
   position: relative;
   isolation: isolate;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: radial-gradient(130% 85% at 50% -8%, #0A2635, #05131B 58%) fixed;
+  background: var(--pf-bg);
   color: var(--pf-text);
-  color-scheme: dark;
+  color-scheme: light;
   overflow-x: hidden;
 }
 
-/* ── The canvas: the artwork's dotted grid, drifting, plus two slow brand
-      lights. Both layers are fixed and sit behind everything, so they read as
-      one continuous background across every section and page. ───────────── */
-.landing-page::before,
-.landing-page::after {
+/* A whisper of the brand grid behind the page — enough to stop plain white
+   reading as unfinished, faint enough that nothing competes with the cards. */
+.landing-page::before {
   content: '';
   position: fixed;
   inset: -12%;
   z-index: -1;
   pointer-events: none;
-}
-.landing-page::before {
-  background-image:
-    radial-gradient(rgba(120,230,170,.30) 1px, transparent 1px),
-    linear-gradient(rgba(120,230,170,.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(120,230,170,.05) 1px, transparent 1px);
-  background-size: 26px 26px, 104px 104px, 104px 104px;
-  opacity: .5;
+  background-image: radial-gradient(rgba(20,48,110,.055) 1px, transparent 1px);
+  background-size: 26px 26px;
   animation: df-canvas-drift 70s linear infinite;
 }
-.landing-page::after {
-  background:
-    radial-gradient(42% 38% at 12% 88%, rgba(31,216,122,.16), transparent 70%),
-    radial-gradient(44% 40% at 88% 8%, rgba(34,217,232,.14), transparent 70%);
-  animation: df-canvas-breathe 16s ease-in-out infinite alternate;
-}
 
-@keyframes df-canvas-drift   { to { transform: translate3d(26px, 26px, 0); } }
-@keyframes df-canvas-breathe { to { transform: translate3d(2%, -2%, 0) scale(1.06); opacity: .75; } }
+@keyframes df-canvas-drift { to { transform: translate3d(26px, 26px, 0); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .landing-page::before, .landing-page::after { animation: none; }
+  .landing-page::before { animation: none; }
 }
 
 .landing-page * { scroll-margin-top: 96px; }
@@ -159,15 +141,15 @@
   white-space: nowrap; text-decoration: none;
 }
 .pf-btn:active { transform: translateY(1px); }
-/* The logo's green→cyan arrow gradient, with navy ink — same in both themes. */
+/* Navy into blue, white ink — the primary action everywhere. */
 .pf-btn--primary {
   background: linear-gradient(135deg, var(--pf-gold), var(--pf-gold-2));
   color: var(--pf-on-gold);
-  box-shadow: 0 8px 22px -10px rgba(31,216,122,.85);
+  box-shadow: 0 8px 22px -12px rgba(20,48,110,.75);
 }
 .pf-btn--primary:hover {
-  background: linear-gradient(135deg, #35DC85, #4AE6F2);
-  box-shadow: 0 14px 30px -10px rgba(34,217,232,.95);
+  background: linear-gradient(135deg, #1B3E8C, #3567D6);
+  box-shadow: 0 14px 30px -12px rgba(20,48,110,.85);
 }
 .pf-btn--ghost {
   background: var(--pf-card); color: var(--pf-text); border-color: var(--pf-border-strong);
@@ -309,19 +291,8 @@
    dark-on-light without a rule of its own. */
 /* ── Nav bar ─────────────────────────────────────────────────────────────────
    A floating white island rather than a full-width strip: narrower than the
-   page, rounded, with the hero's navy visible down both sides. ─────────────── */
+   page, rounded, with the page showing down both sides. ───────────────────── */
 .df-nav {
-  --pf-card:       #FFFFFF;
-  --pf-card-alt:   #F3F8F5;
-  --pf-border:     #DCE9E2;
-  --pf-border-strong: #C2D6CB;
-  --pf-text:       #08160F;
-  --pf-muted:      #4B6357;
-  --pf-faint:      #7D948A;
-  --pf-brand:      #0B8F62;
-  --pf-brand-2:    #0E7C8C;
-  --pf-brand-soft: #E2F8EE;
-  color: var(--pf-text);
   padding: 14px 16px 0;
   background: transparent;
 }
@@ -332,16 +303,16 @@
   margin-inline: auto;
   height: 68px;
   padding-inline: 18px 14px;
-  border-radius: 20px;
+  border-radius: 18px;
   background: var(--pf-card);
   border: 1px solid var(--pf-border);
-  box-shadow: 0 10px 30px -18px rgba(6,20,14,.55);
+  box-shadow: var(--pf-shadow);
   transition: box-shadow .25s ease, background .25s ease;
 }
 .df-navbar--scrolled {
-  background: color-mix(in srgb, var(--pf-card) 88%, transparent);
+  background: color-mix(in srgb, var(--pf-card) 90%, transparent);
   backdrop-filter: saturate(180%) blur(14px);
-  box-shadow: 0 16px 40px -20px rgba(6,20,14,.7);
+  box-shadow: var(--pf-shadow-lg);
 }
 @media (min-width: 1536px) { .df-navbar { max-width: 1280px; } }
 
@@ -354,33 +325,15 @@
   max-width: 1120px;
   margin: 10px auto 0;
   padding: 10px 20px 18px;
-  border-radius: 20px;
+  border-radius: 18px;
   background: var(--pf-card);
   border: 1px solid var(--pf-border);
-  box-shadow: 0 18px 44px -22px rgba(6,20,14,.7);
-}
-
-/* The hero keeps the logo's canvas tokens. */
-.df-hero {
-  --pf-card:       #0A2130;
-  --pf-card-alt:   #0E2A3A;
-  --pf-border:     rgba(120,230,170,.14);
-  --pf-border-strong: rgba(120,230,170,.30);
-  --pf-text:       #EAF5EF;
-  --pf-muted:      #9FB5AB;
-  --pf-faint:      #7E958B;
-  --pf-brand:      #35DC85;
-  --pf-brand-2:    #49E8F0;
-  --pf-brand-soft: rgba(31,216,122,.14);
-  --pf-ghost:      rgba(170,245,205,.07);
-  color: var(--pf-text);
+  box-shadow: var(--pf-shadow-lg);
 }
 
 .df-hero {
   position: relative;
   overflow: hidden;
-  /* transparent on purpose — the page canvas (grid + navy) runs straight
-     through, so the hero is not a separate dark block sitting on the page */
   background: transparent;
 }
 

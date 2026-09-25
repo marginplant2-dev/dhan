@@ -1,0 +1,337 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   The signed-in home page.
+
+   Navy ink on a very light page, one accent green for anything that goes up,
+   and the same card shape everywhere: white, hairline border, soft shadow.
+   Everything reads from the theme tokens, so a switch to dark carries it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.dh-home {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bg-primary);
+  padding-bottom: 40px;
+}
+
+.dh-wrap {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+@media (max-width: 640px) { .dh-wrap { padding-inline: 14px; } }
+
+/* ── Banner ──────────────────────────────────────────────────────────────── */
+.dh-banner {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(90% 140% at 12% 50%, rgba(42, 91, 199, .55), transparent 60%),
+    radial-gradient(80% 130% at 88% 50%, rgba(229, 72, 77, .30), transparent 58%),
+    linear-gradient(120deg, #0B1B45, #14306E 48%, #0B1B45);
+  color: #fff;
+  padding: 34px 0 38px;
+}
+
+/* the candles behind the copy: cheap, on-brand, and no image to ship */
+.dh-banner-candles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .5;
+}
+
+.dh-banner-inner {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 26px;
+}
+
+.dh-banner h1 {
+  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1.12;
+  margin: 0;
+}
+.dh-banner h1 em { font-style: normal; color: #16C784; }
+.dh-banner p {
+  margin: 12px 0 0;
+  font-size: .98rem;
+  color: rgba(255, 255, 255, .78);
+  max-width: 34rem;
+}
+
+.dh-banner-feats { display: flex; flex-wrap: wrap; gap: 10px; }
+.dh-feat {
+  display: flex; align-items: center; gap: 11px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, .14);
+  backdrop-filter: blur(6px);
+}
+.dh-feat-icon {
+  width: 34px; height: 34px; border-radius: 10px;
+  display: grid; place-items: center; flex: none; color: #fff;
+}
+.dh-feat b { display: block; font-size: .84rem; font-weight: 700; }
+.dh-feat span { display: block; font-size: .74rem; color: rgba(255, 255, 255, .7); }
+
+/* ── Index strip ─────────────────────────────────────────────────────────── */
+.dh-indices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: -26px;
+  position: relative;
+  z-index: 1;
+}
+
+.dh-index {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 24px -16px rgba(15, 37, 87, .45);
+}
+.dh-index-mark {
+  width: 38px; height: 38px; border-radius: 999px;
+  display: grid; place-items: center; flex: none;
+}
+.dh-index-body { min-width: 0; flex: 1; }
+.dh-index-name {
+  font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-muted);
+}
+.dh-index-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.dh-index-price {
+  font-size: 1.16rem; font-weight: 800; letter-spacing: -.02em;
+  color: var(--text-primary); font-variant-numeric: tabular-nums;
+}
+.dh-index-chg { font-size: .78rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.dh-index-spark { width: 86px; height: 34px; flex: none; }
+
+/* ── Section headings ────────────────────────────────────────────────────── */
+.dh-section { margin-top: 42px; }
+.dh-eyebrow {
+  font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 6px;
+}
+.dh-h2 {
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem); font-weight: 800; letter-spacing: -.025em;
+  color: var(--text-primary); margin: 0;
+}
+.dh-h2 em { font-style: normal; color: var(--accent-primary); }
+.dh-sub { margin: 6px 0 0; font-size: .9rem; color: var(--text-secondary); }
+.dh-section-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 18px; flex-wrap: wrap; margin-bottom: 20px;
+}
+
+/* ── Programme tabs ──────────────────────────────────────────────────────── */
+.dh-tabs {
+  display: inline-flex; padding: 4px; gap: 4px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+.dh-tab {
+  border: 0; cursor: pointer;
+  padding: 9px 18px; border-radius: 9px;
+  font-size: .8rem; font-weight: 700; letter-spacing: .02em;
+  background: transparent; color: var(--text-secondary);
+  transition: background .18s ease, color .18s ease;
+  white-space: nowrap;
+}
+.dh-tab[data-active="true"] {
+  background: var(--accent-primary);
+  color: #fff;
+}
+
+/* ── Challenge cards ─────────────────────────────────────────────────────── */
+.dh-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(292px, 1fr));
+  gap: 18px;
+}
+
+.dh-card {
+  position: relative;
+  display: flex; flex-direction: column;
+  padding: 26px 22px 22px;
+  border-radius: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.dh-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 18px 40px -24px rgba(15, 37, 87, .5);
+}
+.dh-card[data-popular="true"] { border-color: var(--accent-primary); }
+
+.dh-card-flag {
+  position: absolute; top: -11px; left: 20px;
+  padding: 4px 12px; border-radius: 999px;
+  background: var(--accent-primary); color: #fff;
+  font-size: .62rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+}
+
+.dh-card-size {
+  font-size: 1.3rem; font-weight: 800; letter-spacing: -.025em;
+  color: var(--text-primary);
+}
+.dh-card-note { margin: 4px 0 18px; font-size: .82rem; color: var(--text-secondary); }
+
+.dh-card-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-tertiary);
+  overflow: hidden;
+}
+.dh-card-stat { padding: 12px 10px; text-align: center; }
+.dh-card-stat + .dh-card-stat { border-left: 1px solid var(--border-color); }
+.dh-card-stat span {
+  display: block; font-size: .64rem; font-weight: 600; letter-spacing: .04em;
+  color: var(--text-muted); text-transform: uppercase;
+}
+.dh-card-stat b {
+  display: block; margin-top: 3px;
+  font-size: .98rem; font-weight: 800; color: var(--text-primary);
+}
+
+.dh-card-price {
+  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  margin: 18px 0 16px;
+}
+.dh-card-fee {
+  font-size: 1.42rem; font-weight: 800; letter-spacing: -.03em;
+  color: var(--text-primary); font-variant-numeric: tabular-nums;
+}
+.dh-card-was { font-size: .9rem; color: var(--text-muted); text-decoration: line-through; }
+.dh-card-off {
+  font-size: .68rem; font-weight: 800;
+  padding: 3px 9px; border-radius: 999px;
+  background: rgba(22, 199, 132, .14); color: #0E9F6E;
+}
+
+.dh-buy {
+  margin-top: auto;
+  width: 100%; height: 46px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid var(--accent-primary); border-radius: 11px;
+  background: var(--accent-primary); color: #fff;
+  font-size: .9rem; font-weight: 700; cursor: pointer;
+  transition: filter .18s ease, transform .18s ease;
+}
+.dh-buy:hover { filter: brightness(1.08); }
+.dh-buy:active { transform: translateY(1px); }
+.dh-card:not([data-popular="true"]) .dh-buy {
+  background: transparent; color: var(--accent-primary);
+}
+.dh-card:not([data-popular="true"]) .dh-buy:hover {
+  background: var(--accent-primary); color: #fff;
+}
+
+/* ── Steps strip ─────────────────────────────────────────────────────────── */
+.dh-steps {
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 26px; padding: 22px;
+  border-radius: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+.dh-steps-title { font-size: 1.04rem; font-weight: 800; color: var(--text-primary); }
+.dh-steps-list { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.dh-step { display: flex; align-items: center; gap: 10px; }
+.dh-step-n {
+  width: 26px; height: 26px; border-radius: 999px; flex: none;
+  display: grid; place-items: center;
+  background: var(--accent-primary); color: #fff;
+  font-size: .74rem; font-weight: 800;
+}
+.dh-step-n[data-done="true"] { background: var(--success); }
+.dh-step b { display: block; font-size: .84rem; font-weight: 700; color: var(--text-primary); }
+.dh-step span { display: block; font-size: .72rem; color: var(--text-muted); }
+.dh-step-arrow { color: var(--text-muted); }
+
+/* ── Accounts + demo ─────────────────────────────────────────────────────── */
+.dh-acc-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px;
+}
+.dh-acc {
+  padding: 18px; border-radius: 14px;
+  background: var(--card-bg); border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.dh-acc:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 14px 32px -22px rgba(15, 37, 87, .5);
+}
+.dh-acc-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.dh-acc-id { font-size: .78rem; font-weight: 700; color: var(--text-secondary); }
+.dh-pill {
+  font-size: .64rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 999px;
+}
+.dh-acc-bal {
+  margin-top: 10px; font-size: 1.3rem; font-weight: 800;
+  color: var(--text-primary); font-variant-numeric: tabular-nums;
+}
+.dh-acc-meta { margin-top: 3px; font-size: .76rem; color: var(--text-muted); }
+
+.dh-demo {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding: 16px 18px; border-radius: 14px;
+  background: var(--card-bg); border: 1px solid var(--border-color);
+}
+.dh-demo-main { display: flex; align-items: center; gap: 13px; flex: 1; min-width: 220px; }
+.dh-demo-icon {
+  width: 40px; height: 40px; border-radius: 12px; flex: none;
+  display: grid; place-items: center;
+  background: var(--gold-soft); color: var(--accent-primary);
+}
+.dh-demo-title { font-size: .95rem; font-weight: 700; color: var(--text-primary); }
+.dh-demo-free {
+  font-size: .6rem; font-weight: 800; letter-spacing: .08em;
+  padding: 2px 7px; border-radius: 999px;
+  background: rgba(22,199,132,.14); color: #0E9F6E; margin-left: 8px;
+}
+.dh-demo-sub { font-size: .76rem; color: var(--text-muted); margin-top: 2px; }
+.dh-demo-bal { text-align: right; }
+.dh-demo-bal b {
+  display: block; font-size: 1.1rem; font-weight: 800;
+  color: var(--text-primary); font-variant-numeric: tabular-nums;
+}
+.dh-demo-bal span { font-size: .7rem; color: var(--text-muted); }
+.dh-demo-actions { display: flex; gap: 8px; }
+.dh-btn-sm {
+  height: 38px; padding: 0 16px; border-radius: 10px;
+  font-size: .82rem; font-weight: 700; cursor: pointer;
+  border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary);
+}
+.dh-btn-sm--go { background: var(--accent-primary); border-color: var(--accent-primary); color: #fff; }
+.dh-btn-sm:disabled { opacity: .6; cursor: default; }
+
+.dh-empty {
+  padding: 34px 20px; text-align: center;
+  border-radius: 14px; border: 1px dashed var(--border-color);
+  background: var(--card-bg);
+}
+.dh-empty p { margin: 0 0 14px; font-size: .9rem; color: var(--text-secondary); }
+
+@media (prefers-reduced-motion: reduce) {
+  .dh-card, .dh-acc { transition: none; }
+}

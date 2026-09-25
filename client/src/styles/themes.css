@@ -1,8 +1,41 @@
-/* DhanFunded theme system — the logo's green→cyan arrow on its navy.
-   Buy/sell stay green/red: those are trading semantics, not brand colour. */
+/* DhanFunded theme system — navy ink on white, the logo's green kept for
+   gains and accents. Light is the default; dark stays available behind the
+   data-theme switch. Buy/sell keep their own colours: those are trading
+   semantics, not brand. */
 
-/* Default: dark (the brand's native look) */
+/* Default: light */
 :root,
+[data-theme="light"] {
+  --bg-primary: #F5F8FC;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #EEF3FA;
+  --bg-hover: #E4ECF7;
+  --border-color: #E3EAF3;
+  --card-bg: #FFFFFF;
+  --text-primary: #0F2557;
+  --text-secondary: #5A6B85;
+  --text-muted: #8A99B0;
+
+  /* brand — navy primary, blue second stop. Token names kept so every
+     component that already reads --gold picks the new brand up untouched. */
+  --gold: #14306E;
+  --gold-2: #2A5BC7;
+  --gold-soft: #EAF0FB;
+  --on-gold: #FFFFFF;
+  --gold-grad: linear-gradient(135deg, #14306E, #2A5BC7);
+
+  --accent-primary: #14306E;
+  --accent-secondary: #16C784;
+  --info: #2A5BC7;
+
+  --success: #16C784;
+  --danger: #E5484D;
+  --warning: #E9A23B;
+  --buy-color: #16C784;
+  --sell-color: #E5484D;
+}
+
+/* Dark, for anyone who switches */
 [data-theme="dark"] {
   --bg-primary: #05131B;
   --bg-secondary: #0A2130;
@@ -12,54 +45,23 @@
   --card-bg: #0A2130;
   --text-primary: #EAF5EF;
   --text-secondary: #9FB5AB;
-  --text-muted: #718A80;
+  --text-muted: #7E958B;
 
-  /* brand — logo green → logo cyan (token names kept so every component
-     that already reads --gold picks the new brand up untouched) */
-  --gold: #1FD87A;
-  --gold-2: #22D9E8;
-  --gold-soft: rgba(31, 216, 122, 0.14);
-  --on-gold: #04121C;
-  --gold-grad: linear-gradient(135deg, #1FD87A, #22D9E8);
+  --gold: #2A5BC7;
+  --gold-2: #16C784;
+  --gold-soft: rgba(42, 91, 199, 0.16);
+  --on-gold: #FFFFFF;
+  --gold-grad: linear-gradient(135deg, #2A5BC7, #16C784);
 
-  --accent-primary: #35DC85;
-  --accent-secondary: #C9CBD4;   /* the logo's silver */
-  --info: #49E8F0;
+  --accent-primary: #4C82F7;
+  --accent-secondary: #16C784;
+  --info: #4C82F7;
 
-  --success: #26a69a;
-  --danger: #ef5350;
-  --warning: #ff9800;
-  --buy-color: #26a69a;
-  --sell-color: #ef5350;
-}
-
-/* Light Mode */
-[data-theme="light"] {
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F7FBF9;
-  --bg-tertiary: #E9F2ED;
-  --bg-hover: #E2EFE8;
-  --border-color: #DCE9E2;
-  --card-bg: #FFFFFF;
-  --text-primary: #0A2130;
-  --text-secondary: #4B6357;
-  --text-muted: #7D948A;
-
-  --gold: #1FD87A;
-  --gold-2: #22D9E8;
-  --gold-soft: #E2F8EE;
-  --on-gold: #04121C;
-  --gold-grad: linear-gradient(135deg, #1FD87A, #22D9E8);
-
-  --accent-primary: #0B8F62;      /* legible brand green for text/links on white */
-  --accent-secondary: #566D60;
-  --info: #0E7C8C;
-
-  --success: #0f9d63;
-  --danger: #e04b4b;
-  --warning: #A97A11;
-  --buy-color: #0f9d63;
-  --sell-color: #e04b4b;
+  --success: #16C784;
+  --danger: #E5484D;
+  --warning: #E9A23B;
+  --buy-color: #16C784;
+  --sell-color: #E5484D;
 }
 
 /* Base styles */
