@@ -149,6 +149,32 @@ function FundManagement() {
     return 'challenge-buys';   // /admin/funds lands on the buys queue
   };
   const activeTab = getActiveTab();
+
+  // The bank / UPI / crypto screens were only reachable by typing the URL —
+  // the sidebar has a single Funds entry, so an admin had no way to open the
+  // UPI and QR the checkout reads. Same button pattern as the AI Options tabs.
+  const fundTabs = (
+    <div className="admin-tabs" style={{ display: 'flex', gap: 8, marginBottom: 18, flexWrap: 'wrap' }}>
+      {[
+        ['challenge-buys', 'Challenge Buys', ''],
+        ['challenge-resets', 'Resets', '/challenge-resets'],
+        ['withdrawal-requests', 'Withdrawals', '/withdrawals'],
+        ['transaction-history', 'History', '/history'],
+        ['bank-accounts', 'Bank Accounts', '/banks'],
+        ['upi-management', 'UPI & QR', '/upi'],
+        ['crypto-wallets', 'Crypto', '/crypto'],
+      ].map(([key, label, suffix]) => (
+        <button
+          key={key}
+          type="button"
+          className={`admin-btn ${activeTab === key ? 'admin-btn-primary' : ''}`}
+          onClick={() => navigate(`/admin/funds${suffix}`)}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  );
   
   // Get current columns based on active tab
   const columns = activeTab === 'withdrawal-requests' ? withdrawalColumns : depositColumns;
@@ -627,6 +653,8 @@ function FundManagement() {
         <div className="admin-page-header">
           <h2>Bank Accounts</h2>
         </div>
+
+          {fundTabs}
         
         {/* Add Bank Account Form */}
         <div className="admin-form-card">
@@ -753,6 +781,8 @@ function FundManagement() {
         <div className="admin-page-header">
           <h2>UPI Management</h2>
         </div>
+
+          {fundTabs}
         
         {/* Add UPI Form */}
         <div className="admin-form-card">
@@ -871,6 +901,8 @@ function FundManagement() {
         <div className="admin-page-header">
           <h2>Crypto Wallets</h2>
         </div>
+
+          {fundTabs}
         
         {/* Add Crypto Wallet Form */}
         <div className="admin-form-card">
@@ -1244,6 +1276,8 @@ function FundManagement() {
       <div className="admin-page-header">
         <h2>{activeTab === 'deposit-requests' ? 'Deposit Requests' : activeTab === 'withdrawal-requests' ? 'Withdrawal Requests' : 'Transaction History'}</h2>
       </div>
+
+        {fundTabs}
 
       {(activeTab === 'deposit-requests' || activeTab === 'withdrawal-requests') && (
         <div className="fund-stats-row" aria-busy={fundStatsLoading}>
@@ -2071,6 +2105,8 @@ function ChallengeBuysPanel({ apiUrl }) {
         <h2>Challenge Buy Requests</h2>
       </div>
 
+        {fundTabs}
+
       {/* Summary cards */}
       <div className="fund-stats-row" style={{ marginBottom: 18 }}>
         <div className="fund-stat-card">
@@ -2383,6 +2419,8 @@ function ChallengeResetsPanel({ apiUrl }) {
       <div className="admin-page-header">
         <h2>🔄 Challenge Reset / Restart Requests</h2>
       </div>
+
+        {fundTabs}
 
       {/* Clear context banner so the admin never confuses these with buys. */}
       <div style={{
