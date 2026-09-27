@@ -82,6 +82,14 @@
      the previous pattern where every page had its own scroll wrapper and
      had to remember to leave ~90px at the bottom for the nav. */
   .app.user-layout-shell .main-content {
+    /* .main-content is display:flex. As a flex item the page root was sized
+       by the flex formatting context, not by its content, so it stayed at the
+       container height while its sections overflowed it — and a scroll
+       container does not place its padding-bottom below overflow. That is why
+       the last card sat under the fixed nav however much space was reserved.
+       One page shows at a time on a phone, so a block container is enough and
+       lets the root grow to its content. */
+    display: block;
     overflow-y: auto !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch;

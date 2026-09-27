@@ -853,6 +853,31 @@ function UserLayout({ user, onLogout }) {
 
   // Refs
   const lastGoodWalletRef = useRef(null);
+
+  // --mobi-footer-h reserves room at the foot of the scroll area so the last
+  // card is not left under the fixed bottom nav. It was a hand-kept 90px, and
+  // a guess that has to track a real rendered element drifts the moment the
+  // nav changes — which is why the last card was ending up behind it. Measure
+  // the footer instead, so the reservation is always exactly right.
+  const mobiFooterRef = useRef(null);
+  const shellRef = useRef(null);
+  useEffect(() => {
+    const footer = mobiFooterRef.current;
+    const shell = shellRef.current;
+    if (!footer || !shell || typeof ResizeObserver === 'undefined') return;
+    const apply = () => {
+      const h = footer.offsetHeight;
+      // 0 while the footer is display:none on desktop — leave the stylesheet's
+      // own value alone there rather than collapsing the padding to nothing.
+      if (h > 0) shell.style.setProperty('--mobi-footer-h', `${Math.ceil(h) + 12}px`);
+      else shell.style.removeProperty('--mobi-footer-h');
+    };
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(footer);
+    window.addEventListener('orientationchange', apply);
+    return () => { ro.disconnect(); window.removeEventListener('orientationchange', apply); };
+  }, []);
   const lastGoodMarginRef = useRef(0); // Track last known good margin to prevent flickering
   const positionsRef = useRef([]);
   const positionsEmptyMarginClearTimerRef = useRef(null);
@@ -2511,7 +2536,7 @@ function UserLayout({ user, onLogout }) {
   ];
 
   return (
-    <div className={`app user-layout-shell ${isDark ? 'dark' : 'light'}`}>
+    <div ref={shellRef} className={`app user-layout-shell ${isDark ? 'dark' : 'light'}`}>
       {/* Forces Google / phone-less sign-ups to add their mobile number before
           using the app — so the admin always has a contact number. */}
       <CompleteProfileModal user={user} apiUrl={API_URL} />
@@ -3127,7 +3152,7 @@ function UserLayout({ user, onLogout }) {
         </div>
       </footer>
 
-      <div className="mobi-fixed-footer">
+      <div className="mobi-fixed-footer" ref={mobiFooterRef}>
         <nav className="mobile-bottom-nav mobi-dhanfunded-bnav" aria-label="Main">
           <button
             type="button"
