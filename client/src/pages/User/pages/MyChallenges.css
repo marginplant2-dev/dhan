@@ -11,6 +11,8 @@
   --mc-line: #E6ECF5;
   --mc-surface: #F4F7FB;
 
+  flex: 1;
+  min-width: 0;
   width: 100%;
   height: 100%;
   overflow-y: auto;
@@ -20,8 +22,6 @@
 
 .mc-inner {
   padding: 20px 24px 56px;
-  max-width: 1240px;
-  margin: 0 auto;
 }
 
 /* ── Header ─────────────────────────────────────────────────────────── */
@@ -125,8 +125,14 @@
   cursor: pointer;
   text-align: left;
   white-space: nowrap;
-  flex: 0 0 auto;
+  flex: 1 1 0;
+  min-width: 0;
   transition: background 0.18s;
+}
+
+.mc-pill > span:nth-child(2) {
+  min-width: 0;
+  flex: 1;
 }
 
 .mc-pill:hover { background: #F2F6FC; }
@@ -137,6 +143,9 @@
 }
 
 .mc-pill-label {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 12.5px;
   font-weight: 700;
   color: var(--mc-ink);
@@ -144,6 +153,9 @@
 }
 
 .mc-pill-sub {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 10.5px;
   color: var(--mc-muted);
   line-height: 1.3;
@@ -151,6 +163,7 @@
 }
 
 .mc-pill-count {
+  flex: 0 0 auto;
   min-width: 20px;
   height: 20px;
   padding: 0 6px;
@@ -390,7 +403,7 @@
   .mc-btn-primary { padding: 8px 12px; font-size: 11.5px; }
 
   .mc-filters { padding: 6px; gap: 2px; }
-  .mc-pill { padding: 7px 9px; gap: 8px; }
+  .mc-pill { padding: 7px 9px; gap: 8px; flex: 0 0 auto; }
   .mc-pill-sub { display: none; }
 
   .mc-stats { grid-template-columns: repeat(2, 1fr); gap: 8px; }
