@@ -1,6 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
+import {
+  LuTrophy, LuLayoutGrid, LuClock, LuPlay, LuCrown, LuCircleCheck, LuCircleX,
+  LuSearch, LuArrowUpDown, LuChevronDown, LuList, LuShoppingCart, LuInfo, LuPlus,
+  LuCalendarX, LuBan, LuRotateCw, LuWallet,
+} from 'react-icons/lu';
 import socketService from '../../../services/socketService';
+import './MyChallenges.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
@@ -13,14 +19,53 @@ function getAuthHeaders() {
 }
 
 const statusConfig = {
-  PENDING:   { color: '#f59e0b', bg: '#f59e0b20', label: 'Awaiting Approval', icon: '⏳' },
-  ACTIVE:    { color: '#3b82f6', bg: '#3b82f620', label: 'Active',  icon: '🔵' },
-  PASSED:    { color: '#10b981', bg: '#10b98120', label: 'Passed',  icon: '✅' },
-  FAILED:    { color: '#ef4444', bg: '#ef444420', label: 'Failed',  icon: '❌' },
-  FUNDED:    { color: '#f59e0b', bg: '#f59e0b20', label: 'Funded',  icon: '💰' },
-  EXPIRED:   { color: '#6b7280', bg: '#6b728020', label: 'Expired', icon: '⏰' },
-  CANCELLED: { color: '#ef4444', bg: '#ef444420', label: 'Payment Rejected', icon: '🚫' }
+  PENDING:   { color: '#D97706', bg: '#FFF7E8', label: 'Awaiting Approval', Icon: LuClock },
+  ACTIVE:    { color: '#2563EB', bg: '#EEF4FF', label: 'Active',            Icon: LuPlay },
+  PASSED:    { color: '#059669', bg: '#E9F9F1', label: 'Passed',            Icon: LuCircleCheck },
+  FAILED:    { color: '#DC2626', bg: '#FDEDED', label: 'Failed',            Icon: LuCircleX },
+  FUNDED:    { color: '#7C3AED', bg: '#F4EDFE', label: 'Funded',            Icon: LuCrown },
+  EXPIRED:   { color: '#6B7280', bg: '#F1F3F7', label: 'Expired',           Icon: LuCalendarX },
+  CANCELLED: { color: '#DC2626', bg: '#FDEDED', label: 'Payment Rejected',  Icon: LuBan },
 };
+
+// The filter rail and the stat cards are the same six buckets, so they read
+// from one table — a count that disagrees between the two rows is the kind of
+// bug that only shows up once a user actually owns accounts.
+const BUCKETS = [
+  { key: 'ALL',     icon: LuLayoutGrid,  label: 'All Challenges',    short: 'Total Challenges',   sub: 'View all your challenges', statSub: 'All challenges',   tint: '#EEF4FF', fg: '#2563EB' },
+  { key: 'PENDING', icon: LuClock,       label: 'Awaiting Approval', short: 'Awaiting Approval',  sub: 'Pending verification',    statSub: 'Pending verification', tint: '#FFF7E8', fg: '#D97706' },
+  { key: 'ACTIVE',  icon: LuPlay,        label: 'Active',            short: 'Active Challenges',  sub: 'Currently trading',       statSub: 'In progress',      tint: '#E9F9F1', fg: '#059669' },
+  { key: 'FUNDED',  icon: LuCrown,       label: 'Funded',            short: 'Funded Accounts',    sub: 'Live funded accounts',    statSub: 'Live accounts',    tint: '#F4EDFE', fg: '#7C3AED' },
+  { key: 'PASSED',  icon: LuCircleCheck, label: 'Passed',            short: 'Passed Challenges',  sub: 'Successfully completed',  statSub: null,               tint: '#E9F9F1', fg: '#059669' },
+  { key: 'FAILED',  icon: LuCircleX,     label: 'Failed',            short: 'Failed Challenges',  sub: 'Not qualified',           statSub: 'Try again',        tint: '#FDEDED', fg: '#DC2626' },
+];
+
+// Flat line art rather than a raster: it stays crisp at any zoom and costs no
+// request. Colours are the page's own, so it cannot drift from the theme.
+function EmptyArt() {
+  return (
+    <svg width="188" height="132" viewBox="0 0 188 132" fill="none" role="presentation">
+      <path d="M14 96c14-9 22-26 15-40C22 42 30 26 48 22" stroke="#C7D7F0" strokeWidth="2" strokeLinecap="round" strokeDasharray="5 7" />
+      <path d="M118 30c22 2 38 14 46 30" stroke="#C7D7F0" strokeWidth="2" strokeLinecap="round" strokeDasharray="5 7" />
+      <rect x="62" y="24" width="62" height="84" rx="9" fill="#DCE8FB" />
+      <rect x="68" y="32" width="50" height="72" rx="6" fill="#fff" />
+      <rect x="80" y="16" width="26" height="15" rx="5" fill="#9DB9E8" />
+      <rect x="76" y="46" width="8" height="8" rx="2.5" fill="#2E5FB5" />
+      <rect x="88" y="48" width="22" height="4" rx="2" fill="#D3DEEE" />
+      <rect x="76" y="62" width="8" height="8" rx="2.5" fill="#2E5FB5" />
+      <rect x="88" y="64" width="22" height="4" rx="2" fill="#D3DEEE" />
+      <rect x="76" y="78" width="8" height="8" rx="2.5" fill="#9DB9E8" />
+      <rect x="88" y="80" width="16" height="4" rx="2" fill="#E4EAF3" />
+      <path d="M133 34l22 12-22 12-4-11z" fill="#3E72C9" />
+      <path d="M133 34l-4 13 9 3z" fill="#2E5FB5" />
+      <circle cx="46" cy="60" r="5.5" stroke="#BBD0EE" strokeWidth="2" />
+      <path d="M33 44h7M36.5 40.5v7" stroke="#F2A93B" strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M146 78h7M149.5 74.5v7" stroke="#F2A93B" strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M126 20l3 3-3 3-3-3z" fill="#E86A6A" />
+      <circle cx="152" cy="60" r="3" fill="#BBD0EE" />
+    </svg>
+  );
+}
 
 function formatINR(n) {
   const v = Number(n) || 0;
@@ -33,6 +78,9 @@ function MyChallengesPage() {
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('ALL');
+  const [query, setQuery] = useState('');
+  const [sortBy, setSortBy] = useState('latest');
+  const [view, setView] = useState('grid');
   const pollingRef = useRef(null);
 
   useEffect(() => {
@@ -73,7 +121,15 @@ function MyChallengesPage() {
     if (showSpinner) setLoading(false);
   };
 
-  const filtered = filter === 'ALL' ? accounts : accounts.filter(a => a.status === filter);
+  const q = query.trim().toLowerCase();
+  const filtered = accounts
+    .filter(a => filter === 'ALL' || a.status === filter)
+    .filter(a => !q || `${a.accountId || ''} ${a.challengeId?.name || ''}`.toLowerCase().includes(q))
+    .sort((a, b) => {
+      const ta = new Date(a.createdAt || 0).getTime();
+      const tb = new Date(b.createdAt || 0).getTime();
+      return sortBy === 'oldest' ? ta - tb : tb - ta;
+    });
 
   const statCounts = {
     ALL: accounts.length,
@@ -104,127 +160,130 @@ function MyChallengesPage() {
   }
 
   return (
-    <div className="pf-my-challenges-root" style={{ width: '100%', height: '100%', overflowY: 'auto', overflowX: 'hidden' }}>
-      <style>{`
-        @media (max-width: 768px) {
-          .pf-my-challenges-root { background: var(--bg-primary); }
-          .pf-my-challenges-root .pf-mc-inner { padding: 12px 12px 16px !important; }
+    <div className="mc-root">
+    <div className="mc-inner">
 
-          /* Header — title + "Buy New Challenge" must stay on one line.
-             Shrink both so the button sits beside the heading instead of
-             wrapping underneath. */
-          .pf-my-challenges-root .pf-mc-header {
-            flex-wrap: nowrap !important;
-            margin-bottom: 10px !important;
-            gap: 8px !important;
-          }
-          .pf-my-challenges-root .pf-mc-header h2 {
-            font-size: 16px !important;
-            white-space: nowrap;
-          }
-          .pf-my-challenges-root .pf-mc-header > button {
-            padding: 6px 12px !important;
-            font-size: 11px !important;
-            white-space: nowrap;
-            flex-shrink: 0;
-          }
-
-          /* Filter pills — all 5 on one horizontally-scrollable line. */
-          .pf-my-challenges-root .pf-mc-filters {
-            flex-wrap: nowrap !important;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            gap: 6px !important;
-            margin-bottom: 12px !important;
-            padding-bottom: 2px;
-          }
-          .pf-my-challenges-root .pf-mc-filters::-webkit-scrollbar {
-            display: none;
-          }
-          .pf-my-challenges-root .pf-mc-filters button {
-            padding: 5px 10px !important;
-            font-size: 11px !important;
-            white-space: nowrap;
-            flex-shrink: 0;
-          }
-
-          /* Challenge card — tighter padding, smaller stat typography so
-             the whole card takes less vertical space. */
-          .pf-my-challenges-root .pf-mc-list > div {
-            padding: 12px 14px !important;
-            border-radius: 12px !important;
-          }
-          .pf-my-challenges-root .pf-mc-list > div > div:first-child {
-            margin-bottom: 8px !important;
-          }
-          /* Stats grid: pack 2 per row with smaller values. */
-          .pf-my-challenges-root .pf-mc-list > div > div:nth-child(2) {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 8px !important;
-            margin-bottom: 10px !important;
-          }
-          .pf-my-challenges-root .pf-mc-list > div > div:nth-child(2) > div > div:first-child {
-            font-size: 10px !important;
-          }
-          .pf-my-challenges-root .pf-mc-list > div > div:nth-child(2) > div > div:last-child {
-            font-size: 13px !important;
-          }
-          .pf-my-challenges-root .pf-mc-list > div button {
-            padding: 8px 16px !important;
-            font-size: 12px !important;
-            margin-top: 6px !important;
-          }
-        }
-      `}</style>
-    <div className="pf-mc-inner" style={{ padding: '24px 28px 60px' }}>
-      {/* Header */}
-      <div className="pf-mc-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
-        <h2 style={{ color: 'var(--text-primary)', margin: 0, fontSize: '20px', fontWeight: '700' }}>📊 My Challenges</h2>
-        <button
-          onClick={() => navigate('/app/challenges')}
-          style={{
-            padding: '8px 20px', borderRadius: '8px', border: 'none', cursor: 'pointer',
-            background: 'var(--gold-grad)', color: 'var(--on-gold)', fontWeight: '600', fontSize: '13px'
-          }}
-        >
-          + Buy New Challenge
+      <div className="mc-head">
+        <div className="mc-head-left">
+          <span className="mc-chip mc-head-chip"><LuTrophy size={19} /></span>
+          <div>
+            <h1>My Challenges</h1>
+            <p>Track, manage and continue your trading challenges</p>
+          </div>
+        </div>
+        <button className="mc-btn-primary" onClick={() => navigate('/app/challenges')}>
+          <LuPlus size={15} /> Buy New Challenge
         </button>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="pf-mc-filters" style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
-        {['ALL', 'PENDING', 'ACTIVE', 'FUNDED', 'PASSED', 'FAILED'].map(f => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            style={{
-              padding: '6px 16px', borderRadius: '20px', border: 'none', cursor: 'pointer',
-              fontSize: '12px', fontWeight: '600',
-              background: filter === f ? (f === 'ALL' ? 'var(--gold)' : statusConfig[f]?.color || 'var(--gold)') : 'var(--bg-secondary)',
-              color: filter === f ? '#fff' : 'var(--text-secondary)',
-            }}
-          >
-            {f === 'ALL' ? 'All' : statusConfig[f]?.label || f} ({statCounts[f] || 0})
-          </button>
-        ))}
+      <div className="mc-card mc-filters">
+        {BUCKETS.map(b => {
+          const Icon = b.icon;
+          const active = filter === b.key;
+          return (
+            <button
+              key={b.key}
+              className={`mc-pill${active ? ' is-active' : ''}`}
+              onClick={() => setFilter(b.key)}
+            >
+              <span className="mc-chip mc-pill-chip" style={{ background: b.tint, color: b.fg }}>
+                <Icon size={15} />
+              </span>
+              <span>
+                <span className="mc-pill-label">{b.label}</span>
+                <span className="mc-pill-sub">{b.sub}</span>
+              </span>
+              <span className="mc-pill-count">{statCounts[b.key] || 0}</span>
+            </button>
+          );
+        })}
       </div>
 
-      {/* Accounts List */}
+      <div className="mc-stats">
+        {BUCKETS.map(b => {
+          const Icon = b.icon;
+          const count = statCounts[b.key] || 0;
+          const sub = b.key === 'PASSED'
+            ? `Success rate: ${accounts.length ? Math.round((count / accounts.length) * 100) : 0}%`
+            : b.statSub;
+          return (
+            <div key={b.key} className="mc-stat" style={{ background: b.tint, borderColor: `${b.fg}1F` }}>
+              <span className="mc-chip mc-stat-chip" style={{ background: '#ffffffcc', color: b.fg }}>
+                <Icon size={15} />
+              </span>
+              <div style={{ minWidth: 0 }}>
+                <div className="mc-stat-label" style={{ color: b.fg }}>{b.short}</div>
+                <div className="mc-stat-value">{count}</div>
+                <div className="mc-stat-sub">{sub}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mc-toolbar">
+        <div className="mc-search">
+          <LuSearch size={15} />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Search your challenges..."
+            aria-label="Search your challenges"
+          />
+        </div>
+        <div className="mc-toolbar-right">
+          <span className="mc-sort-label">Sort by:</span>
+          <div className="mc-sort">
+            <LuArrowUpDown size={14} />
+            <select value={sortBy} onChange={e => setSortBy(e.target.value)} aria-label="Sort challenges">
+              <option value="latest">Latest First</option>
+              <option value="oldest">Oldest First</option>
+            </select>
+            <LuChevronDown size={15} />
+          </div>
+          <button
+            className={`mc-view${view === 'grid' ? ' is-active' : ''}`}
+            onClick={() => setView('grid')}
+            aria-label="Grid view"
+          >
+            <LuLayoutGrid size={16} />
+          </button>
+          <button
+            className={`mc-view${view === 'list' ? ' is-active' : ''}`}
+            onClick={() => setView('list')}
+            aria-label="List view"
+          >
+            <LuList size={16} />
+          </button>
+        </div>
+      </div>
+
       {filtered.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-secondary)' }}>
-          <div style={{ fontSize: '48px', marginBottom: '16px' }}>📋</div>
-          <p>{accounts.length === 0 ? 'You haven\'t purchased any challenges yet.' : 'No accounts match this filter.'}</p>
+        <div className="mc-card mc-empty">
+          <EmptyArt />
+          <h3>
+            {accounts.length === 0
+              ? "You haven't purchased any challenges yet."
+              : 'No challenges match this filter.'}
+          </h3>
+          <p>
+            {accounts.length === 0
+              ? 'Start your trading journey today and prove your skills with our funded challenges.'
+              : 'Try a different status, or clear the search box.'}
+          </p>
           {accounts.length === 0 && (
-            <button
-              onClick={() => navigate('/app/challenges')}
-              style={{ marginTop: '12px', padding: '10px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: 'var(--gold)', color: 'var(--on-gold)', fontWeight: '600' }}
-            >
-              Browse Challenges
-            </button>
+            <div className="mc-empty-actions">
+              <button className="mc-btn-primary" onClick={() => navigate('/app/challenges')}>
+                <LuShoppingCart size={15} /> Browse Challenges
+              </button>
+              <button className="mc-btn-ghost" onClick={() => navigate('/how-it-works')}>
+                <LuInfo size={15} /> Learn More
+              </button>
+            </div>
           )}
         </div>
       ) : (
-        <div className="pf-mc-list" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div className={`mc-list${view === 'grid' ? ' is-grid' : ''}`} style={{ gap: '12px' }}>
           {filtered.map(acc => {
             const ch = acc.challengeId || {};
             const sc = statusConfig[acc.status] || statusConfig.ACTIVE;
@@ -301,11 +360,11 @@ function MyChallengesPage() {
                         }}
                         style={{ padding: '5px 14px', borderRadius: 999, fontSize: '12px', fontWeight: 800, cursor: 'pointer' }}
                       >
-                        🔄 Reset
+                        <LuRotateCw size={13} style={{ verticalAlign: '-2px' }} /> Reset
                       </button>
                     )}
-                    <span style={{ padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: '600', background: sc.bg, color: sc.color }}>
-                      {sc.icon} {sc.label}
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: '600', background: sc.bg, color: sc.color }}>
+                      <sc.Icon size={13} /> {sc.label}
                     </span>
                   </div>
                 </div>
@@ -337,7 +396,9 @@ function MyChallengesPage() {
                   <div>
                     <div style={{ fontSize: '10px', color: 'var(--text-secondary)', marginBottom: '2px' }}>Phase</div>
                     <div style={{ fontSize: '15px', fontWeight: '700', color: 'var(--text-primary)' }}>
-                      {acc.accountType === 'FUNDED' ? '💰 Funded' : `${acc.currentPhase}/${acc.totalPhases}`}
+                      {acc.accountType === 'FUNDED'
+                        ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><LuWallet size={14} /> Funded</span>
+                        : `${acc.currentPhase}/${acc.totalPhases}`}
                     </div>
                   </div>
                   <div>
@@ -425,7 +486,7 @@ function MyChallengesPage() {
                       background: 'var(--gold-grad)',
                     }}
                   >
-                    📈 Start Practicing
+                    Start Practicing
                   </button>
                 )}
               </div>
