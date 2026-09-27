@@ -1,0 +1,336 @@
+/* Referral Partner — built to the supplied reference.
+   Same tokens and chip/card language as MyChallenges.css and
+   PassedChallenges.css, so the three pages read as one product. */
+
+.rp-root {
+  --rp-navy: #123C87;
+  --rp-navy-deep: #0C2C66;
+  --rp-ink: #16233A;
+  --rp-muted: #6B7A94;
+  --rp-line: #E6ECF5;
+  --rp-surface: #F4F7FB;
+
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--rp-surface);
+}
+
+.rp-wrap { padding: 14px 24px 56px; }
+
+.rp-crumb { font-size: 12px; color: var(--rp-muted); margin-bottom: 10px; }
+.rp-crumb b { color: var(--rp-ink); font-weight: 600; }
+
+.rp-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border-radius: 10px;
+}
+
+.rp-card {
+  background: #fff;
+  border: 1px solid var(--rp-line);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(20, 40, 80, 0.04);
+}
+
+/* ── Hero banner ────────────────────────────────────────────────────
+   The banner is a gradient plus inline SVG rather than a pair of exported
+   images: it stays sharp on every DPI, re-flows instead of letterboxing, and
+   adds no request. Desktop and mobile get different art and proportions, so
+   they still read as two designs. */
+.rp-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr) 250px;
+  align-items: center;
+  gap: 18px;
+  padding: 26px 28px;
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 14px;
+  background:
+    radial-gradient(120% 150% at 88% 15%, #7B3FE4 0%, rgba(123, 63, 228, 0) 55%),
+    radial-gradient(95% 130% at 4% 92%, #1A7BD4 0%, rgba(26, 123, 212, 0) 60%),
+    linear-gradient(118deg, #0E3A86 0%, #14479E 46%, #1C57BE 100%);
+  color: #fff;
+}
+
+/* A soft sheen so the flat gradient does not read as a plain block. */
+.rp-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(70% 120% at 50% -20%, rgba(255, 255, 255, 0.18), transparent 60%);
+  pointer-events: none;
+}
+
+.rp-hero-copy { position: relative; z-index: 1; min-width: 0; }
+
+.rp-eyebrow {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.rp-hero h1 {
+  margin: 9px 0 0;
+  font-size: 33px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  line-height: 1.12;
+}
+
+.rp-hero h1 span { color: #6FB6FF; }
+
+.rp-hero p {
+  margin: 11px 0 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.86);
+  max-width: 430px;
+}
+
+.rp-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 11px 22px;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--rp-navy);
+  font-size: 13.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+
+.rp-hero-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18); }
+
+.rp-hero-note { margin-top: 10px; font-size: 11.5px; color: rgba(255, 255, 255, 0.66); }
+
+.rp-hero-art {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+.rp-hero-art svg { width: 100%; height: auto; max-width: 340px; }
+
+/* The glass panel of four selling points */
+.rp-hero-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  padding: 15px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 10px 30px rgba(6, 26, 66, 0.22);
+}
+
+.rp-hero-item { display: flex; align-items: center; gap: 10px; }
+.rp-hero-item-chip { width: 30px; height: 30px; }
+.rp-hero-item-t { font-size: 12px; font-weight: 800; color: var(--rp-ink); line-height: 1.25; }
+.rp-hero-item-s { font-size: 10.5px; color: var(--rp-muted); margin-top: 1px; line-height: 1.3; }
+
+/* ── How it works ───────────────────────────────────────────────────── */
+.rp-how { padding: 16px 18px 18px; margin-bottom: 14px; }
+.rp-how-t { font-size: 16px; font-weight: 800; color: var(--rp-ink); }
+.rp-how-s { font-size: 12px; color: var(--rp-muted); margin-top: 2px; }
+
+.rp-how-steps {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.rp-how-step { display: flex; align-items: center; gap: 11px; min-width: 0; }
+
+.rp-how-n {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rp-how-chip { width: 38px; height: 38px; border-radius: 12px; }
+.rp-how-step-t { font-size: 13px; font-weight: 800; color: var(--rp-ink); line-height: 1.3; }
+.rp-how-step-s { font-size: 11.5px; color: var(--rp-muted); margin-top: 2px; line-height: 1.4; }
+.rp-how-arrow { color: #C3D2E8; display: flex; align-items: center; justify-content: center; }
+
+/* ── Form + benefits ────────────────────────────────────────────────── */
+.rp-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 14px;
+  align-items: start;
+}
+
+.rp-form-card { padding: 18px 20px 20px; }
+
+.rp-form-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+.rp-form-chip { width: 36px; height: 36px; background: #EAF2FE; color: var(--rp-navy); }
+.rp-form-t { font-size: 16px; font-weight: 800; color: var(--rp-ink); line-height: 1.25; }
+.rp-form-s { font-size: 12px; color: var(--rp-muted); margin-top: 2px; }
+
+.rp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+
+.rp-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--rp-ink);
+  margin-bottom: 6px;
+}
+
+.rp-field label i { color: #E04343; font-style: normal; }
+
+.rp-input { position: relative; display: flex; align-items: center; }
+
+.rp-input > svg {
+  position: absolute;
+  left: 12px;
+  color: var(--rp-muted);
+  pointer-events: none;
+}
+
+.rp-input input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border: 1px solid var(--rp-line);
+  border-radius: 10px;
+  background: #fff;
+  font-size: 12.5px;
+  color: var(--rp-ink);
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+.rp-input input::placeholder { color: #9AA8BD; }
+
+.rp-input input:focus {
+  border-color: var(--rp-navy);
+  box-shadow: 0 0 0 3px rgba(18, 60, 135, 0.1);
+}
+
+.rp-submit {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: var(--rp-navy);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.18s, transform 0.18s;
+}
+
+.rp-submit:hover:not(:disabled) { background: var(--rp-navy-deep); transform: translateY(-1px); }
+.rp-submit:disabled { opacity: 0.62; cursor: default; }
+
+.rp-foot {
+  margin-top: 11px;
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--rp-muted);
+  line-height: 1.5;
+}
+
+.rp-err {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #FDEDED;
+  border: 1px solid #F6CFCF;
+  color: #B42318;
+  font-size: 12px;
+}
+
+/* Benefits panel */
+.rp-benefits { position: relative; padding: 16px 18px 18px; overflow: hidden; }
+
+.rp-benefits-bg {
+  position: absolute;
+  right: -10px;
+  bottom: -10px;
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+.rp-benefits-head { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+.rp-benefits-chip { width: 32px; height: 32px; background: #E9F9F1; color: #059669; }
+.rp-benefits-t { font-size: 15px; font-weight: 800; color: var(--rp-ink); }
+
+.rp-benefit { position: relative; display: flex; gap: 11px; margin-bottom: 14px; }
+.rp-benefit:last-child { margin-bottom: 0; }
+.rp-benefit-chip { width: 32px; height: 32px; }
+.rp-benefit-t { font-size: 12.5px; font-weight: 800; color: var(--rp-ink); line-height: 1.3; }
+.rp-benefit-s { font-size: 11.5px; color: var(--rp-muted); margin-top: 2px; line-height: 1.4; }
+
+/* ── Responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 1220px) {
+  .rp-hero { grid-template-columns: minmax(0, 1fr) 250px; }
+  .rp-hero-art { display: none; }
+}
+
+@media (max-width: 1000px) {
+  .rp-hero { grid-template-columns: 1fr; gap: 20px; }
+  .rp-hero-art { display: flex; }
+  .rp-hero-art svg { max-width: 260px; }
+  .rp-row { grid-template-columns: 1fr; }
+  .rp-how-steps { grid-template-columns: 1fr; gap: 14px; }
+  .rp-how-arrow { display: none; }
+}
+
+@media (max-width: 640px) {
+  .rp-wrap { padding: 12px 12px 80px; }
+
+  /* Mobile banner: art on top, copy under it, tighter proportions — a
+     different composition rather than the desktop one squeezed down. */
+  .rp-hero {
+    padding: 20px 16px 22px;
+    border-radius: 16px;
+    text-align: center;
+    gap: 14px;
+  }
+  .rp-hero-art { order: -1; }
+  .rp-hero-art svg { max-width: 190px; }
+  .rp-hero h1 { font-size: 24px; }
+  .rp-hero p { font-size: 12.5px; margin-left: auto; margin-right: auto; }
+  .rp-hero-cta { width: 100%; justify-content: center; }
+  .rp-hero-panel { gap: 9px; padding: 12px; text-align: left; }
+
+  .rp-how { padding: 14px; }
+  .rp-how-t { font-size: 15px; }
+  .rp-form-card { padding: 14px; }
+  .rp-grid { grid-template-columns: 1fr; gap: 12px; }
+  .rp-benefits { padding: 14px; }
+}

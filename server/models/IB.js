@@ -118,7 +118,13 @@ const ibSchema = new mongoose.Schema({
     website: { type: String, default: '' },
     marketingPlan: { type: String, default: '' },
     expectedMonthlyReferrals: { type: Number, default: 0 },
-    experience: { type: String, default: '' }
+    experience: { type: String, default: '' },
+    // The apply form asks for the applicant's own contact details, which can
+    // differ from the account's. Declared here because applyForIB assigns the
+    // request body wholesale and Mongoose drops keys the schema does not name.
+    fullName: { type: String, default: '' },
+    mobile: { type: String, default: '' },
+    contactEmail: { type: String, default: '' }
   },
   
   // Admin Notes

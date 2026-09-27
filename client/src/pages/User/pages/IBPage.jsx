@@ -1,4 +1,10 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, Fragment } from 'react';
+import {
+  LuPercent, LuIndianRupee, LuUsers, LuShieldCheck, LuArrowRight, LuGift,
+  LuShare2, LuFileText, LuLink, LuUser, LuPhone, LuMail, LuSend, LuAward,
+  LuTicket, LuChartLine, LuBanknote, LuHandshake,
+} from 'react-icons/lu';
+import './ReferralPartner.css';
 import { useOutletContext, useParams, useNavigate } from 'react-router-dom';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -23,16 +29,102 @@ const SUB_TABS = [
   { key: 'withdraw', label: 'Withdraw' }
 ];
 
+// The banner art: a gift box with two coupon tickets, drawn rather than
+// exported, so it stays sharp at any DPI and re-flows on a phone instead of
+// being letterboxed. Desktop and mobile size and reorder it differently.
+function HeroArt() {
+  return (
+    <svg viewBox="0 0 340 250" fill="none" role="presentation">
+      <defs>
+        <linearGradient id="rpBox" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#5AA9FF" /><stop offset="1" stopColor="#2563EB" />
+        </linearGradient>
+        <linearGradient id="rpLid" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#7FC0FF" /><stop offset="1" stopColor="#3B82F6" />
+        </linearGradient>
+        <linearGradient id="rpTicket" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#FFD770" /><stop offset="1" stopColor="#F2A93B" />
+        </linearGradient>
+      </defs>
+
+      <path d="M120 44c-16-16-40-14-40 4 0 14 22 20 46 18" stroke="#8FD0FF" strokeWidth="7" strokeLinecap="round" />
+      <path d="M186 44c16-16 40-14 40 4 0 14-22 20-46 18" stroke="#8FD0FF" strokeWidth="7" strokeLinecap="round" />
+
+      <rect x="86" y="92" width="134" height="104" rx="10" fill="url(#rpBox)" />
+      <rect x="76" y="66" width="154" height="34" rx="9" fill="url(#rpLid)" />
+      <rect x="142" y="66" width="22" height="130" fill="#93C5FD" fillOpacity="0.85" />
+
+      <g transform="rotate(-8 214 150)">
+        <rect x="170" y="126" width="112" height="56" rx="9" fill="url(#rpTicket)" />
+        <circle cx="170" cy="154" r="8" fill="#12409A" />
+        <circle cx="282" cy="154" r="8" fill="#12409A" />
+        <path d="M226 132v44" stroke="#C8862A" strokeWidth="2.5" strokeDasharray="5 5" />
+        <text x="198" y="150" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="13" fontWeight="800" fill="#7A4B10">COUPON</text>
+        <text x="198" y="166" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="13" fontWeight="800" fill="#7A4B10">CODE</text>
+        <circle cx="254" cy="154" r="17" fill="#fff" fillOpacity="0.55" />
+        <text x="254" y="161" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="20" fontWeight="800" fill="#7A4B10">%</text>
+      </g>
+
+      <circle cx="74" cy="196" r="15" fill="#F5B93D" />
+      <circle cx="74" cy="196" r="10" fill="#FFD879" />
+      <circle cx="98" cy="208" r="12" fill="#F5B93D" />
+      <circle cx="98" cy="208" r="8" fill="#FFD879" />
+
+      <path d="M252 96l34-34M286 62h-15M286 62v15" stroke="#7FE3B0" strokeWidth="5" strokeLinecap="round" />
+      <path d="M56 78l4 9 9 4-9 4-4 9-4-9-9-4 9-4z" fill="#BFE4FF" />
+      <path d="M298 128l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#BFE4FF" />
+      <path d="M240 34l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" fill="#FFE59B" />
+      <circle cx="46" cy="140" r="4" fill="#8FD0FF" />
+      <circle cx="312" cy="196" r="5" fill="#8FD0FF" />
+    </svg>
+  );
+}
+
+function BenefitsArt() {
+  return (
+    <svg className="rp-benefits-bg" width="150" height="104" viewBox="0 0 150 104" fill="none" role="presentation">
+      <rect x="6" y="62" width="18" height="42" rx="4" fill="#2563EB" />
+      <rect x="34" y="44" width="18" height="60" rx="4" fill="#2563EB" />
+      <rect x="62" y="26" width="18" height="78" rx="4" fill="#2563EB" />
+      <rect x="90" y="52" width="18" height="52" rx="4" fill="#60A5FA" />
+      <rect x="118" y="14" width="18" height="90" rx="4" fill="#2563EB" />
+    </svg>
+  );
+}
+
+const RP_HERO_POINTS = [
+  [LuPercent, '#F4EDFE', '#7C3AED', 'Buyers Get Discount', 'Using your coupon code'],
+  [LuIndianRupee, '#E9F9F1', '#059669', 'You Earn Commission', 'On every successful purchase'],
+  [LuUsers, '#EEF4FF', '#2563EB', 'Track Everything', 'Real-time analytics'],
+  [LuShieldCheck, '#FFF7E8', '#D97706', 'Reliable & Secure', 'Timely payouts'],
+];
+
+const RP_STEPS = [
+  [LuFileText, '#EAF2FE', '#2563EB', 'Apply as a Partner', 'Submit a simple application. It takes only 1 minute.'],
+  [LuGift, '#F4EDFE', '#7C3AED', 'Get Your Coupon Code', 'After approval, you will receive your unique coupon code.'],
+  [LuShare2, '#E9F9F1', '#059669', 'Share & Earn', 'Share the code with your audience and earn commission on every sale.'],
+];
+
+const RP_BENEFITS = [
+  [LuBanknote, '#FFF7E8', '#D97706', 'Attractive Commission', 'Earn on every successful purchase'],
+  [LuTicket, '#FFF3E0', '#EA7C1B', 'Your Own Coupon Code', 'Give discount to your audience'],
+  [LuChartLine, '#F4EDFE', '#7C3AED', 'Real-time Tracking', 'Track clicks, sales and earnings'],
+  [LuShieldCheck, '#EAF2FE', '#2563EB', 'Reliable Payouts', 'Timely and secure payments'],
+];
+
 function ApplyForm({ user, onApplied, onError, error }) {
+  // Name, phone and email are prefilled from the account but stay editable —
+  // a partner often wants payouts and updates on a different contact than the
+  // one they trade with. The server stores whatever is submitted here.
   const [form, setForm] = useState({
-    businessName: '',
+    fullName: user?.name || '',
+    mobile: user?.phone || '',
+    contactEmail: user?.email || '',
     website: '',
-    marketingPlan: '',
-    expectedMonthlyReferrals: 0,
-    experience: ''
   });
   const [busy, setBusy] = useState(false);
-  const [open, setOpen] = useState(false);
+
+  const set = (k) => (e) => setForm(prev => ({ ...prev, [k]: e.target.value }));
 
   const submit = async (e) => {
     e.preventDefault();
@@ -42,117 +134,150 @@ function ApplyForm({ user, onApplied, onError, error }) {
       const res = await fetch(`${API_URL}/api/ib/apply`, {
         method: 'POST',
         headers: getAuthHeaders(),
-        body: JSON.stringify(form)
+        // businessName is what the admin list has always keyed on, so it is
+        // sent alongside rather than left blank for existing rows.
+        body: JSON.stringify({ ...form, businessName: form.fullName }),
       });
       const data = await res.json();
-      if (data.success) {
-        await onApplied?.();
-      } else {
-        onError?.(data.error || 'Application failed');
-      }
+      if (data.success) await onApplied?.();
+      else onError?.(data.error || 'Application failed');
     } catch (err) { onError?.(err.message); }
     setBusy(false);
   };
 
-  const samplePrefix = (user?.name || 'YOU').split(' ')[0].toUpperCase().replace(/[^A-Z0-9]/g, '') || 'YOU';
-
-  // Collapsed until the user opts in. A five-field form stretched edge-to-edge
-  // was the first thing on the page for people who had no interest in it.
-  if (!open) {
-    return (
-      <div style={formShell}>
-        <div style={{ ...cardStyle, padding: 0, overflow: 'hidden', marginBottom: 0 }}>
-          <div style={pitchHead}>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.14em', opacity: .75 }}>
-              PARTNER PROGRAMME
-            </div>
-            <h2 style={{ margin: '6px 0 0', fontSize: 22, letterSpacing: '-.02em' }}>
-              Earn on every referral
-            </h2>
-          </div>
-
-          <div style={{ padding: 22 }}>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 13.5, lineHeight: 1.6, margin: '0 0 18px' }}>
-              Get your own coupon code. Anyone who buys a challenge with it gets a
-              discount, and you earn a commission on that purchase.
-            </p>
-
-            <div style={pitchGrid}>
-              {[
-                ['Your own code', <>Issued on approval, e.g. <code style={codeChip}>{samplePrefix}24</code></>],
-                ['Buyers save', 'They get a discount for using your code'],
-                ['You earn', 'Commission credited on each challenge sold'],
-              ].map(([h, b]) => (
-                <div key={h} style={pitchCell}>
-                  <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 4 }}>{h}</div>
-                  <div style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{b}</div>
-                </div>
-              ))}
-            </div>
-
-            {error && <div style={{ ...errBox, marginTop: 16, marginBottom: 0 }}>{error}</div>}
-
-            <button type="button" onClick={() => setOpen(true)} style={{ ...primaryBtn, marginTop: 20, width: '100%' }}>
-              Apply to become a partner
-            </button>
-            <p style={{ fontSize: 11.5, color: 'var(--text-secondary)', textAlign: 'center', margin: '10px 0 0' }}>
-              Takes a minute · reviewed by admin
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const scrollToForm = () => {
+    document.getElementById('rp-apply')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('rp-name')?.focus({ preventScroll: true });
+  };
 
   return (
-    <div style={formShell}>
-      <form onSubmit={submit} style={{ ...cardStyle, marginBottom: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, marginBottom: 18 }}>
-          <div>
-            <h2 style={{ margin: 0, fontSize: 19, color: 'var(--text-primary)', letterSpacing: '-.01em' }}>
-              Partner application
-            </h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 12.5, margin: '5px 0 0' }}>
-              Tell us about your reach. Admin reviews every application.
-            </p>
+    <>
+      <div className="rp-hero">
+        <div className="rp-hero-copy">
+          <div className="rp-eyebrow">Referral Partner Program</div>
+          <h1>Earn on Every <span>Referral</span></h1>
+          <p>
+            Share your unique coupon code. When someone buys a challenge using
+            your code, they get a discount and you earn a commission.
+          </p>
+          <button type="button" className="rp-hero-cta" onClick={scrollToForm}>
+            <LuHandshake size={16} /> Apply Now <LuArrowRight size={15} />
+          </button>
+          <div className="rp-hero-note">Takes 1 minute &bull; Reviewed by admin</div>
+        </div>
+
+        <div className="rp-hero-art"><HeroArt /></div>
+
+        <div className="rp-hero-panel">
+          {RP_HERO_POINTS.map(([Icon, bg, fg, t, sub]) => (
+            <div key={t} className="rp-hero-item">
+              <span className="rp-chip rp-hero-item-chip" style={{ background: bg, color: fg }}>
+                <Icon size={15} />
+              </span>
+              <div>
+                <div className="rp-hero-item-t">{t}</div>
+                <div className="rp-hero-item-s">{sub}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="rp-card rp-how">
+        <div className="rp-how-t">How It Works?</div>
+        <div className="rp-how-s">Become a partner and start earning in 3 simple steps</div>
+        <div className="rp-how-steps">
+          {RP_STEPS.map(([Icon, bg, fg, t, sub], i) => (
+            <Fragment key={t}>
+              {i > 0 && <span className="rp-how-arrow"><LuArrowRight size={18} /></span>}
+              <div className="rp-how-step">
+                <span className="rp-how-n" style={{ background: bg, color: fg }}>{i + 1}</span>
+                <span className="rp-chip rp-how-chip" style={{ background: bg, color: fg }}>
+                  <Icon size={18} />
+                </span>
+                <div style={{ minWidth: 0 }}>
+                  <div className="rp-how-step-t">{t}</div>
+                  <div className="rp-how-step-s">{sub}</div>
+                </div>
+              </div>
+            </Fragment>
+          ))}
+        </div>
+      </div>
+
+      <div className="rp-row">
+        <form id="rp-apply" className="rp-card rp-form-card" onSubmit={submit}>
+          <div className="rp-form-head">
+            <span className="rp-chip rp-form-chip"><LuLink size={17} /></span>
+            <div>
+              <div className="rp-form-t">Apply to Become a Referral Partner</div>
+              <div className="rp-form-s">Fill in the details below. Our team will review and approve your application.</div>
+            </div>
           </div>
-          <button type="button" onClick={() => setOpen(false)} style={ghostBtn}>Cancel</button>
-        </div>
 
-        <div style={fieldRow}>
-          <label style={lbl} htmlFor="ib-business">Business / Channel Name <span style={{ color: '#ef4444' }}>*</span></label>
-          <input id="ib-business" style={inp} value={form.businessName} onChange={(e) => setForm({ ...form, businessName: e.target.value })} placeholder="e.g. Nifty Traders Hub" required />
-        </div>
-
-        {/* Short fields pair up on desktop so the form doesn't read as one long column. */}
-        <div style={twoCol}>
-          <div style={fieldRow}>
-            <label style={lbl} htmlFor="ib-site">Website / Social Profile</label>
-            <input id="ib-site" style={inp} value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} placeholder="https://youtube.com/@yourchannel" />
+          <div className="rp-grid">
+            <div className="rp-field">
+              <label htmlFor="rp-name">Full Name <i>*</i></label>
+              <div className="rp-input">
+                <LuUser size={15} />
+                <input id="rp-name" value={form.fullName} onChange={set('fullName')} placeholder="Enter your full name" required />
+              </div>
+            </div>
+            <div className="rp-field">
+              <label htmlFor="rp-mobile">Mobile Number <i>*</i></label>
+              <div className="rp-input">
+                <LuPhone size={15} />
+                <input id="rp-mobile" value={form.mobile} onChange={set('mobile')} placeholder="Enter your mobile number" inputMode="tel" required />
+              </div>
+            </div>
+            <div className="rp-field">
+              <label htmlFor="rp-email">Email Address <i>*</i></label>
+              <div className="rp-input">
+                <LuMail size={15} />
+                <input id="rp-email" type="email" value={form.contactEmail} onChange={set('contactEmail')} placeholder="Enter your email address" required />
+              </div>
+            </div>
+            <div className="rp-field">
+              <label htmlFor="rp-social">Social Media / Channel Link (Optional)</label>
+              <div className="rp-input">
+                <LuLink size={15} />
+                <input id="rp-social" value={form.website} onChange={set('website')} placeholder="YouTube / Instagram / Telegram link" />
+              </div>
+            </div>
           </div>
-          <div style={fieldRow}>
-            <label style={lbl} htmlFor="ib-refs">Expected Monthly Referrals</label>
-            <input id="ib-refs" style={inp} type="number" min="0" value={form.expectedMonthlyReferrals} onChange={(e) => setForm({ ...form, expectedMonthlyReferrals: Number(e.target.value) })} />
+
+          {error && <div className="rp-err">{error}</div>}
+
+          <button type="submit" className="rp-submit" disabled={busy}>
+            <LuSend size={15} /> {busy ? 'Submitting…' : 'Submit Application'} {!busy && <LuArrowRight size={15} />}
+          </button>
+
+          <div className="rp-foot">
+            Our team will review your application and approve it shortly.<br />
+            You will receive your coupon code after approval.
           </div>
+        </form>
+
+        <div className="rp-card rp-benefits">
+          <BenefitsArt />
+          <div className="rp-benefits-head">
+            <span className="rp-chip rp-benefits-chip"><LuAward size={17} /></span>
+            <div className="rp-benefits-t">Partner Benefits</div>
+          </div>
+          {RP_BENEFITS.map(([Icon, bg, fg, t, sub]) => (
+            <div key={t} className="rp-benefit">
+              <span className="rp-chip rp-benefit-chip" style={{ background: bg, color: fg }}>
+                <Icon size={16} />
+              </span>
+              <div>
+                <div className="rp-benefit-t">{t}</div>
+                <div className="rp-benefit-s">{sub}</div>
+              </div>
+            </div>
+          ))}
         </div>
-
-        <div style={fieldRow}>
-          <label style={lbl} htmlFor="ib-plan">Marketing Plan</label>
-          <textarea id="ib-plan" style={{ ...inp, minHeight: 84, resize: 'vertical' }} value={form.marketingPlan} onChange={(e) => setForm({ ...form, marketingPlan: e.target.value })} placeholder="How will you reach traders? Channels, audience size, content style." />
-        </div>
-
-        <div style={fieldRow}>
-          <label style={lbl} htmlFor="ib-exp">Past Experience</label>
-          <textarea id="ib-exp" style={{ ...inp, minHeight: 64, resize: 'vertical' }} value={form.experience} onChange={(e) => setForm({ ...form, experience: e.target.value })} placeholder="Any affiliate or community-building work you've done before." />
-        </div>
-
-        {error && <div style={errBox}>{error}</div>}
-
-        <button type="submit" disabled={busy} style={{ ...primaryBtn, width: '100%', opacity: busy ? 0.65 : 1 }}>
-          {busy ? 'Submitting…' : 'Submit application'}
-        </button>
-      </form>
-    </div>
+      </div>
+    </>
   );
 }
 
@@ -282,7 +407,9 @@ function IBPage() {
         <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
           Home / <span style={{ color: 'var(--text-primary)' }}>Referral Partner</span>
         </div>
-        <h1 style={{ color: 'var(--text-primary)', margin: '0 0 18px' }}>🤝 Referral Partner</h1>
+        <h1 style={{ color: 'var(--text-primary)', margin: '0 0 18px', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <LuHandshake size={22} /> Referral Partner
+        </h1>
 
         {profileStatus === 'none' && (
           <ApplyForm user={user} onApplied={fetchProfile} onError={setError} error={error} />

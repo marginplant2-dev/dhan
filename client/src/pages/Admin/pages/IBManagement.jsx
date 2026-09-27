@@ -652,7 +652,7 @@ const IBManagement = () => {
                   </div>
                 </td>
                 <td><code>{ib.referralCode}</code></td>
-                <td>{d.businessName || '-'}</td>
+                <td>{d.fullName || d.businessName || '-'}</td>
                 <td>{new Date(ib.appliedAt).toLocaleDateString()}</td>
                 <td>
                   <div className="action-buttons">
@@ -693,11 +693,19 @@ const IBManagement = () => {
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px 28px' }}>
                       <div>
-                        <div style={lblStyle}>Business / Channel Name</div>
-                        <div style={valStyle}>{d.businessName || '—'}</div>
+                        <div style={lblStyle}>Full Name</div>
+                        <div style={valStyle}>{d.fullName || d.businessName || '—'}</div>
                       </div>
                       <div>
-                        <div style={lblStyle}>Website / Social Profile</div>
+                        <div style={lblStyle}>Mobile</div>
+                        <div style={valStyle}>{d.mobile || '—'}</div>
+                      </div>
+                      <div>
+                        <div style={lblStyle}>Contact Email</div>
+                        <div style={valStyle}>{d.contactEmail || '—'}</div>
+                      </div>
+                      <div>
+                        <div style={lblStyle}>Social Media / Channel Link</div>
                         <div style={valStyle}>
                           {d.website
                             ? <a href={d.website} target="_blank" rel="noreferrer">{d.website}</a>
@@ -1255,7 +1263,7 @@ const IBManagement = () => {
               <p>Approve <strong>{selectedIB.userId?.name}</strong> as an Introducing Broker?</p>
               <div className="ib-details">
                 <p><strong>Referral Code:</strong> <code>{selectedIB.referralCode}</code></p>
-                <p><strong>Business:</strong> {selectedIB.applicationDetails?.businessName || 'N/A'}</p>
+                <p><strong>Applicant:</strong> {selectedIB.applicationDetails?.fullName || selectedIB.applicationDetails?.businessName || 'N/A'}</p>
               </div>
               <h4 style={{ marginTop: 16, marginBottom: 8 }}>First Coupon Settings</h4>
               <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 0, marginBottom: 12 }}>
