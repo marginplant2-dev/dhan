@@ -106,9 +106,6 @@ function AdminLogin({ onLogin }) {
 
       <div className="ac-footer">
         <p><a href="/">← Back to DhanFunded</a></p>
-        <p className="ac-links">
-          <a href="/subadmin">Sub-Admin login</a> · <a href="/broker">Broker login</a>
-        </p>
       </div>
     </AuthShell>
   );
