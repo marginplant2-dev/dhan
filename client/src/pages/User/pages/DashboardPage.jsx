@@ -403,24 +403,6 @@ function DashboardPage() {
             </button>
           </div>
 
-          <div className="dh-tiles">
-            <div className="dh-tile">
-              <span className="dh-tile-icon" style={{ background: 'rgba(22,199,154,.16)', color: '#16C79A' }}><BarChart3 size={18} /></span>
-              <b>Real market data</b><span>NSE &amp; BSE prices</span>
-            </div>
-            <div className="dh-tile">
-              <span className="dh-tile-icon" style={{ background: 'rgba(122,90,248,.16)', color: '#7A5AF8' }}><Zap size={18} /></span>
-              <b>Flexible plans</b><span>1-Step &amp; 2-Step</span>
-            </div>
-            <div className="dh-tile">
-              <span className="dh-tile-icon" style={{ background: 'rgba(233,162,59,.18)', color: '#E9A23B' }}><ShieldCheck size={18} /></span>
-              <b>Clear rules</b><span>No hidden conditions</span>
-            </div>
-            <div className="dh-tile">
-              <span className="dh-tile-icon" style={{ background: 'rgba(18,104,232,.16)', color: '#1268E8' }}><LineChart size={18} /></span>
-              <b>Get funded</b><span>Trade real capital</span>
-            </div>
-          </div>
         </section>
 
       </div>
