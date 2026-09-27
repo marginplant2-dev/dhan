@@ -1,7 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
-import { LuTrophy, LuWallet, LuClock, LuCheck } from 'react-icons/lu';
+import {
+  LuTrophy, LuWallet, LuClock, LuCheck, LuUsers, LuChartColumn, LuLandmark,
+  LuTarget, LuTrendingUp, LuArrowRight, LuBookOpen, LuInfo, LuZap,
+  LuLock, LuClipboardList, LuX, LuBanknote,
+} from 'react-icons/lu';
 import { compressImage } from '../../../utils/compressImage';
+import './PassedChallenges.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
@@ -14,6 +19,59 @@ function getAuthHeaders() {
 }
 
 const fmtINR = (v) => `₹${Number(v || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+// The reference tucks a faint mark into each stat card and runs a candle line
+// under the empty state. Inline SVG keeps both crisp and costs no request.
+const STAT_ART = {
+  users: (
+    <svg width="96" height="60" viewBox="0 0 96 60" fill="none"><circle cx="40" cy="20" r="11" fill="#2563EB" /><path d="M20 56c0-11 9-19 20-19s20 8 20 19z" fill="#2563EB" /><circle cx="66" cy="26" r="8" fill="#60A5FA" /><path d="M52 56c0-8 6-14 14-14s14 6 14 14z" fill="#60A5FA" /></svg>
+  ),
+  chart: (
+    <svg width="104" height="56" viewBox="0 0 104 56" fill="none"><path d="M4 46L26 30l16 10 20-24 18 12 18-20" stroke="#059669" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /><path d="M4 46L26 30l16 10 20-24 18 12 18-20V56H4z" fill="#059669" fillOpacity="0.25" /></svg>
+  ),
+  wallet: (
+    <svg width="92" height="60" viewBox="0 0 92 60" fill="none"><rect x="10" y="16" width="66" height="42" rx="9" fill="#7C3AED" /><rect x="52" y="30" width="34" height="15" rx="7" fill="#A78BFA" /><circle cx="64" cy="37.5" r="4" fill="#7C3AED" /></svg>
+  ),
+  bank: (
+    <svg width="92" height="58" viewBox="0 0 92 58" fill="none"><path d="M46 6l36 18H10z" fill="#D97706" /><rect x="18" y="28" width="8" height="22" fill="#F59E0B" /><rect x="34" y="28" width="8" height="22" fill="#F59E0B" /><rect x="50" y="28" width="8" height="22" fill="#F59E0B" /><rect x="66" y="28" width="8" height="22" fill="#F59E0B" /><rect x="10" y="52" width="72" height="6" rx="2" fill="#D97706" /></svg>
+  ),
+};
+
+function EmptyCandles() {
+  const bars = [
+    [30, 34, 18], [58, 22, 30], [86, 40, 14], [114, 28, 24], [700, 30, 22],
+    [728, 20, 32], [756, 36, 16], [784, 26, 26], [812, 34, 18],
+  ];
+  return (
+    <svg className="pc-empty-bg" width="100%" height="86" viewBox="0 0 860 86" preserveAspectRatio="none" fill="none" role="presentation">
+      <path d="M0 62c90-26 150 12 240-6s150-34 240-16 160 30 240 8v42H0z" fill="#E8F0FC" />
+      {bars.map(([x, y, h], i) => (
+        <rect key={i} x={x} y={y} width="7" height={h} rx="2" fill="#C9DCF6" />
+      ))}
+    </svg>
+  );
+}
+
+// Flat line art, in the page's own palette, rather than a raster trophy.
+function EmptyTrophy() {
+  return (
+    <svg width="186" height="120" viewBox="0 0 186 120" fill="none" role="presentation">
+      <rect x="34" y="28" width="26" height="20" rx="4" fill="#DCE8FB" transform="rotate(-12 34 28)" />
+      <rect x="126" y="24" width="24" height="18" rx="4" fill="#DCE8FB" transform="rotate(10 126 24)" />
+      <rect x="40" y="70" width="22" height="16" rx="4" fill="#EAF1FC" transform="rotate(8 40 70)" />
+      <path d="M62 30h62v22a31 31 0 0 1-62 0z" fill="#2E5FB5" />
+      <path d="M62 34H50a14 14 0 0 0 14 14z" fill="#5B8AD8" />
+      <path d="M124 34h12a14 14 0 0 1-14 14z" fill="#5B8AD8" />
+      <rect x="85" y="80" width="16" height="12" fill="#2E5FB5" />
+      <rect x="70" y="92" width="46" height="11" rx="4" fill="#1E4795" />
+      <path d="M93 38l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6-6.8-3.6-6.8 3.6 1.3-7.6-5.5-5.4 7.6-1.1z" fill="#fff" />
+      <path d="M140 46l22 12-22 12-4-11z" fill="#3E72C9" />
+      <path d="M140 46l-4 13 9 3z" fill="#2E5FB5" />
+      <path d="M26 60h8M30 56v8" stroke="#F2A93B" strokeWidth="2.6" strokeLinecap="round" />
+      <circle cx="160" cy="88" r="4" fill="#BBD0EE" />
+    </svg>
+  );
+}
 
 function PassedChallengesPage() {
   const { user } = useOutletContext();
@@ -297,113 +355,172 @@ function PassedChallengesPage() {
     return <div style={{ padding: 24, color: 'var(--text-secondary)' }}>Loading passed challenges…</div>;
   }
 
+  const fundedAccs = accounts.filter(a => a.status === 'FUNDED');
+  const awaitingCount = accounts.filter(a => a.status === 'PASSED').length;
+  const totalProfit = fundedAccs.reduce((sum, a) => sum + computePayoutStatus(a).profit, 0);
+  const totalWithdrawn = accounts.reduce((sum, a) => sum + (Number(a.totalWithdrawn) || 0), 0);
+  const eligibleCount = fundedAccs.filter(a => computePayoutStatus(a).eligible).length;
+  const payoutReady = fundedAccs.reduce((sum, a) => {
+    const st = computePayoutStatus(a);
+    return sum + (st.eligible ? st.cappedWithdrawable : 0);
+  }, 0);
+  const fundedBase = fundedAccs.reduce((sum, a) => sum + Number(a.initialBalance || 0), 0);
+  const profitPct = fundedBase > 0 ? (totalProfit / fundedBase) * 100 : 0;
+
+  // Where the user actually stands, so the stepper reflects the account rather
+  // than always sitting on step 1.
+  const stage = totalWithdrawn > 0 ? 4 : eligibleCount > 0 ? 3 : fundedAccs.length > 0 ? 2 : 1;
+
+  const STEPS = ['Evaluation', 'Get Funded', 'Trade & Profit', 'Request Payout'];
+  const HOW = [
+    ['Pass an Evaluation', 'Complete the challenge as per rules and get a funded account.'],
+    ['Trade & Earn Profit', 'Trade on your funded account and generate eligible profits.'],
+    ['Request Withdrawal', 'Once eligible, request your payout directly to your UPI or bank account.'],
+  ];
+
+  const STAT_CARDS = [
+    { key: 'funded', chip: '#EEF4FF', fg: '#2563EB', Icon: LuUsers, label: 'Funded Accounts',
+      value: String(fundedAccs.length), sub: `${awaitingCount} active funded accounts`, art: STAT_ART.users },
+    { key: 'profit', chip: '#E9F9F1', fg: '#059669', Icon: LuChartColumn, label: 'Total Profit',
+      value: fmtINR(totalProfit), sub: 'Across all funded accounts', art: STAT_ART.chart,
+      badge: `${profitPct.toFixed(0)}%` },
+    { key: 'eligible', chip: '#F4EDFE', fg: '#7C3AED', Icon: LuWallet, label: 'Eligible for Payout',
+      value: String(eligibleCount), sub: 'Meets all funded phase rules', art: STAT_ART.wallet },
+    { key: 'drawn', chip: '#FFF7E8', fg: '#D97706', Icon: LuLandmark, label: 'Already Withdrawn',
+      value: fmtINR(totalWithdrawn), sub: 'Total amount withdrawn', art: STAT_ART.bank },
+  ];
+
   return (
-    <div style={{ width: '100%', height: '100%', overflowY: 'auto', overflowX: 'hidden' }}>
-      <style>{`
-        .pc-page { padding: 20px 28px 60px; max-width: 1200px; margin: 0 auto; }
-        .pc-headline { color: var(--text-primary); margin: 0 0 6px; display: flex; align-items: center; gap: 10px; font-size: 26px; font-weight: 700; }
-        .pc-subhead { color: var(--text-secondary); font-size: 13px; margin: 0 0 22px; }
-        .pc-summary { padding: 18px; border-radius: 14px; margin-bottom: 18px;
-          background: linear-gradient(135deg, rgba(0,51,102,0.06), rgba(0,51,102,0.015));
-          border: 2px solid rgba(0,51,102,0.22); }
-        .pc-summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 14px; }
-        .pc-stat { padding: 0; }
-        .pc-stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; line-height: 1.2; }
-        .pc-stat-big { font-size: 28px; font-weight: 800; color: var(--accent-primary); margin-top: 4px; line-height: 1.15; }
-        .pc-stat-num { font-size: 22px; font-weight: 700; margin-top: 4px; line-height: 1.15; }
-        .pc-stat-sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; line-height: 1.25; }
-        .pc-cta-row { display: flex; align-items: center; justify-content: space-between; gap: 12px;
-          padding-top: 14px; border-top: 1px dashed rgba(0,51,102,0.22); flex-wrap: wrap; }
-        .pc-cta-text { font-size: 13px; color: var(--text-secondary); flex: 1; min-width: 200px; }
-        .pc-cta-btn { padding: 12px 22px; border-radius: 10px; border: none; background: var(--gold);
-          color: #fff; font-weight: 700; font-size: 14px; cursor: pointer;
-          display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; }
-        .pc-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    <div className="pc-root">
+      <div className="pc-wrap">
 
-        @media (max-width: 640px) {
-          .pc-page { padding: 14px 12px 80px; }
-          .pc-headline { font-size: 20px; gap: 8px; }
-          .pc-subhead { font-size: 12px; margin-bottom: 14px; }
-          .pc-summary { padding: 12px; border-radius: 12px; margin-bottom: 14px; border-width: 1.5px; }
-          .pc-summary-grid { grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-          .pc-stat { padding: 10px; border-radius: 10px;
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); }
-          .pc-stat-label { font-size: 9px; letter-spacing: 0.3px; }
-          .pc-stat-big { font-size: 18px; margin-top: 2px; }
-          .pc-stat-num { font-size: 15px; margin-top: 2px; }
-          .pc-stat-sub { font-size: 9px; margin-top: 1px; }
-          .pc-cta-row { flex-direction: column; align-items: stretch; gap: 8px; padding-top: 10px; }
-          .pc-cta-text { font-size: 11px; text-align: center; min-width: 0; line-height: 1.35; }
-          .pc-cta-btn { width: 100%; padding: 11px 14px; font-size: 13px; }
-          .pc-cards-grid { grid-template-columns: 1fr; gap: 12px; }
-        }
-      `}</style>
-      <div className="pc-page">
-        <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-          Home / <span style={{ color: 'var(--text-primary)' }}>Passed Challenges</span>
+        <div className="pc-crumb">Home / <b>Passed Challenges</b></div>
+
+        <div className="pc-head">
+          <div className="pc-head-left">
+            <span className="pc-chip pc-head-chip"><LuTrophy size={22} /></span>
+            <div>
+              <h1>Passed Challenges</h1>
+              <p>Your funded accounts, profits and withdrawal status. Trade your skills and earn real rewards.</p>
+            </div>
+          </div>
+          <div className="pc-banner">
+            <span className="pc-chip pc-banner-chip"><LuTrendingUp size={18} /></span>
+            <div>
+              <div className="pc-banner-t">Complete an evaluation challenge</div>
+              <div className="pc-banner-s">Get funded and start earning real profits!</div>
+            </div>
+            <button className="pc-banner-go" onClick={() => navigate('/app/challenges')} aria-label="Browse challenges">
+              <LuArrowRight size={17} />
+            </button>
+          </div>
         </div>
-        <h1 className="pc-headline">
-          <LuTrophy size={22} /> Passed Challenges
-        </h1>
-        <p className="pc-subhead">
-          Your funded accounts. Profit kamao aur direct UPI me withdraw karo.
-        </p>
 
-        {/* Top summary — at-a-glance view of funded-phase progress.
-            The Withdraw CTA is intentionally NOT here anymore (real prop
-            firms gate payouts per-account); per-card buttons enforce gates. */}
-        {(() => {
-          const fundedAccs = accounts.filter(a => a.status === 'FUNDED');
-          const totalProfit = fundedAccs.reduce((s, a) => s + computePayoutStatus(a).profit, 0);
-          const totalWithdrawn = accounts.reduce((s, a) => s + (Number(a.totalWithdrawn) || 0), 0);
-          const eligibleCount = fundedAccs.filter(a => computePayoutStatus(a).eligible).length;
-          return (
-            <div className="pc-summary">
-              <div className="pc-summary-grid">
-                <div className="pc-stat">
-                  <div className="pc-stat-label">Funded Accounts</div>
-                  <div className="pc-stat-big" style={{ color: '#f59e0b' }}>{fundedAccs.length}</div>
-                  <div className="pc-stat-sub">
-                    {accounts.filter(a => a.status === 'PASSED').length} awaiting funding
-                  </div>
-                </div>
-                <div className="pc-stat">
-                  <div className="pc-stat-label">Total Profit</div>
-                  <div className="pc-stat-num" style={{ color: totalProfit > 0 ? '#10b981' : 'var(--text-primary)' }}>{fmtINR(totalProfit)}</div>
-                  <div className="pc-stat-sub">across funded a/c</div>
-                </div>
-                <div className="pc-stat">
-                  <div className="pc-stat-label">Eligible for Payout</div>
-                  <div className="pc-stat-num" style={{ color: eligibleCount > 0 ? '#10b981' : 'var(--text-secondary)' }}>{eligibleCount}</div>
-                  <div className="pc-stat-sub">meets all funded-phase gates</div>
-                </div>
-                <div className="pc-stat">
-                  <div className="pc-stat-label">Already Withdrawn</div>
-                  <div className="pc-stat-num" style={{ color: 'var(--accent-primary)' }}>{fmtINR(totalWithdrawn)}</div>
+        <div className="pc-stats">
+          {STAT_CARDS.map(c => (
+            <div key={c.key} className="pc-card pc-stat">
+              <span className="pc-stat-art">{c.art}</span>
+              <div className="pc-stat-top">
+                <span className="pc-chip pc-stat-chip" style={{ background: c.chip, color: c.fg }}>
+                  <c.Icon size={17} />
+                </span>
+                {c.badge && <span className="pc-badge">{c.badge} <LuTrendingUp size={11} /></span>}
+              </div>
+              <div className="pc-stat-body">
+                <div className="pc-stat-label">{c.label}</div>
+                <div className="pc-stat-value">{c.value}</div>
+                <div className="pc-stat-sub">{c.sub}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="pc-row">
+          <div className="pc-card">
+            <div className="pc-panel-head">
+              <div className="pc-panel-title">
+                <span className="pc-chip pc-panel-chip" style={{ background: '#EEF4FF', color: '#2563EB' }}>
+                  <LuTarget size={17} />
+                </span>
+                <div>
+                  <div className="pc-panel-t">Funding Progress</div>
+                  <div className="pc-panel-s">Complete an evaluation challenge to get a funded account</div>
                 </div>
               </div>
-
+              <button className="pc-link" onClick={() => navigate('/challenges')}>
+                View Rules <LuArrowRight size={12} />
+              </button>
             </div>
-          );
-        })()}
+            <div className="pc-progress-body">
+              <div className="pc-steps">
+                {STEPS.map((label, i) => {
+                  const n = i + 1;
+                  return (
+                    <div key={label} className={`pc-step${n === stage ? ' is-on' : ''}${n < stage ? ' is-done' : ''}`}>
+                      <div className="pc-step-dot">{n < stage ? <LuCheck size={13} /> : n}</div>
+                      <div className="pc-step-n">{n}</div>
+                      <div className="pc-step-l">{label}</div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="pc-payout">
+                <div className="pc-payout-top">
+                  <span className="pc-chip pc-payout-chip"><LuChartColumn size={16} /></span>
+                  <div>
+                    <div className="pc-payout-t">Payout Ready <LuInfo size={12} /></div>
+                    <div className="pc-payout-v">{fmtINR(payoutReady)}</div>
+                  </div>
+                </div>
+                <div className="pc-payout-s">
+                  {payoutReady > 0
+                    ? 'Ready to withdraw from your funded account.'
+                    : 'Complete a challenge to unlock withdrawals'}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="pc-card pc-how">
+            <div className="pc-panel-head">
+              <div className="pc-panel-title">
+                <span className="pc-chip pc-panel-chip" style={{ background: '#EEF4FF', color: '#2563EB' }}>
+                  <LuBookOpen size={17} />
+                </span>
+                <div className="pc-panel-t">How payouts work?</div>
+              </div>
+              <button className="pc-link" onClick={() => navigate('/how-it-works')}>
+                View Details <LuArrowRight size={12} />
+              </button>
+            </div>
+            <div className="pc-how-list">
+              {HOW.map(([t, sub], i) => (
+                <div key={t} className="pc-how-item">
+                  <span className="pc-how-n">{i + 1}</span>
+                  <div>
+                    <div className="pc-how-t">{t}</div>
+                    <div className="pc-how-s">{sub}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {accounts.length === 0 ? (
-          <div style={{
-            padding: 40, textAlign: 'center', borderRadius: 14,
-            background: 'var(--bg-secondary)', border: '1px solid var(--border-color)'
-          }}>
-            <div style={{ fontSize: 40, marginBottom: 10 }}>🏆</div>
-            <h3 style={{ margin: '0 0 8px', color: 'var(--text-primary)' }}>No passed challenges yet</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 13, margin: '0 0 16px' }}>
-              Pass an evaluation challenge to see it here. After passing, you can withdraw the profit split directly to your UPI.
-            </p>
-            <button
-              onClick={() => navigate('/app/my-challenges')}
-              style={{
-                padding: '10px 22px', borderRadius: 10, border: 'none',
-                background: 'var(--gold)', color: 'var(--on-gold)', fontWeight: 600, cursor: 'pointer'
-              }}
-            >See My Challenges</button>
+          <div className="pc-card pc-empty">
+            <EmptyCandles />
+            <div className="pc-empty-art"><EmptyTrophy /></div>
+            <h3>No funded accounts yet</h3>
+            <p>Pass an evaluation challenge to see it here. After passing, you can withdraw the profits directly to your UPI or bank account.</p>
+            <div className="pc-empty-actions">
+              <button className="pc-btn" onClick={() => navigate('/app/my-challenges')}>
+                <LuTrophy size={15} /> View My Challenges <LuArrowRight size={14} />
+              </button>
+              <button className="pc-btn pc-btn-ghost" onClick={() => navigate('/app/challenges')}>
+                <LuZap size={15} /> Start Evaluation
+              </button>
+            </div>
           </div>
         ) : (
           <div className="pc-cards-grid">
@@ -601,7 +718,7 @@ function PassedChallengesPage() {
                           textAlign: 'center', cursor: 'help', lineHeight: 1.3
                         }}
                       >
-                        🔒 {lockReason || 'Withdraw locked'}
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><LuLock size={13} /> {lockReason || 'Withdraw locked'}</span>
                       </div>
                     ) : isPassed ? (
                       <div style={{
@@ -621,7 +738,7 @@ function PassedChallengesPage() {
       {/* Payout History Section */}
       {payoutHistory.length > 0 && (
         <div style={{ marginTop: 24, background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: 14, padding: 18 }}>
-          <h3 style={{ margin: '0 0 14px', fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>📋 My Payout Requests</h3>
+          <h3 style={{ margin: '0 0 14px', fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}><span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><LuClipboardList size={16} /> My Payout Requests</span></h3>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
@@ -653,7 +770,11 @@ function PassedChallengesPage() {
                           fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
                           background: statusBg, color: statusColor
                         }}>
-                          {p.status === 'approved' ? '✓ Approved' : p.status === 'rejected' ? '✗ Rejected' : '⏳ Pending'}
+                          {p.status === 'approved'
+                          ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><LuCheck size={12} /> Approved</span>
+                          : p.status === 'rejected'
+                            ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><LuX size={12} /> Rejected</span>
+                            : <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><LuClock size={12} /> Pending</span>}
                         </span>
                       </td>
                     </tr>
@@ -683,7 +804,7 @@ function PassedChallengesPage() {
               color: 'var(--text-primary)', maxHeight: '92vh', overflowY: 'auto'
             }}
           >
-            <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>💸 Withdraw Profit</div>
+            <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}><span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><LuBanknote size={18} /> Withdraw Profit</span></div>
             <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 14 }}>
               {withdrawAccount.accountId} · {withdrawAccount.challengeId?.name}<br />
               Maximum withdrawable: <strong style={{ color: '#10b981' }}>{fmtINR(computeWithdrawable(withdrawAccount).withdrawable)}</strong>

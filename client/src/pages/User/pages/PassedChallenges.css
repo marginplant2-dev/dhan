@@ -1,0 +1,408 @@
+/* Passed Challenges — built to the supplied reference.
+   Shares the tokens and the chip/card language of MyChallenges.css so the two
+   pages read as one product. Full width: no centred column, no dead gutters. */
+
+.pc-root {
+  --pc-navy: #123C87;
+  --pc-navy-deep: #0C2C66;
+  --pc-ink: #16233A;
+  --pc-muted: #6B7A94;
+  --pc-line: #E6ECF5;
+  --pc-surface: #F4F7FB;
+
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--pc-surface);
+}
+
+.pc-wrap { padding: 16px 24px 56px; }
+
+.pc-crumb {
+  font-size: 12px;
+  color: var(--pc-muted);
+  margin-bottom: 10px;
+}
+
+.pc-crumb b { color: var(--pc-ink); font-weight: 600; }
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+.pc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.pc-head-left { display: flex; align-items: center; gap: 13px; min-width: 0; }
+
+.pc-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border-radius: 11px;
+}
+
+.pc-head-chip {
+  width: 44px;
+  height: 44px;
+  background: #FFF3DC;
+  color: #E0912F;
+}
+
+.pc-head h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--pc-ink);
+  line-height: 1.15;
+}
+
+.pc-head p { margin: 3px 0 0; font-size: 12.5px; color: var(--pc-muted); }
+
+/* Right-hand banner — "complete an evaluation" */
+.pc-banner {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #E8F1FE, #DCE9FD);
+  border: 1px solid #CBDEFA;
+  flex: 0 1 auto;
+}
+
+.pc-banner-chip { width: 36px; height: 36px; background: #fff; color: var(--pc-navy); }
+.pc-banner-t { font-size: 13px; font-weight: 700; color: var(--pc-ink); line-height: 1.25; }
+.pc-banner-s { font-size: 11.5px; color: var(--pc-muted); margin-top: 2px; }
+
+.pc-banner-go {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border: none;
+  border-radius: 999px;
+  background: var(--pc-navy);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+}
+
+.pc-banner-go:hover { background: var(--pc-navy-deep); transform: translateX(2px); }
+
+/* ── Cards ──────────────────────────────────────────────────────────── */
+.pc-card {
+  background: #fff;
+  border: 1px solid var(--pc-line);
+  border-radius: 15px;
+  box-shadow: 0 1px 2px rgba(20, 40, 80, 0.04);
+}
+
+/* ── Stat row ───────────────────────────────────────────────────────── */
+.pc-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 13px;
+  margin-bottom: 13px;
+}
+
+.pc-stat {
+  position: relative;
+  padding: 15px 16px;
+  overflow: hidden;
+}
+
+/* The reference tucks a faint illustration into each card's right edge. It is
+   decorative, so it is inert to the pointer and hidden from assistive tech. */
+.pc-stat-art {
+  position: absolute;
+  right: -6px;
+  bottom: -8px;
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+.pc-stat-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.pc-stat-chip { width: 34px; height: 34px; }
+
+.pc-stat-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pc-ink);
+  line-height: 1.25;
+}
+
+.pc-stat-value {
+  font-size: 25px;
+  font-weight: 800;
+  color: var(--pc-ink);
+  line-height: 1.15;
+  margin-top: 3px;
+}
+
+.pc-stat-sub { font-size: 11px; color: var(--pc-muted); margin-top: 2px; }
+
+.pc-stat-body { position: relative; margin-left: 47px; margin-top: -30px; }
+
+.pc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #E9F9F1;
+  color: #059669;
+  font-size: 10.5px;
+  font-weight: 700;
+  flex: 0 0 auto;
+}
+
+/* ── Progress + payouts row ─────────────────────────────────────────── */
+.pc-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 13px;
+  margin-bottom: 13px;
+  align-items: start;
+}
+
+.pc-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 16px 0;
+}
+
+.pc-panel-title { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.pc-panel-chip { width: 34px; height: 34px; }
+.pc-panel-t { font-size: 14px; font-weight: 800; color: var(--pc-ink); line-height: 1.25; }
+.pc-panel-s { font-size: 11.5px; color: var(--pc-muted); margin-top: 2px; }
+
+.pc-link {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--pc-navy);
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pc-link:hover { text-decoration: underline; }
+
+.pc-progress-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 16px;
+  padding: 16px;
+  align-items: center;
+}
+
+/* Stepper — the connector is one dashed line behind the circles, so it cannot
+   drift out of alignment when a label wraps. */
+.pc-steps { position: relative; display: flex; justify-content: space-between; }
+
+.pc-steps::before {
+  content: '';
+  position: absolute;
+  top: 13px;
+  left: 12%;
+  right: 12%;
+  border-top: 2px dashed #D3DEEE;
+}
+
+.pc-step { position: relative; text-align: center; flex: 1; min-width: 0; }
+
+.pc-step-dot {
+  width: 27px;
+  height: 27px;
+  margin: 0 auto;
+  border-radius: 999px;
+  background: #fff;
+  border: 2px solid #D3DEEE;
+  color: var(--pc-muted);
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.pc-step.is-on .pc-step-dot { border-color: var(--pc-navy); color: var(--pc-navy); }
+.pc-step.is-done .pc-step-dot { background: var(--pc-navy); border-color: var(--pc-navy); color: #fff; }
+
+.pc-step-n { font-size: 10.5px; color: var(--pc-muted); margin-top: 6px; font-weight: 700; }
+.pc-step-l { font-size: 11px; color: var(--pc-ink); font-weight: 700; margin-top: 1px; }
+.pc-step.is-on .pc-step-l { color: var(--pc-navy); }
+
+.pc-payout {
+  padding: 14px;
+  border-radius: 13px;
+  background: #EAF2FE;
+  border: 1px solid #D2E3FB;
+}
+
+.pc-payout-top { display: flex; align-items: center; gap: 9px; }
+.pc-payout-chip { width: 30px; height: 30px; background: #fff; color: var(--pc-navy); }
+.pc-payout-t { font-size: 11.5px; font-weight: 700; color: var(--pc-muted); display: flex; align-items: center; gap: 4px; }
+.pc-payout-v { font-size: 22px; font-weight: 800; color: var(--pc-ink); line-height: 1.2; }
+.pc-payout-s { font-size: 11px; color: var(--pc-muted); margin-top: 6px; line-height: 1.35; }
+
+/* ── How payouts work ───────────────────────────────────────────────── */
+.pc-how { padding-bottom: 6px; }
+.pc-how-list { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 14px; }
+.pc-how-item { display: flex; gap: 11px; }
+
+.pc-how-n {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #EAF2FE;
+  color: var(--pc-navy);
+  font-size: 11.5px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pc-how-t { font-size: 12.5px; font-weight: 700; color: var(--pc-ink); line-height: 1.3; }
+.pc-how-s { font-size: 11.5px; color: var(--pc-muted); margin-top: 2px; line-height: 1.4; }
+
+/* ── Empty state ────────────────────────────────────────────────────── */
+.pc-empty {
+  position: relative;
+  padding: 34px 24px 38px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.pc-empty-art { position: relative; z-index: 1; }
+
+/* Faint candles along the foot of the card, as in the reference. */
+.pc-empty-bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.pc-empty h3 {
+  position: relative;
+  z-index: 1;
+  margin: 14px 0 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--pc-ink);
+}
+
+.pc-empty p {
+  position: relative;
+  z-index: 1;
+  margin: 8px auto 0;
+  max-width: 520px;
+  font-size: 13px;
+  color: var(--pc-muted);
+  line-height: 1.5;
+}
+
+.pc-empty-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.pc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border: none;
+  border-radius: 10px;
+  background: var(--pc-navy);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+}
+
+.pc-btn:hover { background: var(--pc-navy-deep); transform: translateY(-1px); }
+
+.pc-btn-ghost {
+  background: #fff;
+  color: var(--pc-navy);
+  border: 1px solid #C9DBF8;
+}
+
+.pc-btn-ghost:hover { background: #F5F9FF; border-color: var(--pc-navy); }
+
+/* ── Account cards ──────────────────────────────────────────────────── */
+.pc-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 1180px) {
+  .pc-row { grid-template-columns: 1fr; }
+  .pc-progress-body { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 900px) {
+  .pc-stats { grid-template-columns: repeat(2, 1fr); }
+  .pc-banner { width: 100%; }
+}
+
+@media (max-width: 640px) {
+  .pc-wrap { padding: 12px 12px 80px; }
+  .pc-head h1 { font-size: 19px; }
+  .pc-head p { font-size: 11.5px; }
+  .pc-head-chip { width: 38px; height: 38px; }
+
+  .pc-stats { gap: 9px; }
+  .pc-stat { padding: 12px; }
+  .pc-stat-value { font-size: 20px; }
+  .pc-stat-body { margin-left: 0; margin-top: 9px; }
+
+  .pc-steps::before { left: 14%; right: 14%; }
+  .pc-step-l { font-size: 10px; }
+  .pc-step-n { font-size: 9.5px; }
+
+  .pc-empty { padding: 26px 14px 30px; }
+  .pc-empty h3 { font-size: 17px; }
+  .pc-btn { width: 100%; justify-content: center; }
+
+  .pc-cards-grid { grid-template-columns: 1fr; }
+}
