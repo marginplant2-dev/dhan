@@ -151,7 +151,7 @@ function ApplyForm({ user, onApplied, onError, error }) {
   };
 
   return (
-    <>
+    <div className="rp-scope">
       <div className="rp-hero">
         <div className="rp-hero-copy">
           <div className="rp-eyebrow">Referral Partner Program</div>
@@ -277,7 +277,7 @@ function ApplyForm({ user, onApplied, onError, error }) {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

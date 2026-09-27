@@ -2,14 +2,17 @@
    Same tokens and chip/card language as MyChallenges.css and
    PassedChallenges.css, so the three pages read as one product. */
 
-.rp-root {
+.rp-root,
+.rp-scope {
   --rp-navy: #123C87;
   --rp-navy-deep: #0C2C66;
   --rp-ink: #16233A;
   --rp-muted: #6B7A94;
   --rp-line: #E6ECF5;
   --rp-surface: #F4F7FB;
+}
 
+.rp-root {
   flex: 1;
   min-width: 0;
   width: 100%;

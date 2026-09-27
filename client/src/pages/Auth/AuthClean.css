@@ -118,7 +118,9 @@
   background-repeat: no-repeat;
   background-position: 14px center;
   font-size: 14.5px;
-  color: var(--a-text);
+  color: #09264B;
+  -webkit-text-fill-color: #09264B;
+  caret-color: #09264B;
   outline: none;
   transition: border-color .18s ease, box-shadow .18s ease;
   font-family: inherit;
@@ -129,6 +131,9 @@
 /* the icon in each field, chosen by what the field is for */
 .ac-form input[type="email"],
 .ac-form input[name="email"] { background-image: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%25238A99B0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/></svg>"); }
+.ac-form input[name="password"],
+.ac-form input[name="confirmPassword"],
+.ac-form input[name="newPassword"],
 .ac-form input[type="password"] { background-image: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%25238A99B0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='11' width='18' height='11' rx='2'/><path d='M7 11V7a5 5 0 0 1 10 0v4'/></svg>"); }
 .ac-form input[name="username"],
 .ac-form input[name="name"] { background-image: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%25238A99B0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21a8 8 0 1 0-16 0'/><circle cx='12' cy='7' r='4'/></svg>"); }
@@ -145,10 +150,11 @@
 .ac-form select option { background: #fff; color: var(--a-text); }
 .ac-form input:-webkit-autofill,
 .ac-form input:-webkit-autofill:hover,
-.ac-form input:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--a-text);
-  -webkit-box-shadow: 0 0 0 1000px var(--a-field) inset;
-  caret-color: var(--a-text);
+.ac-form input:-webkit-autofill:focus,
+.ac-form input:autofill {
+  -webkit-text-fill-color: #09264B;
+  -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset;
+  caret-color: #09264B;
   transition: background-color 9999s ease-in-out 0s;
 }
 
