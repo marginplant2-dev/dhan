@@ -112,7 +112,10 @@ function FundManagement() {
   });
   const [fundStatsLoading, setFundStatsLoading] = useState(false);
 
-  const fmtMoney = (v) => (typeof formatAdminCurrency === 'function' ? formatAdminCurrency(v) : `₹${Number(v || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+  // formatAdminCurrency was never imported here, so the typeof guard always
+  // fell through to this. Kept the behaviour, dropped the dead branch so a
+  // real no-undef stands out in lint.
+  const fmtMoney = (v) => `₹${Number(v || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
   const fetchFundStats = useCallback(async () => {
     setFundStatsLoading(true);
@@ -1258,12 +1261,12 @@ function FundManagement() {
 
   // Challenge Buys tab — early return with its own self-contained panel.
   if (activeTab === 'challenge-buys') {
-    return <ChallengeBuysPanel apiUrl={API_URL} />;
+    return <ChallengeBuysPanel apiUrl={API_URL} tabs={fundTabs} />;
   }
 
   // Challenge Resets tab — paid retry requests on FAILED accounts.
   if (activeTab === 'challenge-resets') {
-    return <ChallengeResetsPanel apiUrl={API_URL} />;
+    return <ChallengeResetsPanel apiUrl={API_URL} tabs={fundTabs} />;
   }
 
   // AI Options — subscription payments, and the plans that price them.
@@ -2018,7 +2021,7 @@ export default FundManagement;
 // to keep all bank-fund-management tabs co-located.
 // =================================================================
 
-function ChallengeBuysPanel({ apiUrl }) {
+function ChallengeBuysPanel({ apiUrl, tabs }) {
   const [rows, setRows] = useState([]);
   const [summary, setSummary] = useState({ pending: 0, approved: 0, rejected: 0, totalApproved: 0, totalPending: 0 });
   const [loading, setLoading] = useState(true);
@@ -2105,7 +2108,7 @@ function ChallengeBuysPanel({ apiUrl }) {
         <h2>Challenge Buy Requests</h2>
       </div>
 
-        {fundTabs}
+        {tabs}
 
       {/* Summary cards */}
       <div className="fund-stats-row" style={{ marginBottom: 18 }}>
@@ -2339,7 +2342,7 @@ function ChallengeBuysPanel({ apiUrl }) {
 // and restarts the account fresh (ACTIVE, 0 trades). Mirrors ChallengeBuysPanel.
 // =================================================================
 
-function ChallengeResetsPanel({ apiUrl }) {
+function ChallengeResetsPanel({ apiUrl, tabs }) {
   const [rows, setRows] = useState([]);
   const [summary, setSummary] = useState({ pending: 0, approved: 0, rejected: 0, totalPending: 0 });
   const [loading, setLoading] = useState(true);
@@ -2420,7 +2423,7 @@ function ChallengeResetsPanel({ apiUrl }) {
         <h2>🔄 Challenge Reset / Restart Requests</h2>
       </div>
 
-        {fundTabs}
+        {tabs}
 
       {/* Clear context banner so the admin never confuses these with buys. */}
       <div style={{
