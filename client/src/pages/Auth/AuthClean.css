@@ -328,3 +328,53 @@
   .ac-form--2col > .ac-success,
   .ac-form--2col > .ac-info { grid-column: 1 / -1; }
 }
+
+/* ── WhatsApp support ───────────────────────────────────────────────────────
+   Top of every auth screen, so someone who cannot get in can reach a person
+   without first getting in. Reads the same admin-set number as the site's
+   floating button.
+   ─────────────────────────────────────────────────────────────────────────── */
+.ac-wa {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 14px 7px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--a-border);
+  background: var(--a-card);
+  box-shadow: 0 6px 18px -12px rgba(9, 38, 75, .45);
+  text-decoration: none;
+  transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+
+.ac-wa:hover {
+  border-color: #25D366;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px -12px rgba(37, 211, 102, .5);
+}
+
+.ac-wa-mark {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #25D366;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  line-height: 0;
+}
+
+.ac-wa-text { display: flex; flex-direction: column; line-height: 1.25; }
+.ac-wa-text b { font-size: 12px; font-weight: 700; color: var(--a-text); }
+.ac-wa-text i { font-size: 10.5px; font-style: normal; color: var(--a-muted); }
+
+@media (max-width: 640px) {
+  .ac-wa { top: 10px; right: 10px; padding: 6px; gap: 0; }
+  /* On a phone the label would crowd the logo, so the mark carries it alone. */
+  .ac-wa-text { display: none; }
+}

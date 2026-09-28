@@ -302,7 +302,7 @@ async function sendWelcomeEmail(to, { name, userId } = {}) {
     '',
     '─── Need help? ───',
     'Email:    support@dhanfunded.com',
-    'WhatsApp: +91 8367045119',
+    'WhatsApp: +91 86906 64318',
     'Telegram: @dhanfunded',
     '',
     'Trade safe — see you on the charts!',
@@ -406,8 +406,8 @@ async function sendWelcomeEmail(to, { name, userId } = {}) {
         <tr><td style="padding:22px 24px;">
           <p style="margin:0 0 12px 0;font-size:13px;font-weight:800;color:#fff;letter-spacing:1px;text-transform:uppercase;">Need help? We're here.</p>
           <p style="margin:0 0 6px 0;font-size:13px;color:#9FB5AB;line-height:1.7;">📧&nbsp; <a href="mailto:support@dhanfunded.com" style="color:#49E8F0;text-decoration:none;">support@dhanfunded.com</a></p>
-          <p style="margin:0 0 6px 0;font-size:13px;color:#9FB5AB;line-height:1.7;">📞&nbsp; <a href="tel:+918367045119" style="color:#49E8F0;text-decoration:none;">+91 8367045119</a> &nbsp;·&nbsp; Mon–Sat 10 AM – 6 PM IST</p>
-          <p style="margin:0 0 6px 0;font-size:13px;color:#9FB5AB;line-height:1.7;">💬&nbsp; <a href="https://wa.me/918367045119" style="color:#49E8F0;text-decoration:none;">WhatsApp +91 8367045119</a></p>
+          <p style="margin:0 0 6px 0;font-size:13px;color:#9FB5AB;line-height:1.7;">📞&nbsp; <a href="tel:+918690664318" style="color:#49E8F0;text-decoration:none;">+91 86906 64318</a> &nbsp;·&nbsp; Mon–Sat 10 AM – 6 PM IST</p>
+          <p style="margin:0 0 6px 0;font-size:13px;color:#9FB5AB;line-height:1.7;">💬&nbsp; <a href="https://wa.me/918690664318" style="color:#49E8F0;text-decoration:none;">WhatsApp +91 86906 64318</a></p>
           <p style="margin:0;font-size:13px;color:#9FB5AB;line-height:1.7;">📱&nbsp; <a href="https://t.me/dhanfunded" style="color:#49E8F0;text-decoration:none;">Telegram @dhanfunded</a></p>
         </td></tr>
       </table>

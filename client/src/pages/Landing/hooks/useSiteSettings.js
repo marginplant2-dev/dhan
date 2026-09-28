@@ -7,8 +7,8 @@ const DEFAULTS = {
   siteName: 'DhanFunded',
   siteUrl: 'https://dhanfunded.com',
   supportEmail: 'support@dhanfunded.com',
-  supportPhone: '+91 8367045119',
-  supportWhatsapp: '+91 8367045119',
+  supportPhone: '+91 86906 64318',
+  supportWhatsapp: '+91 86906 64318',
   phoneHours: 'Mon–Sat, 9AM–6PM IST',
   whatsappHours: 'Mon–Sat, 9AM–9PM IST',
   emailResponseNote: 'Response within 2 hours',
@@ -45,7 +45,7 @@ const CLEARABLE = new Set([
 let cache = null;
 let inflight = null;
 
-/** Strip everything except digits → wa.me / tel friendly (e.g. "+91 8367045119" → "918367045119"). */
+/** Strip everything except digits → wa.me / tel friendly (e.g. "+91 86906 64318" → "918690664318"). */
 export function digitsOnly(raw) {
   return String(raw || '').replace(/\D/g, '');
 }

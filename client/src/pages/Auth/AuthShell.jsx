@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import { FaWhatsapp } from 'react-icons/fa6';
+import { useSiteSettings, digitsOnly } from '../Landing/hooks/useSiteSettings';
 import wordmark from '../../assets/dhanfunded-wordmark-dark.png';
 import Seo from '../../components/Seo';
 import './AuthClean.css';
@@ -38,9 +40,31 @@ export default function AuthShell({ title, subtitle, badge, legal, children, spl
     };
   }, []);
 
+  // Same admin-set number the site's floating button uses, so support is one
+  // tap away before anyone has signed in. No number set: no button, rather
+  // than a dead wa.me link.
+  const { supportWhatsapp } = useSiteSettings();
+  const waDigits = digitsOnly(supportWhatsapp);
+
   return (
     <div className={`ac-page${split ? ' ac-page--split' : ''}`}>
       <Seo />
+
+      {waDigits && (
+        <a
+          className="ac-wa"
+          href={`https://wa.me/${waDigits}?text=${encodeURIComponent('Hi! I need help with my DhanFunded account.')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Chat with support on WhatsApp at ${supportWhatsapp}`}
+        >
+          <span className="ac-wa-mark"><FaWhatsapp size={17} /></span>
+          <span className="ac-wa-text">
+            <b>Need help?</b>
+            <i>Chat on WhatsApp</i>
+          </span>
+        </a>
+      )}
       <div className="ac-bg" aria-hidden="true">
         <span className="ac-orb ac-orb-1" />
         <span className="ac-orb ac-orb-2" />
