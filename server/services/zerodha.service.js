@@ -364,12 +364,24 @@ class ZerodhaService {
       try {
         const subSettings = await ZerodhaSettings.getSettings();
         const seenTokens = new Set(results.map(r => Number(r.token)));
-        for (const inst of (subSettings.subscribedInstruments || [])) {
-          if (inst.segment !== 'INDICES') continue;
-          const tok = Number(inst.token);
-          if (seenTokens.has(tok) || !matchesQuery(inst)) continue;
-          results.push(inst);
-          seenTokens.add(tok);
+        const addIndices = (list) => {
+          for (const inst of (list || [])) {
+            if (inst.segment !== 'INDICES') continue;
+            const tok = Number(inst.token);
+            if (seenTokens.has(tok) || !matchesQuery(inst)) continue;
+            results.push(inst);
+            seenTokens.add(tok);
+          }
+        };
+        addIndices(subSettings.subscribedInstruments);
+        // Reading only the subscribed set made this circular: an index the
+        // admin had not subscribed yet could never be found, so it could never
+        // be subscribed. SENSEX and NIFTY BANK were unreachable that way. Fall
+        // back to the exchange dumps, which carry every index.
+        if (!results.some(r => r.segment === 'INDICES')) {
+          for (const exch of ['NSE', 'BSE']) {
+            addIndices(await this.fetchExchangeInstruments(exch));
+          }
         }
       } catch (err) {
         console.warn('[searchAllInstruments] index merge skipped:', err.message);
