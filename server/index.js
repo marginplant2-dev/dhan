@@ -3526,7 +3526,18 @@ app.get('/api/zerodha/historical/:symbol', async (req, res) => {
     );
     res.json({ success: true, candles });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message, candles: [] });
+    // A dead broker session is the common case here and it is not a server
+    // fault, so say which it is: the chart can then show the reason instead of
+    // an empty pane the user reads as "the chart is broken".
+    const kind = error.historyFailure || 'upstream';
+    const message = kind === 'session'
+      ? 'Zerodha session expired — reconnect in Admin → Zerodha Connect.'
+      : kind === 'permission'
+        ? 'This Zerodha app is not subscribed to historical data.'
+        : error.message;
+    res.status(kind === 'upstream' ? 500 : 503).json({
+      success: false, error: message, reason: kind, candles: []
+    });
   }
 });
 

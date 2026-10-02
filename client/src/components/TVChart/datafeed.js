@@ -394,6 +394,16 @@ export default {
                 return;
             }
 
+            // The broker session being down is not "no bars here" — the
+            // live-quote fallback has no quote to work from either, so it drew
+            // an empty pane with nothing to explain it. Hand TradingView the
+            // reason and let it say so on the chart.
+            if (data && data.success === false && (data.reason === 'session' || data.reason === 'permission')) {
+                console.error(`getBars: ${baseSymbol} — ${data.error}`);
+                if (typeof onErrorCallback === 'function') onErrorCallback(data.error);
+                return;
+            }
+
             // Backend returned zero history — synthesise candles from the live
             // quote so the chart shows price action instead of a blank pane.
             console.warn(`getBars: no history for ${baseSymbol} (${dataSource}), using live-quote fallback:`, data?.error);

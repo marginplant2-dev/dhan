@@ -96,6 +96,23 @@ function extractBidAskFromZerodha(tickLike, ltpFallback = 0) {
   return { bid, ask, ltp: ltp || bid };
 }
 
+/**
+ * What went wrong when Kite refused a historical request, as far as it changes
+ * what the user should be told:
+ *   'session'    — the daily access token is dead; reconnect fixes it.
+ *   'permission' — the Kite app has no historical-data subscription.
+ *   'upstream'   — anything else (network, 5xx); a real fault to investigate.
+ * Kite answers both of the first two with 403, so the error_type decides.
+ */
+function classifyHistoryFailure(error) {
+  const status = error?.response?.status;
+  const type = String(error?.response?.data?.error_type || '');
+  const message = String(error?.response?.data?.message || '');
+  if (/TokenException/i.test(type) || /token/i.test(message)) return 'session';
+  if (status === 403 || /PermissionException/i.test(type)) return 'permission';
+  return 'upstream';
+}
+
 class ZerodhaService {
   constructor() {
     this.baseUrl = 'https://api.kite.trade';
@@ -1294,9 +1311,15 @@ class ZerodhaService {
       }
       return candles;
     } catch (error) {
-      console.error('Error fetching historical data:', error.response?.data || error.message);
-      // Return empty array instead of throwing - chart will show no data
-      return [];
+      const upstream = error.response?.data || {};
+      console.error('Error fetching historical data:', upstream || error.message);
+      // Swallowing this returned an empty array that the route then reported as
+      // success, so an expired broker session and a quiet window looked
+      // identical and the chart just drew nothing. Hand the caller the reason.
+      const err = new Error(upstream.message || error.message || 'Historical data request failed');
+      err.historyFailure = classifyHistoryFailure(error);
+      err.upstreamStatus = error.response?.status || null;
+      throw err;
     }
   }
 
@@ -1378,3 +1401,4 @@ class ZerodhaService {
 const zerodhaService = new ZerodhaService();
 
 module.exports = zerodhaService;
+module.exports.classifyHistoryFailure = classifyHistoryFailure;
