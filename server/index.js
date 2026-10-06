@@ -268,6 +268,18 @@ app.post('/api/prop/cashfree/webhook', express.raw({ type: '*/*' }), async (req,
 app.post('/api/prop/upiqr/webhook', express.raw({ type: '*/*' }), async (req, res) => {
   try {
     const upiqr = require('./services/upiqr.service');
+
+    // UPIQR documents X-Webhook-Signature as sha256=<hmac_hex> over the raw
+    // body. When a signature is sent it must be right — a wrong one is a
+    // forgery attempt, not a mishap. When none is sent we still accept the
+    // call, because nothing below trusts the payload anyway: the decision is
+    // made by asking UPIQR directly.
+    const signature = req.headers['x-webhook-signature'];
+    if (signature && !upiqr.verifyWebhookSignature(req.body, signature)) {
+      console.warn('[UPIQR webhook] bad signature, rejected');
+      return res.status(400).json({ error: 'invalid signature' });
+    }
+
     let body = {};
     try { body = JSON.parse(req.body.toString('utf8') || '{}'); } catch (_) { body = {}; }
 
