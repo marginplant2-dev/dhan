@@ -1298,7 +1298,25 @@ router.get('/my-accounts', verifyUserToken, async (req, res) => {
     // purchased account, and it would otherwise show up as an "active
     // challenge" on the dashboard, in My Challenges and in billing history.
     // Its own card fetches it from /api/prop/demo.
-    const accounts = await ChallengeAccount.find({ userId: req.user._id, accountType: { $ne: 'DEMO' } })
+    // Opening the gateway checkout creates the PENDING account up front, so an
+    // abandoned "Pay Online" left a challenge sitting in the user's list as
+    // "Awaiting Approval" for money nobody had paid. Those are hidden until the
+    // payment lands; a manual UPI buy genuinely is awaiting approval and stays.
+    const Transaction = require('../models/Transaction');
+    const unpaidGatewayAccountIds = (await Transaction.find({
+      type: 'challenge_purchase',
+      status: 'pending',
+      paymentMethod: { $in: ['razorpay', 'cashfree', 'upiqr'] },
+      oderId: req.user.oderId
+    }).select('challengePurchaseInfo.challengeAccountId').lean())
+      .map(t => t.challengePurchaseInfo?.challengeAccountId)
+      .filter(Boolean);
+
+    const accounts = await ChallengeAccount.find({
+      userId: req.user._id,
+      accountType: { $ne: 'DEMO' },
+      ...(unpaidGatewayAccountIds.length ? { _id: { $nin: unpaidGatewayAccountIds } } : {})
+    })
       .populate('challengeId', 'name fundSize stepsCount challengeFee fundedSettings rules.maxDailyDrawdownPercent rules.maxOverallDrawdownPercent rules.profitTargetPhase1Percent rules.profitTargetPhase2Percent rules.profitTargetInstantPercent rules.maxOneDayProfitPercentOfTarget rules.challengeExpiryDays rules.minLotSize rules.maxLotSize rules.allowFractionalLots')
       .sort({ createdAt: -1 })
       .lean();

@@ -6,6 +6,13 @@ const IBCoupon = require('../models/IBCoupon');
 const IB = require('../models/IB');
 const ibCouponService = require('./ibCoupon.service');
 const globalCouponService = require('./globalCoupon.service');
+
+/** Methods that settle themselves. A pending row for one of these means the
+ *  buyer opened the checkout and has not paid — there is nothing for an admin
+ *  to decide, so it stays out of the approval queue. Mirrors GATEWAY_METHODS
+ *  in propTradingEngine. */
+const GATEWAY_METHODS = ['razorpay', 'cashfree', 'upiqr'];
+const UNPAID_GATEWAY = { paymentMethod: { $in: GATEWAY_METHODS }, status: 'pending' };
 const GlobalCoupon = require('../models/GlobalCoupon');
 
 /**
@@ -213,7 +220,7 @@ class ChallengeApprovalService {
    * Admin-facing list of challenge_purchase transactions, filterable.
    */
   async list({ status = null, search = null, page = 1, limit = 50 }) {
-    const filter = { type: 'challenge_purchase' };
+    const filter = { type: 'challenge_purchase', $nor: [UNPAID_GATEWAY] };
     if (status && status !== 'all') filter.status = status;
     if (search) {
       const rx = new RegExp(String(search).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
@@ -242,7 +249,7 @@ class ChallengeApprovalService {
     rows.forEach((r) => { r.hasProof = withProof.has(String(r._id)); });
 
     const summaryAgg = await Transaction.aggregate([
-      { $match: { type: 'challenge_purchase' } },
+      { $match: { type: 'challenge_purchase', $nor: [UNPAID_GATEWAY] } },
       {
         $group: {
           _id: '$status',
