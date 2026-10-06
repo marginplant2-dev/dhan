@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useOutletContext, useNavigate } from 'react-router-dom';
 import { compressImage, base64ByteSize } from '../../../utils/compressImage';
 import UpiQr from '../../../components/UpiQr';
+import { useSiteSettings } from '../../Landing/hooks/useSiteSettings';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
@@ -20,13 +21,10 @@ const RAZORPAY_ENABLED = false;
 // Cashfree online checkout. Set to false to hide the "Pay Online" button and
 // fall back to manual-UPI-only (the gateway code + endpoints stay in place).
 const CASHFREE_ENABLED = false;
-// UPIQR online checkout — the gateway in use. A paid order activates the
-// challenge automatically; nothing here reaches withdrawals, which stay on
-// their existing manual path.
-const UPIQR_ENABLED = true;
-// True when ANY automated gateway is shown — controls the "manual UPI" button's
-// role (secondary pill vs full-size primary).
-const GATEWAY_ON = RAZORPAY_ENABLED || CASHFREE_ENABLED || UPIQR_ENABLED;
+// UPIQR online checkout. Unlike the two above this is not a constant — it
+// follows Admin -> Settings -> Feature Toggles, so the gateway can be turned
+// off without a deploy and buying falls back to manual UPI. Nothing here
+// reaches withdrawals, which stay on their existing manual path.
 
 const PROGRAMS = [
   { steps: 2, label: '2-Step', sub: 'Standard evaluation', icon: '\u2730', color: '#1a1a2e',
@@ -74,6 +72,11 @@ function PropChallengePage() {
   const [payStep, setPayStep] = useState(1);
   const [paymentForm, setPaymentForm] = useState({ transactionRef: '', screenshotBase64: '', note: '' });
   const [upiqrBusy, setUpiqrBusy] = useState(false);
+  const { paymentGatewayEnabled } = useSiteSettings();
+  const UPIQR_ENABLED = paymentGatewayEnabled !== false;
+  // Controls whether the manual-UPI button is the secondary pill or the
+  // full-size primary, so turning the gateway off restores the old checkout.
+  const GATEWAY_ON = RAZORPAY_ENABLED || CASHFREE_ENABLED || UPIQR_ENABLED;
   const [paymentSubmitting, setPaymentSubmitting] = useState(false);
   const [paymentError, setPaymentError] = useState(null);
 

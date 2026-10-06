@@ -1116,6 +1116,13 @@ router.post('/upiqr/create-order', verifyUserToken, async (req, res) => {
     if (!upiqr.isConfigured()) {
       return res.status(503).json({ success: false, message: 'Online payment is not available right now. Please use the manual UPI option.' });
     }
+    // Admin -> Settings -> Feature Toggles. Checked here as well as in the UI:
+    // hiding the button does not stop anyone calling this endpoint directly.
+    const AppSettings = require('../models/AppSettings');
+    const appSettings = await AppSettings.getSingleton();
+    if (appSettings?.paymentGatewayEnabled === false) {
+      return res.status(503).json({ success: false, message: 'Online payment is turned off. Please use the manual UPI option.' });
+    }
     const { challengeId, tierIndex, couponCode } = req.body;
     if (!challengeId) return res.status(400).json({ success: false, message: 'challengeId required' });
 

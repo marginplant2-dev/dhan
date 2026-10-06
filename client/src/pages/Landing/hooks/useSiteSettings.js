@@ -5,6 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 // Fallback defaults so the UI never shows blanks if the public fetch fails.
 const DEFAULTS = {
   siteName: 'DhanFunded',
+  paymentGatewayEnabled: true,
   siteUrl: 'https://dhanfunded.com',
   supportEmail: 'support@dhanfunded.com',
   supportPhone: '+91 86906 64318',

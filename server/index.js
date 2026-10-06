@@ -13278,6 +13278,7 @@ const SETTINGS_DEFAULTS = {
   socialTelegram: 'https://t.me/dhanfunded',
   maintenanceMode: false,
   registrationEnabled: true,
+  paymentGatewayEnabled: true,
   demoAccountEnabled: true,
   minDeposit: 100,
   maxWithdrawal: 100000,
@@ -13340,6 +13341,7 @@ app.get('/api/settings/public', async (req, res) => {
       success: true,
       settings: {
         siteName: s.siteName,
+        paymentGatewayEnabled: s.paymentGatewayEnabled !== false,
         siteUrl: s.siteUrl,
         supportEmail: s.supportEmail,
         supportPhone: s.supportPhone,

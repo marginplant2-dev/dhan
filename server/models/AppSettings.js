@@ -43,6 +43,9 @@ const appSettingsSchema = new mongoose.Schema({
   // ── Feature toggles ──
   maintenanceMode: { type: Boolean, default: false },
   registrationEnabled: { type: Boolean, default: true },
+  // Off sends challenge buying back to the manual UPI flow (pay the admin
+  // UPI, upload the screenshot, admin approves from Challenge Buys).
+  paymentGatewayEnabled: { type: Boolean, default: true },
   demoAccountEnabled: { type: Boolean, default: true },
 
   // ── Transaction limits ──
