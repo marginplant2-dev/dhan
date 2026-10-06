@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useOutletContext, useNavigate } from 'react-router-dom';
+import { useOutletContext, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   LuTrophy, LuLayoutGrid, LuClock, LuPlay, LuCrown, LuCircleCheck, LuCircleX,
   LuSearch, LuArrowUpDown, LuChevronDown, LuList, LuShoppingCart, LuInfo, LuPlus,
@@ -81,7 +81,64 @@ function MyChallengesPage() {
   const [query, setQuery] = useState('');
   const [sortBy, setSortBy] = useState('latest');
   const [view, setView] = useState('grid');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [payNote, setPayNote] = useState(null);
   const pollingRef = useRef(null);
+
+  // Coming back from the UPIQR payment page. The id is the only thing the
+  // browser carries; the server asks the gateway what actually happened, so a
+  // crafted query string cannot activate anything. The callback settles it
+  // anyway if the browser never makes it back, hence the short poll rather
+  // than a single try.
+  useEffect(() => {
+    let stored = null;
+    try { stored = localStorage.getItem('dhanfunded-upiqr-pending'); } catch (_) { /* private mode */ }
+    const clientTxnId = searchParams.get('upiqr') || stored;
+    if (!clientTxnId) return;
+
+    let cancelled = false;
+    const clear = () => {
+      try { localStorage.removeItem('dhanfunded-upiqr-pending'); } catch (_) { /* private mode */ }
+      if (searchParams.get('upiqr')) {
+        searchParams.delete('upiqr');
+        setSearchParams(searchParams, { replace: true });
+      }
+    };
+
+    (async () => {
+      setPayNote({ kind: 'wait', text: 'Confirming your payment…' });
+      // UPI settlement can lag the redirect by a few seconds.
+      for (let attempt = 0; attempt < 6 && !cancelled; attempt++) {
+        try {
+          const res = await fetch(`${API_URL}/api/prop/upiqr/verify`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ clientTxnId }),
+          });
+          const data = await res.json();
+          if (cancelled) return;
+          if (data.success) {
+            setPayNote({ kind: 'ok', text: 'Payment received — your challenge account is active.' });
+            clear();
+            fetchAccounts(false);
+            return;
+          }
+          if (data.failed) {
+            setPayNote({ kind: 'err', text: data.message || 'That payment did not go through.' });
+            clear();
+            return;
+          }
+        } catch (_) { /* keep trying */ }
+        await new Promise(r => setTimeout(r, 2500));
+      }
+      if (!cancelled) {
+        setPayNote({ kind: 'wait', text: 'Payment is still being confirmed. If money was debited this activates on its own shortly.' });
+        clear();
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     fetchAccounts(true);
@@ -175,6 +232,20 @@ function MyChallengesPage() {
           <LuPlus size={15} /> Buy New Challenge
         </button>
       </div>
+
+      {payNote && (
+        <div
+          className="mc-card"
+          style={{
+            padding: '12px 14px', marginBottom: 12, fontSize: 13, fontWeight: 600,
+            borderColor: payNote.kind === 'ok' ? '#9FE3C4' : payNote.kind === 'err' ? '#F3BDBD' : '#CBDEFA',
+            background: payNote.kind === 'ok' ? '#EAF9F1' : payNote.kind === 'err' ? '#FDEDED' : '#EEF4FF',
+            color: payNote.kind === 'ok' ? '#06734C' : payNote.kind === 'err' ? '#B42318' : '#123C87',
+          }}
+        >
+          {payNote.text}
+        </div>
+      )}
 
       <div className="mc-card mc-filters">
         {BUCKETS.map(b => {

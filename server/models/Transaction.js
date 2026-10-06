@@ -26,7 +26,7 @@ const transactionSchema = new mongoose.Schema({
   // Payment Method (optional for admin fund requests)
   paymentMethod: {
     type: String,
-    enum: ['bank_transfer', 'upi', 'crypto', 'card', 'wallet', 'admin_transfer', 'razorpay', 'cashfree'],
+    enum: ['bank_transfer', 'upi', 'crypto', 'card', 'wallet', 'admin_transfer', 'razorpay', 'cashfree', 'upiqr'],
     required: false,
     default: null
   },
@@ -68,6 +68,13 @@ const transactionSchema = new mongoose.Schema({
     // Cashfree (gateway) — set for paymentMethod='cashfree'
     cashfreeOrderId: { type: String, index: true },
     cashfreePaymentId: { type: String },
+
+    // UPIQR (gateway) — set for paymentMethod='upiqr'. client_txn_id is the id
+    // we generate and the only handle upiqr's status check accepts, so it is
+    // what both the webhook and the browser callback reconcile on.
+    upiqrClientTxnId: { type: String, index: true },
+    upiqrOrderId: { type: String },
+    upiqrUtr: { type: String },
 
     // Prop payout fields (withdrawal from funded challenge account)
     challengeAccountId: { type: String },

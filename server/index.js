@@ -258,6 +258,59 @@ app.post('/api/prop/cashfree/webhook', express.raw({ type: '*/*' }), async (req,
   }
 });
 
+// ── UPIQR callback ────────────────────────────────────────────────────
+// Registered BEFORE express.json() to keep the RAW bytes available for a
+// signature check. UPIQR publishes no signature scheme, so this endpoint does
+// NOT believe its own payload: it reads an id out of it and then asks UPIQR,
+// over TLS with our API key, what actually happened. A forged call therefore
+// costs an attacker one wasted status check and activates nothing. If a
+// signature ever is documented, verifyWebhookSignature already covers it.
+app.post('/api/prop/upiqr/webhook', express.raw({ type: '*/*' }), async (req, res) => {
+  try {
+    const upiqr = require('./services/upiqr.service');
+    let body = {};
+    try { body = JSON.parse(req.body.toString('utf8') || '{}'); } catch (_) { body = {}; }
+
+    const clientTxnId =
+      body.client_txn_id || body.clientTxnId || body?.data?.client_txn_id || null;
+    if (!clientTxnId) return res.json({ received: true });
+
+    const Transaction = require('./models/Transaction');
+    const challengeApprovalService = require('./services/challengeApproval.service');
+    const tx = await Transaction.findOne({
+      type: 'challenge_purchase',
+      'paymentDetails.upiqrClientTxnId': String(clientTxnId)
+    });
+    if (!tx || tx.status !== 'pending') return res.json({ received: true });
+
+    // The decision, made by us and not by the caller.
+    const status = await upiqr.checkOrderStatus(clientTxnId);
+    if (!upiqr.isPaid(status)) return res.json({ received: true, paid: false });
+
+    const paid = Number(status.amount);
+    const owed = Number(tx.amount);
+    if (Number.isFinite(paid) && Number.isFinite(owed) && paid + 0.01 < owed) {
+      console.warn(`[UPIQR webhook] short payment on ${clientTxnId}: paid ${paid} of ${owed}`);
+      return res.json({ received: true, paid: false });
+    }
+
+    tx.paymentDetails = tx.paymentDetails || {};
+    if (status.upi_txn_id) tx.paymentDetails.upiqrUtr = String(status.upi_txn_id);
+    await tx.save();
+    try {
+      await challengeApprovalService.approveChallengeBuy(tx._id, 'upiqr:webhook');
+    } catch (e) {
+      // Already approved by the browser callback — safe no-op.
+      if (!/already/i.test(String(e.message))) throw e;
+    }
+    return res.json({ received: true, paid: true });
+  } catch (e) {
+    console.error('[UPIQR webhook] error:', e.message);
+    // 5xx → the sender retries, so a transient status-check failure still settles.
+    return res.status(500).json({ error: 'processing_error' });
+  }
+});
+
 // Body parsers
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ limit: '25mb', extended: true }));

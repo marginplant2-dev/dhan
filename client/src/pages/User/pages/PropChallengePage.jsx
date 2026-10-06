@@ -20,9 +20,13 @@ const RAZORPAY_ENABLED = false;
 // Cashfree online checkout. Set to false to hide the "Pay Online" button and
 // fall back to manual-UPI-only (the gateway code + endpoints stay in place).
 const CASHFREE_ENABLED = false;
+// UPIQR online checkout — the gateway in use. A paid order activates the
+// challenge automatically; nothing here reaches withdrawals, which stay on
+// their existing manual path.
+const UPIQR_ENABLED = true;
 // True when ANY automated gateway is shown — controls the "manual UPI" button's
 // role (secondary pill vs full-size primary).
-const GATEWAY_ON = RAZORPAY_ENABLED || CASHFREE_ENABLED;
+const GATEWAY_ON = RAZORPAY_ENABLED || CASHFREE_ENABLED || UPIQR_ENABLED;
 
 const PROGRAMS = [
   { steps: 2, label: '2-Step', sub: 'Standard evaluation', icon: '\u2730', color: '#1a1a2e',
@@ -69,6 +73,7 @@ function PropChallengePage() {
   // Sub-step inside the payment stage: 1 = Pay & Screenshot (QR + bank), 2 = Upload proof.
   const [payStep, setPayStep] = useState(1);
   const [paymentForm, setPaymentForm] = useState({ transactionRef: '', screenshotBase64: '', note: '' });
+  const [upiqrBusy, setUpiqrBusy] = useState(false);
   const [paymentSubmitting, setPaymentSubmitting] = useState(false);
   const [paymentError, setPaymentError] = useState(null);
 
@@ -268,6 +273,40 @@ function PropChallengePage() {
     } catch (e) {
       showToast('Payment error: ' + e.message, 'error');
       setCfBusy(false);
+    }
+  };
+
+  // UPIQR flow: create-order (server computes the fee) → leave for the hosted
+  // payment page → come back to /app/my-challenges?upiqr=<id>, which confirms
+  // with the server. The callback is the safety net if the browser never
+  // returns. The outcome is never decided here — only the server asks UPIQR.
+  const payWithUpiqr = async (payable) => {
+    if (!agreeTerms) { showToast('Please agree to the payment & service terms first', 'error'); return; }
+    if (!selectedPlan) { showToast('Please select a plan first', 'error'); return; }
+    setUpiqrBusy(true);
+    try {
+      logPurchaseIntent();
+      const res = await fetch(`${API_URL}/api/prop/upiqr/create-order`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+          challengeId: selectedPlan._id,
+          tierIndex: selectedTierIndex,
+          couponCode: couponState.applied?.code || null
+        })
+      });
+      const data = await res.json();
+      if (!data.success) { showToast(data.message || 'Could not start payment', 'error'); setUpiqrBusy(false); return; }
+      if (data.free) { showToast('Challenge activated (free)! 🎉', 'success'); setTimeout(() => navigate('/app/my-challenges'), 1200); return; }
+      if (!data.paymentUrl) { showToast('Payment link was not returned. Please use the UPI option.', 'error'); setUpiqrBusy(false); return; }
+
+      // Remembered so the return trip can still confirm if the redirect loses
+      // its query string (some UPI apps drop it on the way back).
+      try { localStorage.setItem('dhanfunded-upiqr-pending', data.clientTxnId); } catch (_) { /* private mode */ }
+      window.location.href = data.paymentUrl;
+    } catch (e) {
+      showToast('Payment error: ' + e.message, 'error');
+      setUpiqrBusy(false);
     }
   };
 
@@ -652,6 +691,26 @@ function PropChallengePage() {
                   const payable = Number((couponState.applied?.finalFee != null ? couponState.applied.finalFee : selectedTier.challengeFee) || 0);
                   return (
                   <>
+                    {/* UPIQR "Pay Online" — instant UPI, auto-activates once the
+                        server confirms the payment with the gateway. */}
+                    {UPIQR_ENABLED && (
+                      <button
+                        onClick={() => payWithUpiqr(payable)}
+                        disabled={!agreeTerms || upiqrBusy || buying}
+                        style={{
+                          width: '100%', padding: '15px', borderRadius: '12px', border: 'none', marginBottom: '10px',
+                          cursor: (agreeTerms && !upiqrBusy && !buying) ? 'pointer' : 'not-allowed',
+                          fontWeight: '800', fontSize: '16px', letterSpacing: '0.3px', color: '#fff',
+                          background: agreeTerms ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 'var(--border-color)',
+                          boxShadow: agreeTerms ? '0 8px 20px rgba(16,185,129,0.35)' : 'none',
+                          opacity: agreeTerms ? 1 : 0.5, transition: 'all 0.2s',
+                          touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent'
+                        }}
+                      >
+                        {upiqrBusy ? 'Opening payment…' : `⚡ Pay Online  ₹ ${payable.toLocaleString('en-IN')}`}
+                      </button>
+                    )}
+
                     {/* Cashfree "Pay Online" — instant, auto-activates on success.
                         Hidden while CASHFREE_ENABLED is false. */}
                     {CASHFREE_ENABLED && (

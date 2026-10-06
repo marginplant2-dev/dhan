@@ -1100,6 +1100,133 @@ router.post('/cashfree/verify', verifyUserToken, async (req, res) => {
   }
 });
 
+// ─── UPIQR (automated UPI gateway) challenge purchase ──────────────
+// Flow: create-order → (browser) UPIQR hosted page / UPI intent → verify.
+// Unlike Razorpay and Cashfree, UPIQR publishes no webhook signature scheme,
+// so neither the browser nor the callback is believed about whether money
+// arrived: both paths re-ask UPIQR over TLS with our own key. See
+// services/upiqr.service.js. Both are idempotent — approveChallengeBuy guards
+// on status.
+
+// POST /api/prop/upiqr/create-order — server computes the fee, creates a
+// PENDING account + transaction, then a UPIQR order sized to that fee.
+router.post('/upiqr/create-order', verifyUserToken, async (req, res) => {
+  try {
+    const upiqr = require('../services/upiqr.service');
+    if (!upiqr.isConfigured()) {
+      return res.status(503).json({ success: false, message: 'Online payment is not available right now. Please use the manual UPI option.' });
+    }
+    const { challengeId, tierIndex, couponCode } = req.body;
+    if (!challengeId) return res.status(400).json({ success: false, message: 'challengeId required' });
+
+    // 1) Pending account + transaction. The fee is computed here, server-side,
+    //    with the coupon reserved — the client never states a price.
+    const result = await propTradingEngine.requestChallengeBuy(req.user._id, {
+      challengeId,
+      tierIndex: Number.isInteger(tierIndex) ? tierIndex : (tierIndex != null ? Number(tierIndex) : 0),
+      couponCode: couponCode ? String(couponCode).trim().toUpperCase() : null,
+      paymentMethod: 'upiqr'
+    });
+    const tx = result.transaction;
+    const fee = Number(result.fee) || 0;
+
+    // Free (₹0 after coupon) → no gateway; activate immediately.
+    if (fee <= 0) {
+      await challengeApprovalService.approveChallengeBuy(tx._id, 'system:free');
+      return res.json({ success: true, free: true, accountId: result.account.accountId });
+    }
+
+    // 2) client_txn_id is the only handle UPIQR's status check accepts, so it
+    //    carries the transaction id and is what every later lookup reconciles on.
+    const clientTxnId = `DF_${tx._id}`;
+    const frontendOrigin = process.env.FRONTEND_URL || 'https://dhanfunded.com';
+
+    const order = await upiqr.createOrder({
+      amountInr: fee,
+      clientTxnId,
+      customerName: req.user.name,
+      customerMobile: req.user.phone,
+      redirectUrl: `${frontendOrigin}/app/my-challenges?upiqr=${encodeURIComponent(clientTxnId)}`,
+      info: 'Challenge purchase'
+    });
+
+    tx.paymentDetails = tx.paymentDetails || {};
+    tx.paymentDetails.upiqrClientTxnId = clientTxnId;
+    tx.paymentDetails.upiqrOrderId = order.order_id || null;
+    await tx.save();
+
+    return res.json({
+      success: true,
+      clientTxnId,
+      paymentUrl: order.payment_url,
+      upiIntent: order.upi_intent || null,
+      amount: fee,
+      transactionId: tx._id,
+      accountId: result.account.accountId,
+      coupon: result.coupon || null
+    });
+  } catch (e) {
+    res.status(400).json({ success: false, message: e.message });
+  }
+});
+
+// POST /api/prop/upiqr/verify — browser came back from the payment page. Ask
+// UPIQR what really happened and activate only on a paid status. The browser
+// supplies only an id; it never supplies the outcome.
+router.post('/upiqr/verify', verifyUserToken, async (req, res) => {
+  try {
+    const upiqr = require('../services/upiqr.service');
+    const { clientTxnId } = req.body;
+    if (!clientTxnId) return res.status(400).json({ success: false, message: 'clientTxnId required' });
+
+    const tx = await Transaction.findOne({ type: 'challenge_purchase', 'paymentDetails.upiqrClientTxnId': clientTxnId });
+    if (!tx) return res.status(404).json({ success: false, message: 'Order not found' });
+    if (String(tx.oderId) !== String(req.user.oderId)) {
+      return res.status(403).json({ success: false, message: 'Not your order' });
+    }
+
+    // Already activated by the callback — say so rather than re-checking.
+    if (tx.status !== 'pending') {
+      return res.json({
+        success: true,
+        message: 'Payment received — your challenge account is active.',
+        accountId: tx.challengePurchaseInfo?.challengeAccountId || null
+      });
+    }
+
+    const status = await upiqr.checkOrderStatus(clientTxnId);
+    if (!upiqr.isPaid(status)) {
+      return res.status(400).json({
+        success: false,
+        status: status.status,
+        failed: upiqr.isFailed(status),
+        message: upiqr.isFailed(status)
+          ? 'That payment did not go through. You can try again.'
+          : 'Payment not completed yet. If money was debited it activates automatically within a minute.'
+      });
+    }
+
+    // Guard against a short-paid order being let through on the gateway's word.
+    const paid = Number(status.amount);
+    const owed = Number(tx.amount);
+    if (Number.isFinite(paid) && Number.isFinite(owed) && paid + 0.01 < owed) {
+      return res.status(400).json({ success: false, message: 'Paid amount is less than the challenge fee. Contact support.' });
+    }
+
+    if (status.upi_txn_id) tx.paymentDetails.upiqrUtr = String(status.upi_txn_id);
+    await tx.save();
+    await challengeApprovalService.approveChallengeBuy(tx._id, 'upiqr');
+
+    return res.json({
+      success: true,
+      message: 'Payment verified — your challenge account is now active.',
+      accountId: tx.challengePurchaseInfo?.challengeAccountId || null
+    });
+  } catch (e) {
+    res.status(400).json({ success: false, message: e.message });
+  }
+});
+
 // ─── Demo account (free practice) ──────────────────────────────────
 // Every user can spin up a single demo account from their home page.
 // Demo accounts use accountType='DEMO' on ChallengeAccount and skip
