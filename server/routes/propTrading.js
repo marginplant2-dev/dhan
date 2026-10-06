@@ -1196,12 +1196,20 @@ router.post('/upiqr/verify', verifyUserToken, async (req, res) => {
 
     const status = await upiqr.checkOrderStatus(clientTxnId);
     if (!upiqr.isPaid(status)) {
+      // UPIQR gives an order a 180-second window and then marks it failure.
+      // Leaving ours on 'pending' after that stranded the buyer's account in a
+      // state nothing would ever resolve, so close it out and let them retry.
+      if (upiqr.isFailed(status)) {
+        try {
+          await challengeApprovalService.rejectChallengeBuy(tx._id, null, `UPIQR reported ${status.status}`);
+        } catch (_) { /* already settled by the callback */ }
+      }
       return res.status(400).json({
         success: false,
         status: status.status,
         failed: upiqr.isFailed(status),
         message: upiqr.isFailed(status)
-          ? 'That payment did not go through. You can try again.'
+          ? 'That payment did not go through — the payment window is 3 minutes. Please try again and complete it promptly.'
           : 'Payment not completed yet. If money was debited it activates automatically within a minute.'
       });
     }

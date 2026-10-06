@@ -710,6 +710,13 @@ function PropChallengePage() {
                         {upiqrBusy ? 'Opening payment…' : `⚡ Pay Online  ₹ ${payable.toLocaleString('en-IN')}`}
                       </button>
                     )}
+                    {/* The gateway expires an order 3 minutes after it is
+                        created, so say so before they leave the page. */}
+                    {UPIQR_ENABLED && (
+                      <div style={{ fontSize: '11px', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '-4px', marginBottom: '10px' }}>
+                        Complete the payment within 3 minutes — the link expires after that.
+                      </div>
+                    )}
 
                     {/* Cashfree "Pay Online" — instant, auto-activates on success.
                         Hidden while CASHFREE_ENABLED is false. */}
