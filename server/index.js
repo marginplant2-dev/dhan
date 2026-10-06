@@ -13673,6 +13673,15 @@ server.listen(PORT, async () => {
   } catch (error) {
     console.log(`📈 Zerodha: Will sync instruments when connected`);
   }
+
+  // UPIQR matches an incoming UPI credit to an order on its own schedule, and
+  // sometimes only when the merchant approves it by hand — long after the
+  // buyer has closed the tab. This settles those without anyone watching.
+  try {
+    require('./services/upiqrReconciler').start();
+  } catch (error) {
+    console.log('UPIQR reconciler not started:', error.message);
+  }
 });
 
 module.exports = { app, io };
