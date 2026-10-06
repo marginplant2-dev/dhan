@@ -7,6 +7,13 @@ const User = require('../models/User');
 const ibCouponService = require('./ibCoupon.service');
 const globalCouponService = require('./globalCoupon.service');
 
+/** Payment methods that settle through a gateway: the pending record is made
+ *  first and the payment reference attached afterwards, so none of them carry
+ *  the manual-UPI proof fields. */
+const GATEWAY_METHODS = new Set(['razorpay', 'cashfree', 'upiqr']);
+const GATEWAY_LABELS = { razorpay: 'Razorpay', cashfree: 'Cashfree', upiqr: 'UPI (UPIQR)' };
+
+
 /**
  * Day-bucket key in IST. dailyPnlMap and uniqueTradingDays are keyed by
  * the trader's local trading day, NOT UTC. Previously we used
@@ -391,7 +398,10 @@ class PropTradingEngine {
 
       // Automated gateways (Razorpay, Cashfree) skip the manual UPI proof — the
       // order id is stamped onto paymentDetails by the gateway route after this.
-      const isGateway = paymentMethod === 'razorpay' || paymentMethod === 'cashfree';
+      // A growing OR chain here is how upiqr ended up treated as a manual UPI
+      // buy: it fell through to the branch that reads paymentProof.adminUpiId,
+      // which a gateway never sends, and every purchase died on a TypeError.
+      const isGateway = GATEWAY_METHODS.has(paymentMethod);
       tx = await Transaction.create({
         oderId: user.oderId,
         type: 'challenge_purchase',
@@ -407,7 +417,7 @@ class PropTradingEngine {
         proofImage: isGateway ? '' : (paymentProof.screenshotBase64 || ''),
         status: 'pending',
         userName: user.name || '',
-        userNote: isGateway ? `Paid via ${paymentMethod === 'cashfree' ? 'Cashfree' : 'Razorpay'}` : String(paymentProof.note || '').slice(0, 500),
+        userNote: isGateway ? `Paid via ${GATEWAY_LABELS[paymentMethod] || paymentMethod}` : String(paymentProof.note || '').slice(0, 500),
         challengePurchaseInfo: {
           challengeId: challenge._id,
           challengeAccountId: account._id,

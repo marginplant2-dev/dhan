@@ -143,6 +143,15 @@ async function main() {
       let html = await page.content();
       // The service worker must not be registered while a crawler parses this,
       // and the prerendered copy should never be cached as the live shell.
+      // Third-party tags inject their own <script src> while the page runs,
+      // and serialising the live DOM bakes those in beside the loader that
+      // created them. The Meta Pixel then loaded fbevents.js twice and threw
+      // "__fbeventsModules[e] is not a function" on every prerendered page.
+      // Drop what the page fetched for itself; the loader re-adds it at runtime.
+      html = html.replace(
+        /\s*<script[^>]*\bsrc="https:\/\/connect\.facebook\.net\/[^"]*"[^>]*><\/script>/gi,
+        ''
+      );
       html = html.replace('<head>', '<head>\n    <!-- prerendered -->');
 
       // Flat `pricing.html`, NOT `pricing/index.html`. With a directory, nginx
