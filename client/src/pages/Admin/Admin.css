@@ -1745,16 +1745,26 @@
 
 .admin-toggle {
   display: flex;
-  align-items: center;
+  /* flex-start, not center: a label that wraps to two lines should still line
+     up with its box rather than float beside the middle of the text. */
+  align-items: flex-start;
   gap: 10px;
   cursor: pointer;
   color: var(--text-primary);
   font-size: 14px;
+  line-height: 1.4;
 }
+
+/* A flex item will not shrink below its content, so a long toggle label pushed
+   the whole card wider than its grid track and the column ran off the page.
+   Let the text wrap instead. */
+.admin-toggle > span { min-width: 0; }
 
 .admin-toggle input[type="checkbox"] {
   width: 18px;
   height: 18px;
+  flex: 0 0 auto;
+  margin-top: 2px;
   cursor: pointer;
 }
 

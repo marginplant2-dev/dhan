@@ -186,10 +186,10 @@ function Settings() {
               <div className="admin-toggle-group">
                 <label className="admin-toggle">
                   <input type="checkbox" checked={settings.paymentGatewayEnabled !== false} onChange={(e) => setSettings(prev => ({ ...prev, paymentGatewayEnabled: e.target.checked }))} />
-                  <span>Online Payment Gateway (UPI auto-approve)</span>
+                  <span>Online Payment Gateway</span>
                 </label>
                 <small style={{ display: 'block', marginTop: 4, color: 'var(--text-secondary)', fontSize: 12 }}>
-                  Off: challenge buying goes back to manual UPI — buyer uploads a
+                  Off: buying falls back to manual UPI — the buyer uploads a
                   screenshot and you approve it from Challenge Buys.
                 </small>
               </div>
