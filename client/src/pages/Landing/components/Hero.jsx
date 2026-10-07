@@ -43,8 +43,11 @@ export default function Hero() {
         </p>
 
         <div className="df-hero-cta df-in" style={{ animationDelay: '300ms' }}>
-          <Link to="/pricing" className="pf-btn pf-btn--primary pf-btn--lg">
-            Start Assessment <ArrowRight size={17} />
+          {/* Same destination as the header's Get Started, so the page's main
+              call to action and the one in the nav do not send people to two
+              different places. */}
+          <Link to="/register" className="pf-btn pf-btn--primary pf-btn--lg">
+            Get Started <ArrowRight size={17} />
           </Link>
           <Link to="/how-it-works" className="pf-btn pf-btn--ghost pf-btn--lg">Learn more</Link>
         </div>
