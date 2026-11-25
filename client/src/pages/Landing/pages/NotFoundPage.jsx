@@ -20,7 +20,8 @@ const SUGGESTIONS = [
   { to: '/', label: 'Home' },
   { to: '/how-it-works', label: 'How the evaluation works' },
   { to: '/pricing', label: 'Programmes and fees' },
-  { to: '/prop-firm-india', label: 'Prop firm in India' },
+  { to: '/challenges', label: 'Compare the challenge types' },
+  { to: '/instruments', label: 'What you can trade' },
   { to: '/faqs', label: 'Frequently asked questions' },
   { to: '/contact-us', label: 'Contact support' },
 ];

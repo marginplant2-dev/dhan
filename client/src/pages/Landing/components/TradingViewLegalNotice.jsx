@@ -14,7 +14,7 @@ export default function TradingViewLegalNotice() {
         <BarChart3 size={18} className="text-[#35DC85] shrink-0 mt-0.5" aria-hidden />
         <div>
           <div className="text-xs font-bold text-white mb-1.5 uppercase tracking-wide">
-            Charts & Widgets by TradingView
+            Market charts from TradingView
           </div>
           <p className="text-xs text-[#9FB5AB] mb-2">
             <a
@@ -25,15 +25,15 @@ export default function TradingViewLegalNotice() {
             >
               Stock Heatmap by TradingView
             </a>
-            {' — '}
-            direct link to TradingView as required for embedded widgets.
+            {': '}
+            the direct attribution link TradingView requires wherever its widgets are embedded.
           </p>
           <p className="text-xs text-[#9FB5AB] leading-relaxed">
-            Advanced charts, Stock Heatmap, and related market widgets on DhanFunded are{' '}
-            <strong>provided by TradingView</strong> and are subject to TradingView&apos;s terms,
-            policies, and technical requirements. TradingView is a third-party service; DhanFunded is
-            not responsible for TradingView&apos;s data, availability, or chart behaviour. Use of
-            these charts and widgets constitutes acceptance of TradingView&apos;s applicable terms.
+            The advanced charts, the Stock Heatmap and the other market widgets you see on DhanFunded
+            are <strong>supplied by TradingView</strong>, and TradingView&apos;s own terms, policies and
+            technical rules govern them. TradingView is an independent third party, so DhanFunded cannot
+            answer for its data, its uptime or the way its charts behave. When you use these charts and
+            widgets, you accept the TradingView terms that apply to them.
           </p>
           <p className="mt-2 text-[11px] text-[#9FB5AB]/60 leading-relaxed">
             Learn more:{' '}
@@ -63,7 +63,7 @@ export default function TradingViewLegalNotice() {
             >
               Widgets
             </a>
-            . TradingView and related marks are trademarks of their respective owners.
+            . TradingView and its associated marks are trademarks held by their respective owners.
           </p>
         </div>
       </div>

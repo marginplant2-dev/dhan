@@ -1,40 +1,79 @@
+import { Link } from 'react-router-dom';
 import LegalPageShell from './LegalPageShell';
 
 export default function RefundPolicy() {
   return (
     <LegalPageShell
-      title="Cancellation & Refund Policy"
+      title="Cancellation and Refund Policy"
+      subtitle="When an order can be cancelled, how to report a problem and how long a refund takes"
+      lastUpdated="25 November 2026"
     >
       <section className="terms-section">
         <p>
-          VENKATA SRINIVASREDDY MEDAPATI believes in helping its customers as far as possible, and has
-          therefore a liberal cancellation policy. Under this policy:
+          This policy is issued by VENKATA SRINIVASREDDY MEDAPATI. Our aim is to help customers wherever we can,
+          so the rules on cancellation are kept generous. They are set out below.
         </p>
+      </section>
+
+      <section className="terms-section disclaimer-section">
+        <h2>Key time limits</h2>
+        <ul>
+          <li><strong>Cancelling:</strong> ask straight after you place the order.</li>
+          <li><strong>Damaged, defective or not as described:</strong> tell us on the day you receive it.</li>
+          <li><strong>Approved refunds:</strong> 16–30 days to reach you.</li>
+        </ul>
+      </section>
+
+      <section className="terms-section">
+        <h2>1. Cancelling an order</h2>
+        <p>
+          We consider a cancellation only if you ask for it straight after placing the order. If the order has
+          already gone to the vendor or merchant, and they have begun shipping it, your cancellation request may be
+          turned down.
+        </p>
+      </section>
+
+      <section className="terms-section">
+        <h2>2. Perishable items</h2>
+        <p>
+          Perishable items, such as flowers and food, cannot be cancelled. If you can show that the quality of what
+          was delivered is poor, a refund or a replacement can still be given.
+        </p>
+      </section>
+
+      <section className="terms-section">
+        <h2>3. Damaged, defective or not what you expected</h2>
         <ul>
           <li>
-            Cancellations will be considered only if the request is made immediately after placing the order.
-            However, the cancellation request may not be entertained if the orders have been communicated to the
-            vendors/merchants and they have initiated the process of shipping them.
+            If an item reaches you damaged or defective, tell our Customer Service team on the day you receive it.
+            We act on the request once the merchant has checked the item on their side and confirmed the problem.
           </li>
           <li>
-            VENKATA SRINIVASREDDY MEDAPATI does not accept cancellation requests for perishable items like
-            flowers, eatables etc. However, refund/replacement can be made if the customer establishes that the
-            quality of product delivered is not good.
-          </li>
-          <li>
-            In case of receipt of damaged or defective items please report the same to our Customer Service team.
-            The request will, however, be entertained once the merchant has checked and determined the same at his
-            own end. This should be reported within the same day of receipt of the products. In case you feel that
-            the product received is not as shown on the site or as per your expectations, you must bring it to the
-            notice of our customer service within the same day of receiving the product. The Customer Service Team
-            after looking into your complaint will take an appropriate decision.
-          </li>
-          <li>
-            In case of complaints regarding products that come with a warranty from manufacturers, please refer the
-            issue to them. In case of any refunds approved by VENKATA SRINIVASREDDY MEDAPATI, it will take 16–30
-            days for the refund to be processed to the end customer.
+            If the product does not match what the site showed, or falls short of what you expected, raise it with
+            Customer Service on the day you receive it. The team will look into your complaint and then decide what
+            should be done.
           </li>
         </ul>
+        <p>
+          You can reach Customer Service through our <Link to="/contact-us">contact page</Link>.
+        </p>
+      </section>
+
+      <section className="terms-section">
+        <h2>4. Items covered by a manufacturer’s warranty</h2>
+        <p>If a product comes with a warranty from its manufacturer, take any complaint about it to the manufacturer.</p>
+      </section>
+
+      <section className="terms-section">
+        <h2>5. How long a refund takes</h2>
+        <p>
+          Once VENKATA SRINIVASREDDY MEDAPATI approves a refund, processing it and getting the money to you takes 16
+          to 30 days.
+        </p>
+        <p>
+          Our <Link to="/terms">Terms and Conditions</Link> also explain when you can claim a refund if we cannot
+          provide a Service you paid for.
+        </p>
       </section>
     </LegalPageShell>
   );

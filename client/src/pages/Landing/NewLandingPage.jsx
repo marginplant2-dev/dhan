@@ -38,52 +38,17 @@ const HOME_SCHEMA = [
       "@type": "Country",
       "name": "India"
     },
-    "description": "Simulated prop firm evaluation for Indian intraday people. NIFTY, BANKNIFTY and SENSEX futures and options. Account sizes from ₹1 Lakh to ₹50 Lakhs.",
+    "description": "Simulated prop firm evaluation for Indian intraday traders on NIFTY, BANKNIFTY and SENSEX options. Account sizes from ₹1 Lakh to ₹25 Lakh, fees from ₹3,000.",
+    // Only the floor is known in code (programmes.js lists the ₹1 Lakh fees);
+    // larger tiers are priced in the admin, so no highPrice is claimed.
     "offers": {
       "@type": "AggregateOffer",
       "priceCurrency": "INR",
-      "lowPrice": "3000",
-      "highPrice": "55000"
+      "lowPrice": "3000"
     }
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How do I get funded on DhanFunded?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Pass our simulated evaluation on NIFTY, BANKNIFTY or SENSEX within the rules, and get funded up to ₹50 Lakhs. Once funded, you earn real performance payouts in INR to your Indian bank account."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What account sizes are available?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Funded account sizes range from ₹1 Lakh to ₹50 Lakhs, with 1-Step, 2-Step and Instant funding options."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Are payouts made in Indian Rupees (INR)?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. DhanFunded is a fully INR-based platform. All fees and payouts are in Indian Rupees, paid directly to your Indian bank account."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Which instruments can I practice on?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "You can practice on NIFTY, BANKNIFTY and SENSEX futures and options in a structured, simulated evaluation environment built for Indian intraday people."
-        }
-      }
-    ]
   }
+  // No FAQPage: Google only shows FAQ rich results for gov/health sites, and
+  // this copy had drifted from the visible FAQ (it still said "futures").
 ];
 
 export default function NewLandingPage() {

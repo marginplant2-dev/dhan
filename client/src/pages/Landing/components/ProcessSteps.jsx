@@ -1,23 +1,24 @@
+import { Link } from 'react-router-dom';
 import { ArrowRight, BadgeCheck, CircleCheck, LineChart, Wallet } from 'lucide-react';
 
 const STEPS = [
   {
-    n: '01', Icon: CircleCheck, tile: 'pf-tile--brand', title: 'Clear the Assessment',
-    desc: 'Finish the phase your programme asks for, inside its limits, with at least five trading days used.',
+    n: '01', Icon: CircleCheck, tile: 'pf-tile--brand', title: 'Pass the final phase',
+    desc: 'Meet the last profit target inside its limits, with trades on at least five separate days. Instant Funding has no evaluation, so it starts at step two.',
   },
   {
-    n: '02', Icon: BadgeCheck, tile: 'pf-tile--ink', title: 'Get Your Pro Account',
-    desc: 'Objectives are verified and the funded account appears in your dashboard — usually the same working day.',
+    n: '02', Icon: BadgeCheck, tile: 'pf-tile--ink', title: 'Funded account goes live',
+    desc: 'It appears in your dashboard at the size you passed, with a fresh balance and its own daily and overall loss limits.',
     badge: 'Under 24 hours',
   },
   {
-    n: '03', Icon: LineChart, tile: 'pf-tile--green', title: 'Perform',
-    desc: 'Trade the funded account against its own limits, which are tighter than the evaluation on two of the three programmes.',
+    n: '03', Icon: LineChart, tile: 'pf-tile--green', title: 'Qualify for a payout',
+    desc: 'Stay funded for 14 days, trade on five of them, reach 5% profit, and make sure no single day is more than 30% of that profit.',
     badge: '14-day cycle',
   },
   {
-    n: '04', Icon: Wallet, tile: 'pf-tile--soft', title: 'Request Payouts',
-    desc: 'Once the cycle and conditions are met, raise the request from the dashboard and take your share in INR.',
+    n: '04', Icon: Wallet, tile: 'pf-tile--soft', title: 'Get paid in rupees',
+    desc: 'Complete KYC, then request from the dashboard. With ₹5,000 profit on a ₹1 Lakh account, an 80% share is ₹4,000 to your bank.',
     badge: 'Every 14 days',
   },
 ];
@@ -27,8 +28,13 @@ export default function ProcessSteps() {
     <section className="pf-section pf-section--alt">
       <div className="pf-wrap">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <p className="pf-eyebrow mb-4">After you pass</p>
-          <h2 className="pf-h2">After you pass</h2>
+          <p className="pf-eyebrow mb-4">Funded accounts</p>
+          <h2 className="pf-h2 mb-5">How prop firm payouts work here</h2>
+          <p className="pf-lead">
+            You keep 80% of the profit on 1-Step and 2-Step accounts and 70% on Instant Funding.
+            The exact conditions are listed in the{' '}
+            <Link to="/faqs" className="font-semibold text-[color:var(--pf-brand)] underline underline-offset-2">payout FAQs</Link>.
+          </p>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

@@ -40,10 +40,10 @@ function Row({ label, tip, sub, tiers, render }) {
 }
 
 const HIGHLIGHTS = [
-  'Real-time risk monitoring',
-  'Objective tracking dashboard',
-  'Trade journaling and analytics',
-  'Payouts in INR to your bank',
+  'Loss limits checked live on every trade',
+  'Progress on each objective in your dashboard',
+  'A trade journal with performance stats',
+  'Profit share paid in rupees to your bank',
 ];
 
 export default function PricingTable({
@@ -125,17 +125,17 @@ export default function PricingTable({
   // both render from this, so the two can never drift apart.
   const specs = [
     target1 != null && {
-      label: plan.steps === 2 ? 'Phase 1 Performance Target' : 'Performance Target',
+      label: plan.steps === 2 ? 'Phase 1 Profit Target' : 'Profit Target',
       tip: 'Profit you must reach to clear this phase, measured on the starting balance.',
       render: (t) => (<>{target1}%<span className="pf-table-sub">({inr(pct(target1, t.fundSize))})</span></>),
     },
     plan.steps === 2 && r.profitTargetPhase2Percent != null && {
-      label: 'Phase 2 Performance Target',
+      label: 'Phase 2 Profit Target',
       tip: 'Phase 2 restarts at the original balance with an easier target.',
       render: (t) => (<>{r.profitTargetPhase2Percent}%<span className="pf-table-sub">({inr(pct(r.profitTargetPhase2Percent, t.fundSize))})</span></>),
     },
     {
-      label: 'Maximum Loss Limit',
+      label: 'Overall Loss Limit',
       tip: 'Total loss allowed from the starting balance across the whole assessment.',
       render: (t) => (<>{r.maxOverallDrawdownPercent}%<span className="pf-table-sub">({inr(pct(r.maxOverallDrawdownPercent, t.fundSize))})</span></>),
     },
@@ -145,7 +145,7 @@ export default function PricingTable({
       render: (t) => (<>{r.maxDailyDrawdownPercent}%<span className="pf-table-sub">({inr(pct(r.maxDailyDrawdownPercent, t.fundSize))})</span></>),
     },
     r.maxOneDayProfitPercentOfTarget != null && {
-      label: 'Max One-Day Profit',
+      label: 'Best-Day Cap',
       tip: "Caps how much of a single day's profit counts toward the target, so progress has to be spread across days.",
       render: (t) => (
         <>
@@ -156,9 +156,9 @@ export default function PricingTable({
         </>
       ),
     },
-    { label: 'Assessment Window', tip: 'Calendar days available to complete the assessment.', render: () => (windowDays ? `${windowDays} Days` : 'Unlimited') },
-    { label: 'Min Active Days', tip: 'Distinct days on which you must place at least one trade.', render: () => (days ? `${days} Days` : 'None') },
-    { label: 'Performance Share', tip: 'Your cut of the profit on a funded Pro Account.', render: () => `Up to ${f.profitSplitPercent || 95}%` },
+    { label: 'Time Allowed', tip: 'Calendar days available to complete the assessment.', render: () => (windowDays ? `${windowDays} Days` : 'Unlimited') },
+    { label: 'Minimum Trading Days', tip: 'Distinct days on which you must place at least one trade.', render: () => (days ? `${days} Days` : 'None') },
+    { label: 'Your Profit Share', tip: 'Your cut of the profit on a funded Pro Account.', render: () => `Up to ${f.profitSplitPercent || 95}%` },
     { label: 'Payout Cycle', sub: 'Requested from your dashboard', tip: 'How often you can request a payout once funded.', render: () => `Every ${f.withdrawalFrequencyDays || 14} days` },
   ].filter(Boolean);
 
@@ -169,9 +169,9 @@ export default function PricingTable({
       <div className="pf-wrap">
         {showHeading && (
           <div className="text-center max-w-2xl mx-auto mb-10">
-            <p className="pf-eyebrow mb-4">Assessments</p>
-            <h2 className="pf-h2 mb-5">Pick your account size</h2>
-            <p className="pf-lead">One fee, no subscription. Every rule below is enforced by the platform, not by hand.</p>
+            <p className="pf-eyebrow mb-4">Programmes</p>
+            <h2 className="pf-h2 mb-5">Choose an account size</h2>
+            <p className="pf-lead">You pay once, and the price includes GST. While you trade, the platform tracks every limit in this table automatically.</p>
           </div>
         )}
 
@@ -180,7 +180,7 @@ export default function PricingTable({
             <div className="pf-seg" role="tablist">
               {available.map((t) => (
                 <button key={t} role="tab" aria-selected={t === active} data-active={t === active} onClick={() => select(t)}>
-                  {t === 'Instant' ? 'Instant' : (<>{t}<span className="pf-seg-long"> Assessment</span></>)}
+                  {t === 'Instant' ? 'Instant' : (<>{t}<span className="pf-seg-long"> Evaluation</span></>)}
                 </button>
               ))}
             </div>
@@ -209,7 +209,7 @@ export default function PricingTable({
             <div className="pf-price-head">
               <div className="pf-price-size">{shortFund(tier.fundSize)}</div>
               <div className="pf-price-fee">{inr(tier.fee)}</div>
-              <div className="pf-price-note">One-time fee · including GST</div>
+              <div className="pf-price-note">Paid once · GST included</div>
             </div>
 
             <Link
@@ -248,7 +248,7 @@ export default function PricingTable({
                         Get Started
                       </Link>
                       <div className="text-[1.15rem] font-extrabold mt-3.5" style={{ color: 'var(--pf-text)' }}>{inr(t.fee)}</div>
-                      <span className="pf-table-sub">(including GST)</span>
+                      <span className="pf-table-sub">(GST included)</span>
                     </th>
                   ))}
                 </tr>
@@ -273,7 +273,9 @@ export default function PricingTable({
         </div>
 
         <div className="text-center mt-9">
-          <p className="pf-body mb-4">Need help choosing?</p>
+          <p className="pf-body mb-4">
+            Not sure which route fits? <Link to="/challenges" className="font-semibold underline">Compare the three challenges</Link> or ask us.
+          </p>
           <Link to="/contact-us" className="pf-btn pf-btn--ghost">Contact us for personalised guidance</Link>
         </div>
       </div>

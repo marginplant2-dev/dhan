@@ -25,7 +25,7 @@ const splitSentence = PROGRAMMES.map((p) => `${p.split} on ${p.name}`).join(', '
 const highlights = [
   { value: `Up to ${topSplit}%`, label: 'Performance share on a funded account' },
   { value: 'Every 14 days', label: 'Payout cycle once funded' },
-  { value: '₹50 Lakh', label: 'Maximum account size' },
+  { value: '₹25 Lakh', label: 'Maximum account size' },
   { value: 'INR', label: 'Paid directly to your Indian bank account' },
 ];
 

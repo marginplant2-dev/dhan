@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { CHEAPEST_FEE } from '../data/programmes';
 
 /* ── Hero ────────────────────────────────────────────────────────────────────
    One screen, one message: badge, headline, promise, two actions, four numbers.
@@ -10,10 +11,10 @@ import { ArrowRight } from 'lucide-react';
    ──────────────────────────────────────────────────────────────────────────── */
 
 const STATS = [
-  { k: '80%', v: 'Profit share' },
-  { k: '₹50 Lakh', v: 'Max account' },
-  { k: '14 days', v: 'Payout cycle' },
-  { k: 'NSE · BSE', v: 'Index derivatives' },
+  { k: '80%', v: 'Top profit share' },
+  { k: '₹25 Lakh', v: 'Largest account' },
+  { k: '14 days', v: 'Between payouts' },
+  { k: CHEAPEST_FEE, v: 'Lowest fee' },
 ];
 
 
@@ -28,18 +29,19 @@ export default function Hero() {
       <div className="pf-wrap relative pt-32 pb-14 md:pt-40 md:pb-20">
         <span className="df-badge df-in" style={{ animationDelay: '60ms' }}>
           <i className="df-badge-dot" />
-          INDIA&apos;S INR PROP TRADING ASSESSMENT
+          NIFTY · BANKNIFTY · SENSEX
         </span>
 
         <h1 className="df-h1 df-in" style={{ animationDelay: '140ms' }}>
-          Your Skill,{' '}
-          <span className="df-gradient-text">Our Capital.</span>
+          Get funded by an{' '}
+          <span className="df-gradient-text">Indian prop firm</span>
         </h1>
 
         <p className="df-hero-lead df-in" style={{ animationDelay: '220ms' }}>
-          Clear one rules-based assessment on NIFTY, BANKNIFTY or SENSEX and trade a funded
-          account of up to ₹50 Lakh. Keep 80% of your performance, paid in INR to your Indian
-          bank every 14 days — the drawdown is ours to carry.
+          DhanFunded is a prop firm for traders in India. Pass a simulated evaluation on index
+          options and you get a funded trading account worth up to ₹25 Lakh. You pay a one-time
+          fee instead of risking your own capital, and up to 80% of the profit you make is
+          yours, sent in rupees to your own bank account.
         </p>
 
         <div className="df-hero-cta df-in" style={{ animationDelay: '300ms' }}>
@@ -49,7 +51,7 @@ export default function Hero() {
           <Link to="/register" className="pf-btn pf-btn--primary pf-btn--lg">
             Get Started <ArrowRight size={17} />
           </Link>
-          <Link to="/how-it-works" className="pf-btn pf-btn--ghost pf-btn--lg">Learn more</Link>
+          <Link to="/how-it-works" className="pf-btn pf-btn--ghost pf-btn--lg">See how it works</Link>
         </div>
 
         <div className="df-stats df-in" style={{ animationDelay: '380ms' }}>

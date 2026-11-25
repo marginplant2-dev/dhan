@@ -39,9 +39,10 @@
     <!-- End Meta Pixel Code -->
 
     <!-- ── Primary Meta Tags ───────────────────────────────────────────── -->
-    <title>DhanFunded — Simulated Index Trading Evaluations in India</title>
-    <meta name="title" content="DhanFunded — Simulated Index Trading Evaluations in India" />
-    <meta name="description" content="Show what your strategy can do on NIFTY, BANKNIFTY and SENSEX without staking your own money. Rules published in rupees before you pay, account sizes from ₹1 Lakh, and 80% of what you make paid to an Indian bank every fortnight." />
+    <!-- Keep title/description/OG/Twitter identical to PAGES['/'] in src/components/Seo.jsx. -->
+    <title>Prop Firm India: Get a Funded Trading Account | DhanFunded</title>
+    <meta name="title" content="Prop Firm India: Get a Funded Trading Account | DhanFunded" />
+    <meta name="description" content="An Indian prop firm for NIFTY, BANKNIFTY and SENSEX options traders. Pass a simulated evaluation, get a funded trading account, keep up to 80% of profit." />
     <meta name="author" content="DhanFunded" />
     <meta name="robots" content="index, follow" />
     <meta name="language" content="English" />
@@ -56,8 +57,8 @@
     <!-- ── Open Graph / Facebook ───────────────────────────────────────── -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://dhanfunded.com/" />
-    <meta property="og:title" content="DhanFunded — Simulated Index Trading Evaluations in India" />
-    <meta property="og:description" content="Trade · Learn · Grow. A rules-first evaluation desk for Indian index traders — simulated capital, published limits, and payouts in INR." />
+    <meta property="og:title" content="Prop Firm India: Get a Funded Trading Account | DhanFunded" />
+    <meta property="og:description" content="An Indian prop firm for NIFTY, BANKNIFTY and SENSEX options traders. Pass a simulated evaluation, get a funded trading account, keep up to 80% of profit." />
     <meta property="og:image" content="https://dhanfunded.com/landing/img/dhanfunded-og.png" />
     <meta property="og:site_name" content="DhanFunded" />
     <meta property="og:locale" content="en_IN" />
@@ -65,8 +66,8 @@
     <!-- ── Twitter Card ────────────────────────────────────────────────── -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://dhanfunded.com/" />
-    <meta name="twitter:title" content="DhanFunded — Simulated Index Trading Evaluations in India" />
-    <meta name="twitter:description" content="Trade · Learn · Grow. A rules-first evaluation desk for Indian index traders — simulated capital, published limits, and payouts in INR." />
+    <meta name="twitter:title" content="Prop Firm India: Get a Funded Trading Account | DhanFunded" />
+    <meta name="twitter:description" content="An Indian prop firm for NIFTY, BANKNIFTY and SENSEX options traders. Pass a simulated evaluation, get a funded trading account, keep up to 80% of profit." />
     <meta name="twitter:image" content="https://dhanfunded.com/landing/img/dhanfunded-og.png" />
 
     <!-- ── Favicons ────────────────────────────────────────────────────── -->
@@ -98,42 +99,33 @@
     <!-- ── Schema.org structured data: Organization ───────────────────── -->
     <!-- Only site-wide schema belongs here: every prerendered page inherits
          this head, so a page-specific block (FAQPage, Service) would end up on
-         pages it does not describe. Those live in the page component. -->
+         pages it does not describe. Those live in the page component; the
+         per-route WebPage + BreadcrumbList is written by Seo.jsx (#route-ld).
+         Facts only: no address or legal name until one is published on the
+         site (useSiteSettings ships them blank); phone/email/socials are the
+         defaults in useSiteSettings.js and the footer's Trustpilot link. -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Organization",
+        "@id": "https://dhanfunded.com/#organization",
         "name": "DhanFunded",
-        "legalName": "DhanFunded",
         "alternateName": [
           "Dhan Funded"
         ],
         "slogan": "Trade. Learn. Grow.",
-        "url": "https://dhanfunded.com",
-        "logo": "https://dhanfunded.com/landing/img/dhanfunded-og.png",
-        "description": "A simulated evaluation desk for Indian index traders. Participants trade NIFTY, BANKNIFTY and SENSEX derivatives against published rules on simulated capital, and earn a share of the result in INR.",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "Oval House, 03/302, British Hotel Lane",
-          "addressLocality": "Mumbai",
-          "addressRegion": "Maharashtra",
-          "postalCode": "400001",
-          "addressCountry": "IN"
-        },
+        "url": "https://dhanfunded.com/",
+        "logo": "https://dhanfunded.com/icon-512.png",
+        "image": "https://dhanfunded.com/landing/img/dhanfunded-og.png",
+        "description": "A simulated evaluation desk for Indian index traders. Participants trade NIFTY, BANKNIFTY and SENSEX options against published rules on simulated capital, and earn a share of the result in INR.",
         "contactPoint": [
           {
             "@type": "ContactPoint",
-            "telephone": "+91-83670-45119",
+            "telephone": "+91-86906-64318",
             "contactType": "customer support",
             "email": "support@dhanfunded.com",
-            "areaServed": {
-              "@type": "Country",
-              "name": "India"
-            },
-            "availableLanguage": [
-              "English",
-              "Hindi"
-            ]
+            "areaServed": "IN",
+            "availableLanguage": "English"
           }
         ],
         "sameAs": [
@@ -157,25 +149,21 @@
       }
     </script>
 
-    <!-- ── Schema.org structured data: WebSite + SearchAction ─────────── -->
-    <!-- Only site-wide schema belongs here: every prerendered page inherits
-         this head, so a page-specific block (FAQPage, Service) would end up on
-         pages it does not describe. Those live in the page component. -->
+    <!-- ── Schema.org structured data: WebSite ────────────────────────── -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
+        "@id": "https://dhanfunded.com/#website",
         "name": "DhanFunded",
-        "url": "https://dhanfunded.com",
+        "url": "https://dhanfunded.com/",
         "alternateName": [
           "Dhan Funded"
-        ]
+        ],
+        "inLanguage": "en-IN",
+        "publisher": { "@id": "https://dhanfunded.com/#organization" }
       }
     </script>
-
-    <!-- ── Schema.org structured data: Service ────────────────────────── -->
-
-    <!-- ── Schema.org structured data: FAQPage (rich results) ─────────── -->
 
     <script>
       (function() {

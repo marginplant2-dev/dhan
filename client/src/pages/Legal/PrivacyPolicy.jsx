@@ -1,92 +1,119 @@
+import { Link } from 'react-router-dom';
 import LegalPageShell from './LegalPageShell';
 
 export default function PrivacyPolicy() {
   return (
     <LegalPageShell
       title="Privacy Policy"
-      subtitle="How we collect, use, and protect your information"
-      lastUpdated="March 2025"
+      subtitle="What DhanFunded collects about you, why we need it, and the choices you have"
+      lastUpdated="25 November 2026"
     >
-      <section className="terms-section">
-        <h2>1. Introduction</h2>
-        <p>
-          DhanFunded (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) respects your privacy. This policy describes how we handle
-          personal data when you use our website, applications, and related services (the &quot;Platform&quot;).
-        </p>
-      </section>
-
-      <section className="terms-section">
-        <h2>2. Information we collect</h2>
+      <section className="terms-section disclaimer-section">
+        <h2>At a glance</h2>
         <ul>
+          <li>Your personal data is never sold.</li>
+          <li>We collect what is needed to run your account, keep it secure, process payments and meet our legal duties.</li>
           <li>
-            <strong>Account data:</strong> name, email, phone, country, and credentials you provide at registration.
-          </li>
-          <li>
-            <strong>Usage data:</strong> device type, browser, IP address, approximate location, pages viewed, and
-            interactions with the Platform.
-          </li>
-          <li>
-            <strong>Market &amp; financial data:</strong> orders, positions, wallet activity, and KYC documents where
-            required for compliance.
-          </li>
-          <li>
-            <strong>Communications:</strong> messages you send to support and responses we send to you.
+            You can ask to see, correct or delete your data, using the details on our{' '}
+            <Link to="/contact-us">contact page</Link>.
           </li>
         </ul>
       </section>
 
       <section className="terms-section">
-        <h2>3. How we use information</h2>
-        <p>We use personal data to:</p>
+        <h2>1. What this policy covers</h2>
+        <p>
+          DhanFunded (“we”, “us” or “our”) takes your privacy seriously. This policy explains what we do with
+          personal data when you use our website, our apps or any related service. Together we call these the
+          “Platform”.
+        </p>
+      </section>
+
+      <section className="terms-section">
+        <h2>2. The data we hold about you</h2>
         <ul>
-          <li>Provide, operate, and improve the Platform</li>
-          <li>Authenticate users and prevent fraud</li>
-          <li>Process deposits, withdrawals, and market activity</li>
-          <li>Meet legal, regulatory, and audit requirements</li>
-          <li>Send service-related notices and, where permitted, marketing (you may opt out where applicable)</li>
+          <li>
+            <strong>Sign-up details:</strong> the name, email address, phone number, country and login credentials
+            you give us when you register.
+          </li>
+          <li>
+            <strong>How you use the Platform:</strong> your device type and browser, your IP address, a rough idea
+            of your location, the pages you open and what you do on them.
+          </li>
+          <li>
+            <strong>Trading and money records:</strong> your orders, positions and wallet activity, plus KYC
+            documents in cases where compliance requires them.
+          </li>
+          <li>
+            <strong>Support conversations:</strong> what you write to our support team, and our replies.
+          </li>
         </ul>
       </section>
 
       <section className="terms-section">
-        <h2>4. Sharing &amp; disclosure</h2>
+        <h2>3. Why we use it</h2>
+        <p>Your personal data helps us to:</p>
+        <ul>
+          <li>run the Platform, keep it working and make it better</li>
+          <li>confirm that the person logging in is really you, and stop fraud</li>
+          <li>handle deposits, withdrawals and trading activity</li>
+          <li>satisfy legal, regulatory and audit requirements</li>
+          <li>
+            send you notices about the service and, where the law permits it, marketing messages, which you can opt
+            out of where that option applies
+          </li>
+        </ul>
+      </section>
+
+      <section className="terms-section">
+        <h2>4. Who else sees it</h2>
         <p>
-          We do not sell your personal data. We may share information with service providers (hosting, email, analytics,
-          payment processors) under strict confidentiality, and with authorities when required by law or to protect our
-          rights and users&apos; safety.
+          We never sell personal data. Some of it does reach companies that work for us, such as our hosting,
+          email, analytics and payment processing providers, and each of them must keep it strictly confidential.
+          We also hand information to the authorities when the law requires it, or when we need to protect our
+          rights or the safety of our users.
         </p>
       </section>
 
       <section className="terms-section">
-        <h2>5. Cookies &amp; similar technologies</h2>
+        <h2>5. Cookies and local storage</h2>
         <p>
-          We use cookies and local storage where needed for login sessions, preferences, security, and analytics. You can
-          control cookies through your browser settings; disabling some cookies may limit Platform functionality.
+          The Platform uses cookies and your browser’s local storage where they are needed: to keep you logged in,
+          to remember your preferences, for security and for analytics. You can manage cookies in your browser
+          settings. If you switch some of them off, parts of the Platform may stop working properly.
         </p>
       </section>
 
       <section className="terms-section">
-        <h2>6. Data retention &amp; security</h2>
+        <h2>6. How long we keep it, and how we protect it</h2>
         <p>
-          We retain data as long as your account is active and as required by law or legitimate business needs. We apply
-          technical and organizational measures to protect data; no method of transmission over the internet is 100%
-          secure.
+          We hold your data while your account stays active, and for any longer period the law or our legitimate
+          business needs require.
+        </p>
+        <p>
+          We use technical and organisational safeguards to protect it. Still, sending data over the internet can
+          never be made completely secure, whatever method is used.
         </p>
       </section>
 
       <section className="terms-section">
-        <h2>7. Your rights</h2>
+        <h2>7. Your rights over your data</h2>
         <p>
-          Depending on your jurisdiction, you may have rights to access, correct, delete, or restrict processing of your
-          data, or to object to certain processing. Contact us using the details on the Platform to make a request. We may
-          need to verify your identity before responding.
+          Depending on the law where you live, you may be able to see your data, have it corrected or deleted, limit
+          how we process it, or object to some kinds of processing. Make a request through the contact details
+          shown on the Platform. Before we act on it, we may have to confirm who you are.
         </p>
       </section>
 
       <section className="terms-section disclaimer-section">
-        <h2>8. Changes &amp; contact</h2>
+        <h2>8. Updates and privacy questions</h2>
         <p>
-          We may update this policy from time to time. Continued use after changes constitutes acceptance of the updated
-          policy. For privacy questions, contact us through the official support channels listed on the Platform.
+          This policy may change from time to time. If you keep using the Platform after a change, that means you
+          accept the new version.
+        </p>
+        <p>
+          For any privacy question, use one of the official support channels the Platform lists. They are also on our <Link to="/contact-us">contact page</Link>. How the Platform may be used is set out in
+          our <Link to="/terms">Terms and Conditions</Link>.
         </p>
       </section>
     </LegalPageShell>

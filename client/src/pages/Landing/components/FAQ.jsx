@@ -2,30 +2,32 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 
+// Homepage short list. The full set lives on /faqs (DB-backed, see FAQsPage).
+// Every figure here is taken from data/programmes.js or the server rules.
 const FAQS = [
   {
-    q: 'What is DhanFunded?',
-    a: 'DhanFunded is a simulated assessment platform built for Indian intraday participants. You operate with virtual capital under published risk rules and earn a performance share on successful completion.',
+    q: 'How does DhanFunded work?',
+    a: 'You buy an evaluation once, then trade NIFTY, BANKNIFTY or SENSEX options on a simulated account at live prices. Hit the profit target without breaking a loss limit and you get a funded account, where you keep 80% of the profit (70% on Instant Funding).',
   },
   {
-    q: 'Is this legal in India?',
-    a: 'Yes. DhanFunded runs as a simulated evaluation platform. It is not a broker or a SEBI-registered intermediary, and no orders reach the exchange. Simulated participation is legal in India.',
+    q: 'Is DhanFunded a SEBI-registered broker?',
+    a: 'No. DhanFunded is not a stockbroker or an investment adviser and is not registered with SEBI. Your orders are filled inside our simulation and never reach NSE or BSE. The fee pays for an evaluation of your trading, not for access to the market.',
   },
   {
-    q: 'Which instruments can I be assessed on?',
-    a: 'NIFTY, BANKNIFTY and SENSEX options — both buying and selling. Futures, overnight positions, copy execution and algo execution are not permitted.',
+    q: 'Can I trade BANKNIFTY options in the evaluation?',
+    a: 'Yes. BANKNIFTY, NIFTY and SENSEX options are all open, for buying and for selling. You cannot trade futures, carry a position overnight, or run copy or algo strategies.',
   },
   {
-    q: 'What are the risk rules?',
-    a: 'Every plan carries a daily loss limit, a maximum loss limit and an intraday square-off at 3:15 PM IST. Breaching any hard limit ends the current assessment. All limits are shown in the assessments table above.',
+    q: 'What happens if I break the daily loss limit?',
+    a: 'The evaluation ends there. On a ₹1 Lakh 2-Step account the daily limit is 4% of the starting balance, so a ₹4,000 loss in one day closes it. Each plan also has an overall loss limit, and anything still open at 3:15 PM IST is squared off automatically.',
   },
   {
-    q: 'How do I get paid?',
-    a: 'After you clear the assessment and complete KYC, your Pro Account becomes payout-eligible. Requests are submitted from your dashboard every 14 days and settled in INR to your verified Indian bank account.',
+    q: 'How do payouts work in India?',
+    a: 'Finish KYC and your funded account can request its first payout after 14 days funded, five trading days and 5% profit, with no single day above 30% of that profit. After that you can request every 14 days. The money is paid in INR to a verified bank account in your name.',
   },
   {
-    q: 'Is the assessment fee refundable?',
-    a: 'Assessment fees are non-refundable except in the case of a payment error. Our refund policy sets out the full terms.',
+    q: 'Can I get my evaluation fee back?',
+    a: 'Only if a payment was taken in error. Pass or fail, the fee covers the evaluation itself. A failed account can be reset for half the original fee, which is ₹1,350 on a ₹2,700 evaluation.',
   },
 ];
 
@@ -37,9 +39,9 @@ export default function FAQ() {
       <div className="pf-wrap grid lg:grid-cols-3 gap-10 lg:gap-16">
         <div>
           <p className="pf-eyebrow mb-4">FAQs</p>
-          <h2 className="pf-h2 mb-5">Before you pay</h2>
-          <p className="pf-lead mb-7">The things traders ask us most — rules, money and what ends an account.</p>
-          <Link to="/faqs" className="pf-btn pf-btn--ghost">Read all FAQs</Link>
+          <h2 className="pf-h2 mb-5">Prop firm questions, answered before you pay</h2>
+          <p className="pf-lead mb-7">What you can trade, what closes an account and how the money reaches your bank.</p>
+          <Link to="/faqs" className="pf-btn pf-btn--ghost">See every question</Link>
         </div>
 
         <div className="lg:col-span-2 space-y-3">

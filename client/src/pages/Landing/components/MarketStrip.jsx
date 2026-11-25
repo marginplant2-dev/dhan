@@ -8,7 +8,7 @@ import { ShieldCheck, TrendingDown, TrendingUp } from 'lucide-react';
    only where a real integration exists; a logo wall implies a tie-up.
    ──────────────────────────────────────────────────────────────────────────── */
 
-const CHIPS = ['NSE', 'BSE', 'NIFTY 50', 'BANKNIFTY', 'SENSEX', 'Index F&O'];
+const CHIPS = ['NSE', 'BSE', 'NIFTY 50', 'BANKNIFTY', 'SENSEX', 'Index options'];
 
 const TICKERS = [
   { symbol: 'NIFTY 50', base: 22456.8 },
@@ -76,8 +76,8 @@ export default function MarketStrip() {
               <ShieldCheck size={18} />
             </span>
             <span>
-              <b>Built on Indian markets only</b>
-              <em>NSE &amp; BSE index derivatives · INR fees and payouts</em>
+              <b>Only Indian indices, only rupees</b>
+              <em>Options on NSE and BSE indices · fees, balances and payouts in ₹</em>
             </span>
           </div>
 

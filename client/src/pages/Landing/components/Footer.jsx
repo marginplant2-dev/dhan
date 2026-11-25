@@ -5,26 +5,25 @@ import TradingViewLegalNotice from './TradingViewLegalNotice';
 import logoOnDark from '../../../assets/dhanfunded-wordmark-dark.png';
 
 const COLUMNS = {
-  Platform: [
-    { label: 'How it works', href: '/how-it-works' },
-    { label: 'Assessments', href: '/pricing' },
-    { label: 'Challenges', href: '/challenges' },
-    { label: 'Instruments', href: '/instruments' },
-    
+  Evaluations: [
+    { label: 'Compare the challenges', href: '/challenges' },
+    { label: 'Fees by account size', href: '/pricing' },
+    { label: 'Tradable indices', href: '/instruments' },
+    { label: 'How an evaluation runs', href: '/how-it-works' },
   ],
-  Company: [
-    { label: 'About us', href: '/about' },
+  DhanFunded: [
+    { label: 'About DhanFunded', href: '/about' },
+    { label: 'Questions and answers', href: '/faqs' },
+    { label: 'Contact support', href: '/contact-us' },
     // Outbound on purpose: the reviews live on Trustpilot, and a real profile
     // is a trust signal both for readers and for search engines.
-    { label: 'Reviews on Trustpilot', href: 'https://www.trustpilot.com/review/dhanfunded.com', external: true },
-    { label: 'FAQs', href: '/faqs' },
-    { label: 'Contact us', href: '/contact-us' },
+    { label: 'Our Trustpilot page', href: 'https://www.trustpilot.com/review/dhanfunded.com', external: true },
   ],
-  Legal: [
-    { label: 'Privacy Policy', href: '/privacy-policy' },
-    { label: 'Terms & Conditions', href: '/terms' },
-    { label: 'Refund Policy', href: '/refund-policy' },
-    { label: 'Risk Disclaimer', href: '/risk-disclaimer' },
+  Policies: [
+    { label: 'Risk disclaimer', href: '/risk-disclaimer' },
+    { label: 'Terms and conditions', href: '/terms' },
+    { label: 'Refund policy', href: '/refund-policy' },
+    { label: 'Privacy policy', href: '/privacy-policy' },
   ],
 };
 
@@ -55,8 +54,8 @@ export default function Footer() {
               <img src={logoOnDark} alt="DhanFunded" width={1162} height={320} className="h-14 w-auto" />
             </Link>
             <p className="text-[.9rem] leading-relaxed mb-6" style={{ color: MUTED }}>
-              Trade. Prove. Get Funded. Structured, simulated assessments for serious
-              Indian intraday participants — with payouts in INR.
+              Simulated trading evaluations for people who trade NIFTY, BANKNIFTY and
+              SENSEX options. Clear the rules and we pay your profit share in rupees.
             </p>
 
             <div className="space-y-2.5 mb-6">
@@ -87,7 +86,7 @@ export default function Footer() {
 
           {Object.entries(COLUMNS).map(([title, links]) => (
             <div key={title}>
-              <h4 className="text-[.78rem] font-bold uppercase tracking-[.14em] text-white mb-4">{title}</h4>
+              <h2 className="text-[.78rem] font-bold uppercase tracking-[.14em] text-white mb-4">{title}</h2>
               <ul className="space-y-2.5">
                 {links.map((l) => (
                   <li key={l.label}>
@@ -126,15 +125,21 @@ export default function Footer() {
             )}
           </div>
 
+          {/* Required risk wording, kept in substance: not a broker/adviser, no
+              exchange orders, simulated only, rewards per published terms, no
+              guarantee of results, read the rules first, no advice. */}
           <p className="text-[.76rem] leading-relaxed" style={{ color: MUTED }}>
-            <span className="font-semibold text-white">Disclaimer:</span> DhanFunded is an evaluation
-            platform and is not a stock broker, exchange, investment advisor or portfolio manager. The
-            platform does not facilitate or execute live orders on the NSE, BSE or any other exchange.
-            All activity takes place in a simulated environment designed to assess participants' skill
-            and consistency. Rewards follow the published terms of the evaluation and funding programme.
-            Participation involves risk and past performance does not guarantee future results. Please
-            review our Terms &amp; Conditions, Risk Disclaimer and Programme Rules before participating.
-            No investment or financial advisory services are offered through this platform.
+            <span className="font-semibold text-white">Risk notice:</span> every DhanFunded
+            account is a simulation, used to measure how well and how consistently you trade. Orders are filled inside our own platform at live prices and
+            are never sent to NSE, BSE or any other exchange. DhanFunded is not a stockbroker, an
+            exchange, an investment adviser or a portfolio manager, it is not registered with SEBI,
+            and nothing on this site is a tip, a recommendation or investment advice. Payouts are made
+            only on the terms published for each programme. Trading carries risk, you can lose the
+            whole fee you pay, and good results in the past, yours or anyone else&apos;s, say nothing
+            certain about the future. Before you buy, read the{' '}
+            <Link to="/terms" className="underline hover:text-white">terms</Link>, the{' '}
+            <Link to="/risk-disclaimer" className="underline hover:text-white">risk disclaimer</Link> and
+            the <Link to="/challenges" className="underline hover:text-white">rules for each challenge</Link>.
           </p>
         </div>
       </div>

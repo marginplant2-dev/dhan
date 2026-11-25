@@ -136,9 +136,16 @@ async function main() {
       });
       // #root having children means React has painted — except index.html now
       // ships a #df-splash placeholder inside #root, so that has to be gone too.
+      // Then Seo.jsx's effect must have run for THIS route: canonical points
+      // here and #route-ld exists. Otherwise page.content() can bake in the
+      // homepage defaults from index.html (title, canonical, no JSON-LD).
       await page.waitForFunction(
-        'document.querySelector("#root")?.children.length > 0 && !document.querySelector("#df-splash")',
-        { timeout: 20000 });
+        (url) => document.querySelector('#root')?.children.length > 0
+          && !document.querySelector('#df-splash')
+          && document.querySelector('link[rel="canonical"]')?.getAttribute('href') === url
+          && !!document.getElementById('route-ld'),
+        { timeout: 20000 },
+        `https://dhanfunded.com${route}`);
 
       let html = await page.content();
       // The service worker must not be registered while a crawler parses this,

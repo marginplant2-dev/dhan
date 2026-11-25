@@ -82,7 +82,7 @@ export default function Navbar() {
               style={{ color: 'var(--pf-text)' }}
               aria-expanded={moreOpen}
             >
-              About us
+              More
               <ChevronDown size={15} className={`transition-transform ${moreOpen ? 'rotate-180' : ''}`} />
             </button>
             {moreOpen && (

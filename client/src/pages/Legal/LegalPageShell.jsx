@@ -27,6 +27,7 @@ export default function LegalPageShell({ title, subtitle, lastUpdated, children 
         .legal-doc li { position: relative; margin: 11px 0; padding-left: 24px; }
         .legal-doc li::before { content: ""; position: absolute; left: 4px; top: 10px; width: 7px; height: 7px; border-radius: 50%; background: #35DC85; }
         .legal-doc strong { color: #0A2130; font-weight: 700; }
+        .legal-doc a { color: #0A2130; font-weight: 600; text-decoration: underline; text-decoration-color: #35DC85; text-underline-offset: 3px; }
         .legal-doc .warning-section, .legal-doc .disclaimer-section {
           background: #FFF8EC; border: 1px solid #F6E4BF; border-radius: 12px; padding: 14px 18px; margin: 18px 0; }
         .legal-doc .warning-section ul, .legal-doc .disclaimer-section ul { margin-top: 6px; }

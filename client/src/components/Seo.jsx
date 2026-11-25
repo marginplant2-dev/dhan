@@ -10,78 +10,103 @@ import { useLocation } from 'react-router-dom';
  * would happily hoist a second <title>/<meta> into <head> alongside the static
  * pair, and duplicate canonical/og tags are worse than none.
  *
+ * It also owns one <script type="application/ld+json" id="route-ld"> (WebPage +
+ * BreadcrumbList for the current route), created once and rewritten on every
+ * route change. prerender.mjs waits for it, so each prerendered page ships it.
+ *
  * The bug this fixes: every route served `<link rel="canonical"
  * href="https://dhanfunded.com/">`, telling Google that /challenges, /pricing,
  * /faqs and all eight blog posts were duplicates of the homepage — while
  * sitemap.xml simultaneously listed them as 24 distinct URLs.
+ *
+ * Copy rules: titles ≤ 60 chars with the brand last, descriptions 140–155
+ * chars, facts only from src/pages/Landing/data/programmes.js and page copy.
  */
 const SITE = 'https://dhanfunded.com';
 const OG_IMAGE = `${SITE}/landing/img/dhanfunded-og.png`;
 
+// `crumb` is the short page name used in the BreadcrumbList.
 const PAGES = {
   '/': {
-    title: "DhanFunded — Simulated Index Trading Evaluations in India",
+    crumb: 'Home',
+    title: 'Prop Firm India: Get a Funded Trading Account | DhanFunded',
     description:
-      "Show what your strategy can do on NIFTY, BANKNIFTY and SENSEX without staking your own money. Rules published in rupees before you pay, account sizes from ₹1 Lakh, and 80% of what you make paid to an Indian bank every fortnight.",
+      'An Indian prop firm for NIFTY, BANKNIFTY and SENSEX options traders. Pass a simulated evaluation, get a funded trading account, keep up to 80% of profit.',
   },
   '/how-it-works': {
-    title: "How an Evaluation Runs at DhanFunded — Step by Step",
+    crumb: 'How it works',
+    title: 'How a Prop Firm Evaluation Works, Step by Step | DhanFunded',
     description:
-      "What happens between paying for an evaluation and receiving money: the targets each phase asks for, the two loss limits that close an account, how a funded account is issued, and what has to be true before a payout is released.",
+      'How a prop firm evaluation works: hit the target over 5+ trading days without breaching a loss limit, complete KYC, then request payouts every 14 days.',
   },
   '/challenges': {
-    title: "1-Step, 2-Step or Instant — Which DhanFunded Programme Fits",
+    crumb: 'Challenges',
+    title: 'Prop Firm Challenge India: 1-Step & 2-Step | DhanFunded',
     description:
-      "Three routes to a funded account, compared line by line: targets, daily and overall limits, time allowed and profit share. Pick by how you trade, not by the fee.",
+      'Compare the 2-Step, 1-Step and Instant Funding prop firm challenges: profit targets, daily and overall loss limits, time allowed and profit share.',
   },
   '/instruments': {
-    title: "What You Can Trade — NIFTY, BANKNIFTY and SENSEX Derivatives",
+    crumb: 'Instruments',
+    title: 'NIFTY, BANKNIFTY & SENSEX Options Prop Trading | DhanFunded',
     description:
-      "The index derivatives available inside a DhanFunded evaluation, with contract sizes and session timings. Indian indices only — nothing in forex, crypto or overseas markets.",
+      'Prop trading on NIFTY, BANKNIFTY and SENSEX options, buy or sell, intraday only, squared off by 3:15 PM IST. No futures, forex, crypto or overnight holds.',
   },
   '/pricing': {
-    title: "DhanFunded Evaluation Fees — Pay Once, Per Account Size",
+    crumb: 'Pricing',
+    title: 'Prop Firm Challenge Fees India, From ₹3,000 | DhanFunded',
     description:
-      "Every account size with its one-time fee, target and loss limits in rupees. No monthly billing, no platform charge, and the same numbers on the page as in your dashboard.",
+      'Prop firm challenge fees in rupees, from ₹3,000 for the 2-Step. See 1-Step and Instant Funding prices, account sizes up to ₹25 Lakh and every limit in INR.',
   },
   '/faqs': {
-    title: "DhanFunded Questions — Rules, Payouts, KYC, Resets",
+    crumb: 'FAQs',
+    title: 'Prop Firm Rules & Payouts Explained: FAQs | DhanFunded',
     description:
-      "Plain answers to what traders actually ask: what ends an account, how the consistency rule is measured, when a payout can be requested, what a reset costs, and why the environment is simulated.",
+      'Prop firm rules and payouts in plain words: what closes an account, the 40% best-day cap, when KYC is needed, the 14-day payout cycle and reset costs.',
   },
   '/about': {
-    title: "About DhanFunded — Why We Evaluate Instead of Teach",
+    crumb: 'About us',
+    title: 'About Us: Indian Prop Trading Firm | DhanFunded',
     description:
-      "A simulated evaluation desk for Indian index traders: what the platform is, what it deliberately is not, and how a rules-first environment separates a disciplined strategy from a lucky week.",
+      'DhanFunded is an Indian prop trading firm built around NIFTY, BANKNIFTY and SENSEX: simulated evaluations, rules published in rupees and payouts in INR.',
   },
   '/contact-us': {
-    title: "Talk to DhanFunded — Support for Traders and Payouts",
+    crumb: 'Contact us',
+    title: 'Contact Us: Indian Prop Trading Firm Support | DhanFunded',
     description:
-      "Questions about an evaluation, a funded account, KYC or a payout request? Reach the DhanFunded team by email, phone or WhatsApp.",
+      'Contact DhanFunded, the Indian prop trading firm, about an evaluation, a funded account, KYC or a payout. Reach support by email, phone or WhatsApp.',
   },
 
   '/privacy-policy': {
+    crumb: 'Privacy Policy',
     title: 'Privacy Policy | DhanFunded',
-    description: 'What personal information DhanFunded collects, why it is collected, how long it is kept and how it is protected.',
+    description:
+      'How DhanFunded collects, uses, shares and protects your information, including KYC documents and trading activity, how long it is kept and your rights.',
   },
   '/terms': {
+    crumb: 'Terms & Conditions',
     title: 'Terms & Conditions | DhanFunded',
-    description: 'The agreement covering DhanFunded evaluations, funded accounts, payouts and account closure.',
+    description:
+      'The agreement between you and DhanFunded: your account, fees and what a purchase covers, refunds, lawful use, the risk of losing money and governing law.',
   },
   '/refund-policy': {
-    title: 'Refund Policy | DhanFunded',
-    description: 'When an evaluation fee can be refunded, when it cannot, and how to raise a refund request.',
+    crumb: 'Cancellation & Refund Policy',
+    title: 'Cancellation & Refund Policy | DhanFunded',
+    description:
+      'When a DhanFunded order can be cancelled, how to report a problem with something you paid for, and how long an approved refund takes to reach your account.',
   },
   '/risk-disclaimer': {
+    crumb: 'Risk Disclaimer',
     title: 'Risk Disclaimer | DhanFunded',
     description:
-      'What a simulated evaluation is and is not. Read this before paying for an evaluation or trading a funded account at DhanFunded.',
+      'Read this before you pay. Trading carries a real risk of loss, DhanFunded runs simulated evaluations only, and nothing on this site is investment advice.',
   },
   '/login': {
+    crumb: 'Sign in',
     title: 'Sign In | DhanFunded',
     description: 'Sign in to continue an evaluation, check objectives or request a payout on your funded account.',
   },
   '/register': {
+    crumb: 'Create account',
     title: 'Create Your Account | DhanFunded',
     description: 'Open a free DhanFunded account, try the practice environment, and start an evaluation when you are ready.',
   },
@@ -92,6 +117,9 @@ const PAGES = {
   '/subadmin': { title: 'Sub-Admin Panel | DhanFunded', description: 'Restricted area.', noindex: true },
   '/broker': { title: 'Broker Panel | DhanFunded', description: 'Restricted area.', noindex: true },
 };
+
+// Same page under a second URL (App.jsx mounts the homepage at /landing too).
+const ALIASES = { '/landing': '/' };
 
 /** Set (or create) a <meta> by its name/property attribute. */
 function setMeta(attr, key, content) {
@@ -104,15 +132,49 @@ function setMeta(attr, key, content) {
   el.setAttribute('content', content);
 }
 
+/** WebPage (+ BreadcrumbList off the homepage) for the route being shown. */
+function routeSchema(url, name, description, crumb) {
+  const webPage = {
+    '@type': 'WebPage',
+    '@id': `${url}#webpage`,
+    url,
+    name,
+    description,
+    inLanguage: 'en-IN',
+    isPartOf: { '@id': `${SITE}/#website` },
+  };
+  if (url === `${SITE}/`) return { '@context': 'https://schema.org', ...webPage };
+
+  webPage.breadcrumb = { '@id': `${url}#breadcrumb` };
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      webPage,
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${url}#breadcrumb`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 2, name: crumb, item: url },
+        ],
+      },
+    ],
+  };
+}
+
 export default function Seo({ title, description, path, noindex }) {
   const { pathname } = useLocation();
-  const route = path || pathname;
-  const page = PAGES[route] || PAGES['/'];
+  const raw = (path || pathname).replace(/(.)\/+$/, '$1');
+  const route = ALIASES[raw] || raw;
+  const known = PAGES[route];
+  const page = known || PAGES['/'];
   const t = title || page.title;
   const d = description || page.description;
-  const noIndex = noindex ?? page.noindex ?? false;
-  // Trailing slash only on the root, so /pricing and /pricing/ don't split.
-  const url = SITE + (route === '/' ? '/' : route.replace(/\/+$/, ''));
+  // A route with no entry here and no title of its own would otherwise go out
+  // as an indexable copy of the homepage's title and description.
+  const noIndex = noindex ?? page.noindex ?? !(known || title);
+  const crumb = known?.crumb || t.split(' | ')[0];
+  const url = SITE + route;
 
   useEffect(() => {
     document.title = t;
@@ -137,7 +199,22 @@ export default function Seo({ title, description, path, noindex }) {
       document.head.appendChild(link);
     }
     link.setAttribute('href', url);
-  }, [t, d, url, noIndex]);
+
+    // One node, found by id, so a route change (or the SPA booting over a
+    // prerendered page that already has it) rewrites it instead of adding one.
+    let ld = document.getElementById('route-ld');
+    if (noIndex) {
+      ld?.remove();
+      return;
+    }
+    if (!ld) {
+      ld = document.createElement('script');
+      ld.type = 'application/ld+json';
+      ld.id = 'route-ld';
+      document.head.appendChild(ld);
+    }
+    ld.textContent = JSON.stringify(routeSchema(url, t, d, crumb));
+  }, [t, d, url, noIndex, crumb]);
 
   return null;
 }

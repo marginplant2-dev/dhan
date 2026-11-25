@@ -5,9 +5,11 @@
  * had drifted away from what the platform actually enforces — the site was
  * advertising ₹2,600 / 5% daily / "sizes up to ₹20 Lakh" while the admin had
  * ₹2,700 / 4% daily. One file, one edit, no drift. (Account sizes come from
- * each challenge's `tiers`: ₹1 Lakh up to ₹50 Lakh depending on programme.)
+ * each challenge's `tiers`: ₹1 Lakh up to ₹25 Lakh depending on programme.)
  *
- * Verified against the `challenges` collection. When the admin adds a size or
+ * Verified against live /api/prop/challenges on 2026-11-25 (₹1 Lakh fees:
+ * 2-Step ₹3,000, 1-Step ₹3,800, Instant ₹4,900; largest tier ₹25 Lakh).
+ * When the admin adds a size or
  * changes a fee, update this file in the same breath.
  */
 
@@ -15,8 +17,8 @@ export const PROGRAMMES = [
   {
     key: '2-step',
     name: '2-Step Evaluation',
-    fee: '₹2,700',
-    feeValue: 2700,
+    fee: '₹3,000',
+    feeValue: 3000,
     target: 'Phase 1: 8%, then 5%',
     targetRupees: '₹8,000, then ₹5,000',
     daily: '4%',
@@ -30,8 +32,8 @@ export const PROGRAMMES = [
   {
     key: '1-step',
     name: '1-Step Evaluation',
-    fee: '₹3,900',
-    feeValue: 3900,
+    fee: '₹3,800',
+    feeValue: 3800,
     target: '10% in a single phase',
     targetRupees: '₹10,000',
     daily: '4%',
@@ -45,8 +47,8 @@ export const PROGRAMMES = [
   {
     key: 'instant',
     name: 'Instant Funding',
-    fee: '₹4,100',
-    feeValue: 4100,
+    fee: '₹4,900',
+    feeValue: 4900,
     target: '5% before a payout',
     targetRupees: '₹5,000',
     daily: '3%',
@@ -61,7 +63,7 @@ export const PROGRAMMES = [
 
 /** Rules that are identical across all three programmes. */
 export const COMMON_RULES = [
-  { rule: 'Account sizes', value: '₹1 Lakh to ₹50 Lakh (by programme)' },
+  { rule: 'Account sizes', value: '₹1 Lakh to ₹25 Lakh (by programme)' },
   { rule: 'Max loss on a single trade', value: '2% (₹2,000)' },
   { rule: 'Minimum trading days', value: '5' },
   { rule: 'Max profit from one day', value: '40% of the target' },
@@ -71,5 +73,5 @@ export const COMMON_RULES = [
   { rule: 'Minimum profit to request a payout', value: '5%' },
 ];
 
-export const CHEAPEST_FEE = '₹2,700';
-export const ACCOUNT_SIZE = '₹1 Lakh to ₹50 Lakh';
+export const CHEAPEST_FEE = '₹3,000';
+export const ACCOUNT_SIZE = '₹1 Lakh to ₹25 Lakh';

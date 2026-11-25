@@ -1,0 +1,32 @@
+# DhanFunded
+
+> DhanFunded (dhanfunded.com) is an Indian prop trading evaluation platform. Traders take a simulated evaluation on NIFTY, BANKNIFTY and SENSEX index options, with fees, limits and payouts in Indian rupees (INR).
+
+- Three programmes: 2-Step Evaluation (fee from ₹3,000, 80% profit share), 1-Step Evaluation (from ₹3,800, 80%) and Instant Funding (from ₹4,900, no evaluation phase, 70%).
+- Account sizes run from ₹1 Lakh to ₹25 Lakh, depending on the programme.
+- Options can be bought or sold. Trading is intraday only: positions are squared off by 3:15 PM IST, and futures, overnight positions, copy execution and algo execution are not permitted.
+- Shared rules: at most 2% loss on a single trade, at least 5 trading days, and no more than 40% of the target from one day.
+- Once funded, payouts run on a 14-day cycle and need at least 5% profit. KYC (PAN, Aadhaar and a bank account in the trader's own name) is required before the first payout, which is paid in INR to an Indian bank account.
+- DhanFunded is not a stock broker, exchange, investment adviser or portfolio manager. All trading happens in a simulated environment; no live orders are placed on NSE, BSE or any other exchange.
+- Support: support@dhanfunded.com
+
+## Programmes and rules
+
+- [Home](https://dhanfunded.com/): Overview of the platform, programmes and payouts
+- [Challenges](https://dhanfunded.com/challenges): 1-Step, 2-Step and Instant Funding compared rule by rule
+- [Pricing](https://dhanfunded.com/pricing): Fees in rupees for each programme and account size
+- [How it works](https://dhanfunded.com/how-it-works): The evaluation from purchase to payout, step by step
+- [Instruments](https://dhanfunded.com/instruments): NIFTY, BANKNIFTY and SENSEX options, trading hours and what is not allowed
+- [FAQs](https://dhanfunded.com/faqs): Rules, payouts, KYC and resets
+
+## Company
+
+- [About us](https://dhanfunded.com/about): What DhanFunded is and is not
+- [Contact us](https://dhanfunded.com/contact-us): Support by email, phone or WhatsApp
+
+## Optional
+
+- [Terms & Conditions](https://dhanfunded.com/terms)
+- [Privacy Policy](https://dhanfunded.com/privacy-policy)
+- [Cancellation & Refund Policy](https://dhanfunded.com/refund-policy)
+- [Risk Disclaimer](https://dhanfunded.com/risk-disclaimer)

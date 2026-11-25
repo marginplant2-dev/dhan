@@ -19,31 +19,58 @@ function buildPhases(c) {
   // Common rules shown on every phase block
   const baseRules = (target) => [
     target ? { key: 'Profit Target', value: target } : null,
-    fmtPct(r.maxDailyDrawdownPercent) && { key: 'Daily Drawdown', value: fmtPct(r.maxDailyDrawdownPercent) },
-    fmtPct(r.maxOverallDrawdownPercent) && { key: 'Max Drawdown', value: fmtPct(r.maxOverallDrawdownPercent) },
-    r.maxOneDayProfitPercentOfTarget != null && { key: 'Max one-day profit', value: `${r.maxOneDayProfitPercentOfTarget}% of target` },
-    fmtDays(r.tradingDaysRequired) && { key: 'Min Active Days', value: fmtDays(r.tradingDaysRequired) },
-    { key: 'News-based participation', value: fmtBool(r.allowNewsTrading) }
+    fmtPct(r.maxDailyDrawdownPercent) && { key: 'Daily loss limit', value: fmtPct(r.maxDailyDrawdownPercent) },
+    fmtPct(r.maxOverallDrawdownPercent) && { key: 'Overall loss limit', value: fmtPct(r.maxOverallDrawdownPercent) },
+    r.maxOneDayProfitPercentOfTarget != null && { key: 'Best-day cap', value: `${r.maxOneDayProfitPercentOfTarget}% of the target` },
+    fmtDays(r.tradingDaysRequired) && { key: 'Minimum trading days', value: fmtDays(r.tradingDaysRequired) },
+    { key: 'Trading through news', value: fmtBool(r.allowNewsTrading) }
   ].filter(Boolean);
 
   if (c.stepsCount === 2) {
     return [
-      { label: 'Phase 1 — Qualifier', rules: baseRules(fmtPct(r.profitTargetPhase1Percent)) },
-      { label: 'Phase 2 — Validator', rules: baseRules(fmtPct(r.profitTargetPhase2Percent)) }
+      { label: 'Phase 1', rules: baseRules(fmtPct(r.profitTargetPhase1Percent)) },
+      { label: 'Phase 2', rules: baseRules(fmtPct(r.profitTargetPhase2Percent)) }
     ];
   }
   if (c.stepsCount === 1) {
-    return [{ label: 'Single phase', rules: baseRules(fmtPct(r.profitTargetPhase1Percent)) }];
+    return [{ label: 'One phase', rules: baseRules(fmtPct(r.profitTargetPhase1Percent)) }];
   }
   // Instant (0-step)
-  return [{ label: 'Funded from day one', rules: baseRules(fmtPct(r.profitTargetInstantPercent)) }];
+  return [{ label: 'No evaluation: funded straight away', rules: baseRules(fmtPct(r.profitTargetInstantPercent)) }];
 }
 
 function challengeTagline(c) {
-  if (c.stepsCount === 0) return 'Skip the evaluation entirely — funded from the first session, on tighter limits.';
-  if (c.stepsCount === 1) return 'One phase. Pass once and you\'re funded.';
-  return 'Two phases at 8% then 5%, and the lowest fee of the three.';
+  if (c.stepsCount === 0) return 'No evaluation phase. A funded account from day one, with tighter loss limits.';
+  if (c.stepsCount === 1) return 'A single phase. Reach the target once to get funded.';
+  return 'Two phases with targets of 8% and 5%, and the lowest entry fee.';
 }
+
+// "Which one should I pick" copy. Numbers match the live challenge rules
+// (see data/programmes.js); update both if the admin changes a route.
+const PICKS = [
+  {
+    who: 'If you want the most room',
+    route: '2-Step Evaluation',
+    body: 'Good for traders who are new to fixed rules or whose equity swings more. The 10% overall limit is the widest of the three, and the target comes in two smaller steps: 8%, then 5%. You get 60 days and the lowest fee at the ₹1 Lakh size. The trade-off is that you have to pass twice.',
+  },
+  {
+    who: 'If you have a tested method',
+    route: '1-Step Evaluation',
+    body: 'Good for traders who already know their numbers and would rather prove them once. The target is 10% in a single phase with 45 days to reach it, but the overall limit is tighter at 8%. Once funded, the profit share is 80%, the same as the 2-Step.',
+  },
+  {
+    who: 'If you keep losses small',
+    route: 'Instant Funding',
+    body: 'Good for disciplined traders who rarely lose more than a small slice of the account in a day. There is no qualifying phase, but the limits are the strictest: 3% a day and 6% overall. You need 5% profit before the first payout, the share is 70% and the fee is the highest of the three.',
+  },
+];
+
+const DECIDE = [
+  'If a normal losing day costs you more than 3% of your capital, Instant Funding will be hard to keep alive. Look at the 1-Step or the 2-Step.',
+  'If your account has ever sat more than 8% below where it started before recovering, the 2-Step gives you more room than the 1-Step.',
+  'If budget decides it, the 2-Step has the lowest entry fee. Compare every size on the pricing page.',
+  'If you would rather skip the evaluation and can accept a 70% share, Instant Funding is the shortest road to a payout.',
+];
 
 export default function ChallengesPage() {
   const [challenges, setChallenges] = useState([]);
@@ -74,11 +101,13 @@ export default function ChallengesPage() {
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">Challenges</p>
           <h1 style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.03em' }} className="text-[color:var(--pf-text)] mb-6">
-            Pick the path that <span className="text-[color:var(--pf-brand)]">fits your style</span>
+            Choose your prop firm challenge: <span className="text-[color:var(--pf-brand)]">2-Step, 1-Step or Instant</span>
           </h1>
           <p className="text-base sm:text-lg text-[color:var(--pf-muted)] max-w-2xl mx-auto leading-relaxed">
-            Three challenges, one goal — get you funded. The rules are short, the numbers are
-            published, and there are no hidden conditions.
+            All three routes trade the same NIFTY, BANKNIFTY and SENSEX options in a simulated
+            account. What differs is how many phases you sit, how much you are allowed to lose on
+            the way and what share of the profit you keep. The current rules for each route load
+            below, straight from the platform.
           </p>
         </div>
       </section>
@@ -90,7 +119,9 @@ export default function ChallengesPage() {
             <div className="text-center text-[color:var(--pf-muted)] py-10">Loading challenges…</div>
           )}
           {!loading && challenges.length === 0 && (
-            <div className="text-center text-[color:var(--pf-muted)] py-10">No challenges available right now. Please check back soon.</div>
+            <div className="text-center text-[color:var(--pf-muted)] py-10">
+              No challenges are listed at the moment. Try again shortly, or <Link to="/contact-us" className="text-[color:var(--pf-brand)] font-semibold hover:underline">contact us</Link>.
+            </div>
           )}
           {!loading && challenges.map((c, idx) => {
             const phases = buildPhases(c);
@@ -108,7 +139,7 @@ export default function ChallengesPage() {
                     <span className="text-sm text-[color:var(--pf-brand)] font-medium">{challengeTagline(c)}</span>
                   </div>
                   <p className="text-sm sm:text-base text-[color:var(--pf-muted)] leading-relaxed max-w-3xl">
-                    {c.description || 'Trade platform capital in a simulated environment. Clear the target inside the limits, and the account starts paying you a share.'}
+                    {c.description || 'A simulated account with a profit target and two loss limits. Meet the target without crossing either limit and you earn a share of the profit.'}
                   </p>
                 </div>
 
@@ -131,9 +162,9 @@ export default function ChallengesPage() {
 
                 {/* CTA */}
                 <div className="px-6 sm:px-10 py-5 bg-[color:var(--pf-card-alt)] border-t border-[color:var(--pf-border)] flex flex-wrap gap-4 items-center justify-between">
-                  <p className="text-sm text-[color:var(--pf-muted)]">Ready to take the {c.name.toLowerCase()}?</p>
+                  <p className="text-sm text-[color:var(--pf-muted)]">Fees for every {c.name} account size</p>
                   <Link to="/pricing" className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[color:var(--pf-brand)] text-white text-sm font-semibold hover:bg-[color:var(--pf-brand-2)] transition-all">
-                    See pricing <ArrowRight size={14} />
+                    See pricing <ArrowRight size={14} aria-hidden="true" />
                   </Link>
                 </div>
               </div>
@@ -142,33 +173,75 @@ export default function ChallengesPage() {
         </div>
       </section>
 
-      {/* Notes */}
+      {/* Which one to pick */}
+      <section className="pb-16 md:pb-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.02em' }} className="text-[color:var(--pf-text)] mb-4">
+            Which challenge <span className="text-[color:var(--pf-brand)]">should I pick?</span>
+          </h2>
+          <p className="text-base text-[color:var(--pf-muted)] leading-relaxed max-w-3xl mb-8">
+            Start from how you trade, not from the fee. The right route is the one whose loss
+            limits your normal bad days fit inside.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {PICKS.map((p) => (
+              <div key={p.route} className="bg-[color:var(--pf-card-alt)] border border-[color:var(--pf-border)] rounded-2xl p-6">
+                <p className="text-xs font-bold text-[color:var(--pf-brand)] uppercase tracking-widest mb-2">{p.who}</p>
+                <h3 className="text-lg font-bold text-[color:var(--pf-text)] mb-3">{p.route}</h3>
+                <p className="text-sm text-[color:var(--pf-muted)] leading-relaxed">{p.body}</p>
+              </div>
+            ))}
+          </div>
+
+          <h3 className="text-lg font-bold text-[color:var(--pf-text)] mt-12 mb-4">A quick way to decide</h3>
+          <ul className="space-y-3 max-w-3xl">
+            {DECIDE.map((line) => (
+              <li key={line} className="flex gap-3 items-start text-base text-[color:var(--pf-muted)] leading-relaxed">
+                <span className="w-2 h-2 rounded-full shrink-0 mt-2.5 bg-[color:var(--pf-brand)]" aria-hidden="true" />
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Rules on every route */}
       <section className="py-14 md:py-20 px-6 bg-[#0A2130]">
         <div className="max-w-4xl mx-auto">
           <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.02em' }} className="text-white mb-8 text-center">
-            A few things you should know
+            Rules that apply on every route
           </h2>
           <div className="space-y-5 max-w-3xl mx-auto">
             {[
               {
-                t: 'Daily DD vs Max DD',
-                d: 'The daily limit starts fresh at 9:15 AM each session. The overall limit does not reset at all — it is a fixed floor under the account for as long as it runs.',
+                t: 'Daily limit and overall limit',
+                d: 'The daily limit resets at 9:15 AM every trading day. The overall limit never resets: it is a fixed floor below your starting balance. On a ₹1 Lakh 1-Step account that floor sits at ₹92,000 for the life of the account.',
               },
               {
-                t: 'Why minimum active days?',
-                d: 'Five trading days is the smallest sample that shows a method rather than a moment. They need not be consecutive, and there is no upper limit on how many you use.',
+                t: 'At least 5 trading days',
+                d: 'We ask for five so that a pass reflects a repeatable approach and not one good session. The days can be spread out, and you can use as many as you like within the time window.',
               },
               {
-                t: 'Max one-day profit rule',
-                d: 'A single session may carry at most 40% of the target. The profit is still credited — the day simply cannot be the reason you passed.',
+                t: 'The 40% one-day cap',
+                d: 'One day can count for at most 40% of the target. Anything above that stays in your balance but does not count towards passing. In Phase 1 of a ₹1 Lakh 2-Step, where the target is ₹8,000, that works out to ₹3,200 a day.',
               },
               {
-                t: 'Consistency rule (Instant only)',
-                d: 'On a funded account the best day may hold at most 30% of the profit being paid out. It is the same idea as the evaluation cap, applied to money that is about to leave our side.',
+                t: 'The payout consistency check',
+                d: 'When a funded account asks for a payout, the best single day can make up at most 30% of the profit being paid. It is the one-day cap again, applied at the point money is paid out.',
               },
               {
-                t: 'News-based participation',
-                d: 'Allowed on the 1-Step. Restricted on Instant accounts to manage risk. RBI policy, budget day, results — all fair game on 1-Step.',
+                t: 'Trading on news days',
+                d: 'Each card above shows whether news-day trading is allowed on that route. Where it is, RBI policy days, the Union Budget and company results are open to trade like any other session.',
+              },
+              {
+                t: 'Intraday only',
+                d: (
+                  <>
+                    Close every position by 3:15 PM IST. Nothing is carried overnight or over a weekend. Lot sizes
+                    and session times for each index are on the{' '}
+                    <Link to="/instruments" className="text-[color:var(--pf-brand)] font-semibold hover:underline">instruments page</Link>.
+                  </>
+                ),
               },
             ].map((item) => (
               <div key={item.t} className="border border-[rgba(255,255,255,0.08)] rounded-2xl p-5 sm:p-6 bg-[#0E2A3A]">
@@ -184,11 +257,15 @@ export default function ChallengesPage() {
       <section className="py-14 md:py-24 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.02em' }} className="text-[color:var(--pf-text)] mb-6">
-            Made up your mind?
+            Know which route you want?
           </h2>
-          <p className="text-base sm:text-lg text-[color:var(--pf-muted)] mb-8">Head over to pricing, pick an account size, and let's get started.</p>
+          <p className="text-base sm:text-lg text-[color:var(--pf-muted)] mb-8">
+            The pricing page lists the fee for every account size on each route. Still deciding? Read{' '}
+            <Link to="/how-it-works" className="text-[color:var(--pf-brand)] font-semibold hover:underline">how the evaluation works</Link>{' '}
+            or the <Link to="/faqs" className="text-[color:var(--pf-brand)] font-semibold hover:underline">prop firm rules FAQ</Link>.
+          </p>
           <Link to="/pricing" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[color:var(--pf-brand)] text-white font-semibold text-sm shadow-[0_6px_20px_rgba(31,216,122,0.3)] hover:bg-[color:var(--pf-brand-2)] transition-all">
-            View Pricing <ArrowRight size={16} />
+            See fees by account size <ArrowRight size={16} aria-hidden="true" />
           </Link>
         </div>
       </section>

@@ -5,103 +5,99 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 /**
- * This section used to be a dated founding story — an apartment, an office
- * move, headcount, "never delayed a payout". None of it was true of this
- * platform, and a page that takes money should not invent its own history.
- * What replaces it is how the thing actually works, which needs no dates.
+ * No founding story, headcount, office address or named team on this page:
+ * none of that can be verified, and a page that takes money should not invent
+ * its own history. It describes how the platform works instead. Every figure
+ * comes from data/programmes.js or the server's rule defaults.
+ *
+ * When there are real people to name, add them: name, role, a one-line
+ * background that can be verified, and their own photograph.
  */
-const milestones = [
+const facts = [
   {
-    date: 'The premise',
-    title: 'Capital is not the scarce part',
-    desc: 'Plenty of Indian traders have a method that works and an account too small for it to matter. What is missing is capital willing to back a tested process on the instruments they already trade.',
+    label: 'Simulated',
+    title: 'Your orders never reach an exchange',
+    desc: 'Prices stream live from NSE and BSE, but every order is filled by DhanFunded’s own engine. Nothing you place touches the real market. The only real money involved is the fee you pay and the payouts we send.',
   },
   {
-    date: 'The measure',
-    title: 'A rule is only fair if you can read it first',
-    desc: 'Every target, every limit and every payout condition is a rupee figure published before you pay, and the same figure your dashboard counts down while you trade. Nothing appears for the first time at payout.',
+    label: 'Not a broker',
+    title: 'No broking, no advice, no managed money',
+    desc: 'DhanFunded is not a stockbroker, an investment adviser or a portfolio manager, and it is not registered with SEBI. We give no tips or research calls and never hold your trading capital.',
   },
   {
-    date: 'The environment',
-    title: 'Live prices, simulated capital',
-    desc: 'Quotes come from NSE and BSE as they happen; orders stay inside the platform. The risk stays ours to carry, and we hold none of your trading capital.',
+    label: 'Published rules',
+    title: 'Every limit is written down in rupees',
+    desc: 'Profit targets, daily and overall loss limits, the 2% cap on one trade, the consistency rule and the payout conditions are on the challenges and pricing pages before you pay. Your dashboard tracks the same numbers live.',
   },
   {
-    date: 'The enforcement',
-    title: 'The platform applies the limits, not a person',
-    desc: 'Daily and overall limits are checked on every tick and acted on at the price that broke them. No reviewer decides afterwards whether your account survived.',
+    label: 'Enforcement',
+    title: 'Software applies the limits, not a person',
+    desc: 'Loss limits are checked on every price tick, and an account that crosses one is closed at that price. Positions still open at 3:15 PM IST are squared off automatically. Nobody reviews a breach later and decides your fate by hand.',
   },
   {
-    date: 'The payout',
-    title: 'Fixed cycle, fixed share, INR',
-    desc: 'Fourteen days funded, five trading days used, 5% profit, and no single day carrying more than 30% of it. Meet those and your share goes to a bank account in your own name.',
+    label: 'Payouts',
+    title: 'A fixed schedule, paid in INR',
+    desc: 'After 14 days funded, five trading days and 5% profit, with no single day above 30% of it, you can request a payout every 14 days. Each request can be up to 5% of the account size, sent after KYC to a bank account in your name.',
   },
   {
-    date: 'The scope',
-    title: 'What we deliberately do not do',
-    desc: 'No tips, no advice, no managed accounts, no forex or crypto, no monthly subscription. A narrow product is easier to keep honest than a broad one.',
+    label: 'Scope',
+    title: 'What you will not find here',
+    desc: 'Forex, crypto, commodities, foreign indices, futures, overnight positions, copy trading, algos or a monthly subscription. A narrow product is easier to check and easier to keep honest.',
   },
 ];
 
 const reasons = [
   {
-    title: 'One market, properly',
-    desc: 'NIFTY, BANKNIFTY and SENSEX derivatives, Indian hours, Indian settlement. Better to cover one market well than list forty badly.',
+    title: 'Only Indian index options',
+    desc: 'NIFTY, BANKNIFTY and SENSEX, traded in Indian market hours. The platform is not spread across forty markets it cannot cover well.',
   },
   {
-    title: 'Rupees at both ends',
-    desc: 'You pay in rupees and you are paid in rupees, into an account in your own name. Nothing is converted, so nothing is lost converting it.',
+    title: 'Rupees in, rupees out',
+    desc: 'Fees start at ₹3,000 for a ₹1 Lakh 2-Step evaluation, paid once. Payouts land in an Indian bank account in your name, with no currency conversion either way.',
   },
   {
-    title: 'Limits you can quote back to us',
-    desc: 'Targets, drawdowns, the one-day cap and the payout conditions live on the pricing and challenge pages. A rule that is not written there is not applied to your account.',
+    title: 'Rules you can hold us to',
+    desc: 'If a rule is not written on the challenges or pricing page, it is not applied to your account. You can quote the page back to us.',
   },
   {
-    title: 'A person reads your message',
-    desc: 'Support is email, phone and WhatsApp, answered by people who can open your account and tell you which tick broke which limit.',
+    title: 'Passed on numbers only',
+    desc: 'There is no interview, sales call or manual approval. The target and the limits decide whether an evaluation is passed.',
   },
   {
-    title: 'Judged by numbers alone',
-    desc: 'No interview, no sales call, no discretionary approval. Your objectives either clear inside the limits or they do not.',
+    title: 'A reset costs half',
+    desc: 'A failed account can be restarted for 50% of its original fee, so on a ₹3,000 evaluation a reset is ₹1,500, not another full fee.',
   },
   {
-    title: 'Built to stay narrow',
-    desc: 'No upsells, no subscription, and no promise that the rules bend for a good week. The product is an evaluation and a payout.',
+    title: 'Support that can see your account',
+    desc: 'Email, phone and WhatsApp are answered by the support team, who can look up your account and show you which trade crossed which limit.',
   },
 ];
 
-/**
- * The page previously listed four named executives with photographs and
- * biographies. None of them corresponded to a real person — one card even
- * paired "Venkata Srinivas" with a file named Rajesh.jpeg. Invented leadership
- * on a page that charges people money is the kind of claim that gets a payment
- * gateway pulled, so it is replaced with the functions that genuinely exist.
- *
- * When there are real people to name, put them back: name, role, a one-line
- * background that can be verified, and their own photograph.
- */
 const functions = [
   {
     icon: 'risk',
-    title: 'Risk and rules',
-    body: 'Every drawdown limit, profit target and consistency check is set here and enforced by the platform itself — not applied by hand, and not adjusted per account.',
+    title: 'Rules and risk',
+    body: 'Sets the target, loss limits and consistency rule for each programme. The trading engine applies them the same way to every account; nobody changes them for one trader.',
   },
   {
     icon: 'engineering',
-    title: 'Platform engineering',
-    body: 'The simulated evaluation engine, the order flow, the live NSE and BSE feeds, and the dashboards that show you where you stand against each rule.',
+    title: 'Trading platform',
+    body: 'Runs the simulated order engine, the live NSE and BSE price feeds, and the dashboard showing your balance, equity and how much of each limit is left.',
   },
   {
     icon: 'payouts',
-    title: 'Payouts and KYC',
-    body: 'Verification of funded participants, review of payout requests against the published cycle, and the bank transfer itself in INR.',
+    title: 'KYC and payouts',
+    body: 'Checks PAN, Aadhaar and bank details before a first payout, matches each request to the 14-day cycle, and sends the money in rupees.',
   },
   {
     icon: 'support',
-    title: 'Support',
-    body: 'Questions on rules, assessments and account status — answered by email at support@dhanfunded.com, usually the same working day.',
+    title: 'Trader support',
+    body: 'Answers questions about rules, accounts and payouts. Write to support@dhanfunded.com; replies usually come the same working day.',
   },
 ];
+
+const H2 = { fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em' };
+const LINK = 'text-[color:var(--pf-brand)] font-semibold hover:underline';
 
 export default function AboutPage() {
   return (
@@ -111,60 +107,66 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="pt-28 pb-14 md:pt-44 md:pb-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">About Us</p>
+          <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">About DhanFunded</p>
           <h1 style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.03em' }} className="text-[color:var(--pf-text)] mb-6">
-            We started this because nobody else was <span className="text-[color:var(--pf-brand)]">building it for India</span>
+            An Indian prop trading firm for <span className="text-[color:var(--pf-brand)]">NIFTY, BANKNIFTY and SENSEX</span> traders
           </h1>
           <p className="text-base sm:text-lg text-[color:var(--pf-muted)] max-w-2xl mx-auto leading-relaxed">
-            DhanFunded Edutech Services is a homegrown prop firm evaluation
-            platform. Built in Mumbai, run by Indians, for Indian intraday people.
+            DhanFunded tests how you trade on a simulated account at live prices. Pass the published
+            rules and you get a funded account, with your share of its profit paid in rupees.
           </p>
         </div>
       </section>
 
-      {/* Why we started */}
+      {/* What it is / who it is for */}
       <section className="py-14 md:py-20 px-6 bg-[color:var(--pf-card-alt)]">
         <div className="max-w-4xl mx-auto">
-          <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">Why this exists</p>
-          <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em' }} className="text-[color:var(--pf-text)] mb-8">
-            What this platform is <span className="text-[color:var(--pf-brand)]">DhanFunded</span>
+          <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">What we do</p>
+          <h2 style={H2} className="text-[color:var(--pf-text)] mb-8">
+            What DhanFunded is, and <span className="text-[color:var(--pf-brand)]">who it suits</span>
           </h2>
           <div className="space-y-5 text-base sm:text-lg text-[color:var(--pf-muted)] leading-relaxed">
             <p>
-              Most funded-trader programmes an Indian trader can reach were built for a different
-              market. The fee is charged in dollars, the instruments are someone else's index, and
-              the rules are tuned to a session that opens when ours has closed.
+              DhanFunded is an evaluation platform for retail traders in India who trade index options.
+              You choose a programme and an account size from ₹1 Lakh, pay a one-time fee in
+              rupees, and trade NIFTY, BANKNIFTY and SENSEX options on a simulated account that moves
+              with live NSE and BSE prices.
             </p>
             <p>
-              The question that produced this platform was a narrow one:
-              <em className="text-[color:var(--pf-text)] not-italic font-semibold"> what would an evaluation
-              look like if it were designed around NIFTY, BANKNIFTY and SENSEX from the first line?</em>
-              Indian hours. Contracts traders here already follow. Limits quoted in rupees rather than
-              converted into them.
+              Each evaluation has a profit target and two loss limits. On a ₹1 Lakh 2-Step account,
+              Phase 1 asks for ₹8,000 of profit and Phase 2 for ₹5,000, without losing more
+              than ₹4,000 in a day or ₹10,000 in total. Pass both and you trade a funded
+              account where you keep 80% of the profit. The{' '}
+              <Link to="/challenges" className={LINK}>1-Step, 2-Step and Instant Funding routes</Link> are
+              compared side by side, and the{' '}
+              <Link to="/how-it-works" className={LINK}>step-by-step guide</Link> shows what happens from
+              payment to payout.
             </p>
             <p>
-              That is what this is. One market, covered properly. Fees and payouts in INR to an Indian
-              bank account. Every target and limit published before you pay, and enforced by the platform
-              rather than argued about afterwards.
+              <em className="text-[color:var(--pf-text)] not-italic font-semibold">It suits traders who
+              already have a tested method</em> and want to be paid for running it with discipline. If you
+              are still working one out, start on the free practice account instead of a paid evaluation.
             </p>
             <p>
-              It is not built to be the largest programme available. It is built to be the one whose
-              rules an Indian index trader can read, plan around and hold us to.
+              It is not a course, a tips service, a broker or a fund manager, and an evaluation result is
+              not a promise of future profit. The{' '}
+              <Link to="/risk-disclaimer" className={LINK}>risk disclaimer</Link> sets out exactly what a
+              simulated account is and is not.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Office / Team Photos */}
+      {/* Photos */}
       <section className="py-14 md:py-24 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
-            <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">Our Office</p>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em' }} className="text-[color:var(--pf-text)] mb-4">
-              The people, the place, the work
+            <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">Indian hours</p>
+            <h2 style={H2} className="text-[color:var(--pf-text)] mb-4">
+              Built around the Indian trading day
             </h2>
             <p className="text-base sm:text-lg text-[color:var(--pf-muted)]">
-              A small team building rules-based assessments for Indian index markets.
+              The indices you already follow, the session you already trade, and every limit quoted in rupees.
             </p>
           </div>
 
@@ -184,7 +186,7 @@ export default function AboutPage() {
                 src="/landing/img/about-team.jpg"
                 loading="lazy"
                 decoding="async"
-                alt="A team working together over laptops and notes"
+                alt="People working together over laptops and notes"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -192,16 +194,16 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Growth Journey / Milestones */}
+      {/* How it is run */}
       <section className="py-14 md:py-24 px-6 bg-[#0A2130]">
         <div className="max-w-4xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
-            <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">How it works</p>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em' }} className="text-white mb-4">
-              How this platform is put together
+            <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">Before you sign up</p>
+            <h2 style={H2} className="text-white mb-4">
+              Six things to know about how DhanFunded runs
             </h2>
             <p className="text-base sm:text-lg text-[#9FB5AB]">
-              No founding legend — just the six decisions the product is built on.
+              What the platform is, what it is not, and how rules and payouts are enforced.
             </p>
           </div>
 
@@ -210,13 +212,13 @@ export default function AboutPage() {
             <div className="absolute left-3 sm:left-4 top-2 bottom-2 w-px bg-[rgba(255,255,255,0.1)]" />
 
             <div className="space-y-8">
-              {milestones.map((m, i) => (
-                <div key={i} className="relative pl-12 sm:pl-16">
+              {facts.map((m, i) => (
+                <div key={m.title} className="relative pl-12 sm:pl-16">
                   {/* Dot */}
                   <div className="absolute left-0 top-2 w-6 sm:w-8 h-6 sm:h-8 rounded-full bg-[color:var(--pf-brand)] border-4 border-[#0A2130] flex items-center justify-center">
                     <span className="text-[10px] sm:text-xs font-bold text-white">{String(i + 1).padStart(2, '0')}</span>
                   </div>
-                  <p className="text-xs font-bold text-[color:var(--pf-brand)] uppercase tracking-widest mb-1">{m.date}</p>
+                  <p className="text-xs font-bold text-[color:var(--pf-brand)] uppercase tracking-widest mb-1">{m.label}</p>
                   <h3 className="text-lg sm:text-xl font-bold text-white mb-2">{m.title}</h3>
                   <p className="text-sm sm:text-base text-[#9FB5AB] leading-relaxed">{m.desc}</p>
                 </div>
@@ -226,16 +228,16 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Why Choose Us */}
+      {/* Reasons */}
       <section className="py-14 md:py-24 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
-            <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">Why Us</p>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em' }} className="text-[color:var(--pf-text)] mb-4">
-              Why traders stay with <span className="text-[color:var(--pf-brand)]">DhanFunded</span>
+            <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">The practical side</p>
+            <h2 style={H2} className="text-[color:var(--pf-text)] mb-4">
+              Why Indian index traders pick <span className="text-[color:var(--pf-brand)]">DhanFunded</span>
             </h2>
             <p className="text-base sm:text-lg text-[color:var(--pf-muted)]">
-              No marketing fluff. These are the actual reasons people stick with us.
+              Each point comes from how the platform is set up, and you can check every one before paying.
             </p>
           </div>
 
@@ -251,15 +253,18 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team */}
+      {/* Team functions */}
       <section className="py-14 md:py-24 px-6 bg-[color:var(--pf-card-alt)]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10 md:mb-16">
-            <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">How it is run</p>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em' }} className="text-[color:var(--pf-text)] mb-4">
-              What the team handles
+            <p className="text-sm font-semibold text-[color:var(--pf-brand)] uppercase tracking-widest mb-4">Who does what</p>
+            <h2 style={H2} className="text-[color:var(--pf-text)] mb-4">
+              The four jobs behind every account
             </h2>
-            <p className="text-base sm:text-lg text-[color:var(--pf-muted)]">A small team. Every part of the platform has someone accountable for it.</p>
+            <p className="text-base sm:text-lg text-[color:var(--pf-muted)]">
+              Questions go to whoever owns that part. For phone and WhatsApp details, see the{' '}
+              <Link to="/contact-us" className={LINK}>contact page</Link>.
+            </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {functions.map((f) => (
@@ -287,12 +292,15 @@ export default function AboutPage() {
       {/* CTA */}
       <section className="py-14 md:py-24 px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.02em' }} className="text-[color:var(--pf-text)] mb-6">
-            Want to be part of the next milestone?
+          <h2 style={{ ...H2, lineHeight: 1.1 }} className="text-[color:var(--pf-text)] mb-6">
+            Read the rules, then decide
           </h2>
-          <p className="text-base sm:text-lg text-[color:var(--pf-muted)] mb-8">Pick an account size, clear the assessment, and trade funded capital on NIFTY, BANKNIFTY and SENSEX.</p>
+          <p className="text-base sm:text-lg text-[color:var(--pf-muted)] mb-8">
+            Check the fee and limits for each account size, or look through the{' '}
+            <Link to="/faqs" className={LINK}>questions traders ask most</Link> first.
+          </p>
           <Link to="/pricing" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[color:var(--pf-brand)] text-white font-semibold text-sm shadow-[0_6px_20px_rgba(31,216,122,0.3)] hover:bg-[color:var(--pf-brand-2)] transition-all">
-            View Plans <ArrowRight size={16} />
+            See fees by account size <ArrowRight size={16} />
           </Link>
         </div>
       </section>

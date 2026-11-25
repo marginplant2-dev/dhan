@@ -26,12 +26,13 @@ export default function CtaBand() {
           />
           <div className="relative">
             <p className="text-[.78rem] font-bold tracking-[.22em] uppercase mb-4" style={{ color: 'var(--pf-gold)' }}>
-              Trade · Prove · Get Funded
+              Start with ₹1 Lakh or go up to ₹25 Lakh
             </p>
-            <h2 className="pf-h2 mb-5" style={{ color: '#fff' }}>Think your process holds up?</h2>
+            <h2 className="pf-h2 mb-5" style={{ color: '#fff' }}>Ready to start your evaluation?</h2>
             <p className="text-[1.02rem] leading-relaxed mb-8 max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,.72)' }}>
-              Pick an account size, clear the objectives, and take your share. Every rule is
-              published before you pay.
+              Choose a programme, trade it inside the limits, and request your profit share once
+              you are funded. Have a question before you buy? Message us below or use the{' '}
+              <Link to="/contact-us" className="font-semibold underline underline-offset-2" style={{ color: '#fff' }}>contact page</Link>.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3.5">
               <Link to="/register" className="pf-btn pf-btn--primary pf-btn--lg">
@@ -42,7 +43,7 @@ export default function CtaBand() {
                 className="pf-btn pf-btn--lg"
                 style={{ background: 'rgba(255,255,255,.08)', color: '#fff', borderColor: 'rgba(255,255,255,.22)' }}
               >
-                Compare assessments
+                Compare fees and sizes
               </Link>
             </div>
           </div>
